@@ -1,10 +1,23 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import Home from "./app/screens/Home";
 import { StyleSheet, Text, Image, View, Button, Alert } from "react-native";
-
-export default function App() {
-  console.log("App Executed");
-  console.log("This is a test branch - Dicky");
-  return <Home />;
-}
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import HomeScreen from "./components/HomeScreen";
+import QuestScreen from "./components/QuestScreen";
+const Stack = createStackNavigator();
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: "Supersizers" }}
+        />
+        <Stack.Screen name="Quest" component={QuestScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+export default App;
