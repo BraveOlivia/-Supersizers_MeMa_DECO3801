@@ -1,27 +1,21 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import Home from "./app/screens/Home";
-import { StyleSheet, Text, Image, View, Button, Alert } from "react-native";
-
-export default function App() {
-  console.log("App Executed");
-  return <Home />;
-  // Android does not support Alert.prompt
-  // Leave this feature for now
-  // <View style={styles.startContainer}>
-  //   <Button
-  //     color="fuchsia"
-  //     title="Start"
-  //     onPress={() => Alert.prompt("Enter names", "Please Enter your name")}
-  //   />
-  // </View>
-}
-
-const styles = StyleSheet.create({
-  startContainer: {
-    flex: 1,
-    backgroundColor: "#f0f8ff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import HomeScreen from "./components/HomeScreen";
+import QuestScreen from "./components/QuestScreen";
+const Stack = createStackNavigator();
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: "Supersizers" }}
+        />
+        <Stack.Screen name="Quest" component={QuestScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+export default App;
