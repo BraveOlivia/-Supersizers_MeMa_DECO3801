@@ -36,7 +36,7 @@ export default class Homescreen extends Component {
           />
           <Button
             title="Nutritional Tips"
-            onPress={() => console.log("Nutritional Tips Button Pressed")}
+            onPress={() => this.props.navigation.navigate("Nutritional")}
           />
           <View
             style={{
