@@ -14,45 +14,50 @@ export default class Homescreen extends Component {
   }
   render() {
     return (
-      <View style={{ flex: 1, flexDirection: "row" }}>
+      <View style={styles.container}>
         <View style={styles.avatarContainer}>
-          <Text>G'day, staying healthy?</Text>
+          <Text>[Happiness Bar]</Text>
+          <Text>[Status Bar]</Text>
           <Image
             style={styles.avatar}
-            source={require("../app/assets/avatar.png")}
+            source={require("../assets/avatar.png")}
           />
-          <Button
-            color="fuchsia"
-            title="Feed Avatar"
-            onPress={() => Alert.alert("Avatar:", "Thank you!")}
-          />
+          <Text style={styles.avatarDialogue}>
+            [AvatarName]: G'day[UserName], staying healthy?
+          </Text>
+          {/* <Button
+          color="fuchsia"
+          title="Feed Avatar"
+          onPress={() => Alert.alert("Avatar:", "Thank you!")}
+        /> */}
           <StatusBar style="auto" />
         </View>
 
         <View style={styles.menuContainer}>
           <Button
-            title="QuestPage"
-            onPress={() => this.props.navigation.navigate("Quest")}
+            title="Quests"
+            onPress={() => console.log("Quests Button Pressed")}
           />
+
+          <Button
+            title="Items"
+            onPress={() => console.log("Items Button Pressed")}
+          />
+
           <Button
             title="Nutritional Tips"
             onPress={() => this.props.navigation.navigate("Nutritional")}
           />
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-            }}
-          >
-            <Button
-              title="Socialise"
-              onPress={() => console.log("Socialise Button Pressed")}
-            />
-            <Button
-              title="Setting"
-              onPress={() => console.log("Setting Button Pressed")}
-            />
-          </View>
+
+          <Button
+            title="Socialise"
+            onPress={() => console.log("Socialise Button Pressed")}
+          />
+
+          <Button
+            title="Setting"
+            onPress={() => console.log("Setting Button Pressed")}
+          />
         </View>
       </View>
     );
@@ -61,25 +66,37 @@ export default class Homescreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#f0f8ff",
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: "row",
   },
+
   avatarContainer: {
     flex: 1.5,
-    backgroundColor: "#f0f8ff",
     alignItems: "center",
     justifyContent: "center",
   },
+
   menuContainer: {
-    flex: 1,
-    backgroundColor: "#f0f8ff",
+    flex: 0.9,
     alignItems: "stretch",
     justifyContent: "space-around",
+    padding: 10,
   },
+
   avatar: {
-    width: 175,
-    height: 175,
+    width: 200,
+    height: 200,
+    margin: 5,
+  },
+
+  avatarDialogue: {
+    backgroundColor: "#dcdcdc",
+    borderWidth: 1,
+    borderRadius: 5,
+    width: 250,
+    padding: 10,
+    marginTop: "auto",
+    marginBottom: 10,
   },
 });
