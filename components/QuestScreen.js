@@ -23,14 +23,15 @@ export default class QuestScreen extends Component {
             activeOpacity={0.5}
           >
             <Image
-              source={require("../app/assets/home.png")}
+              source={require("../assets/home.png")}
               style={styles.ImageStyle}
             />
-            <Text style={styles.TextStyle}>Home</Text>
-            {/* <Button
-                    title="Home"
-                    onPress={() => this.props.navigation.navigate("Home")}
-                /> */}
+            {/* <Text style={styles.TextStyle}>Home</Text> */}
+            <Button
+              style={{ alignItems: "stretch" }}
+              title="Home"
+              onPress={() => this.props.navigation.navigate("Home")}
+            />
           </TouchableOpacity>
 
           <View style={styles.TextStyle}>
@@ -48,7 +49,7 @@ export default class QuestScreen extends Component {
           >
             <Image
               styles={styles.ImageStyle}
-              source={require("../app/assets/money-bag.png")}
+              source={require("../assets/money-bag.png")}
             />
             <Text style={styles.TextStyle}>Reward Points</Text>
           </TouchableOpacity>
