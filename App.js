@@ -8,6 +8,7 @@ import QuestScreen from "./components/QuestScreen";
 import NutritionalScreen from "./components/NutritionalScreen";
 
 const Stack = createStackNavigator();
+console.log("hello world - this is another test DSG");
 const App = () => {
   return (
     <NavigationContainer>
