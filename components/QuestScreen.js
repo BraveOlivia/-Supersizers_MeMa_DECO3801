@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import {
   StyleSheet,
   Button,
@@ -7,33 +7,41 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 
 export default class QuestScreen extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      count: 0,
+    };
   }
   render() {
     return (
       <View style={styles.MainContainer}>
         <View style={styles.Header}>
-          <TouchableOpacity
-            style={{ backgroundColor: "dodgerblue", width: 50, height: 50 }}
-            activeOpacity={0.5}
-          >
+          <TouchableOpacity activeOpacity={0.5}>
             <Image
               source={require("../assets/home.png")}
               style={styles.ImageStyle}
             />
             {/* <Text style={styles.TextStyle}>Home</Text> */}
             <Button
-              style={{ alignItems: "stretch" }}
+              style={{ justifyContent: "center" }}
               title="Home"
               onPress={() => this.props.navigation.navigate("Home")}
             />
           </TouchableOpacity>
-
+          <TouchableOpacity activeOpacity={0.5}>
+            <Image
+              source={require("../assets/help.png")}
+              style={styles.ImageStyle}
+            />
+            <Button
+              style={{ alignItems: "stretch" }}
+              title="Help"
+              onPress={() => console.log("help")}
+            />
+          </TouchableOpacity>
           <View style={styles.TextStyle}>
             <Text
               style={{
@@ -44,16 +52,21 @@ export default class QuestScreen extends Component {
             </Text>
           </View>
           <TouchableOpacity
-            style={{ backgroundColor: "dodgerblue", right: 20 }}
+            // style={{ right: 20 }}
             activeOpacity={0.5}
           >
             <Image
-              styles={styles.ImageStyle}
               source={require("../assets/money-bag.png")}
+              style={styles.ImageStyle}
             />
-            <Text style={styles.TextStyle}>Reward Points</Text>
+            <Button
+              style={{ alignItems: "stretch" }}
+              title="Rewards Point"
+              onPress={() => console.log("Your rewards is ", this.state.count)}
+            />
           </TouchableOpacity>
         </View>
+
         <View style={styles.Content}>
           <View style={styles.QuestButtons}>
             <Button
@@ -76,13 +89,22 @@ export default class QuestScreen extends Component {
           <View style={styles.QuestDetails}>
             <View style={styles.QuestCompletion}>
               <View style={styles.QuestInProgress}>
-                <Button title="In Progress" />
+                <Button
+                  title="In Progress"
+                  onPress={() => console.log("Quest in progress")}
+                />
               </View>
               <View style={styles.QuestInComplete}>
-                <Button title="Complete" />
+                <Button
+                  title="Complete"
+                  onPress={() => console.log("Quest incompleted")}
+                />
               </View>
               <View style={styles.QuestComplete}>
-                <Button title="Incomplete" />
+                <Button
+                  title="Incomplete"
+                  onPress={() => console.log("Quest completed")}
+                />
               </View>
             </View>
             <View style={styles.QuestTask}></View>
@@ -108,7 +130,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   Content: {
-    flex: 1,
+    flex: 0.8,
     flexDirection: "row",
     // top: "5%",
     left: 10,
@@ -116,9 +138,10 @@ const styles = StyleSheet.create({
     // flexWrap: "wrap",
   },
   QuestButtons: {
-    flex: 1.5,
+    flex: 2.3,
+    flexDirection: "column",
     justifyContent: "space-around",
-    alignItems: "baseline",
+    alignItems: "stretch",
   },
   QuestDetails: {
     backgroundColor: "#fff",
@@ -136,11 +159,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   ImageStyle: {
-    backgroundColor: "#fff",
-    width: "100%",
-    height: "100%",
-    // marginBottom: 4,
-    // marginRight: 20,
+    backgroundColor: "white",
+    width: 35,
+    height: 35,
+    //margin: 5,
+    marginBottom: 4,
+    marginRight: 20,
   },
   SeparatorLine: {
     backgroundColor: "#fff",
@@ -148,9 +172,3 @@ const styles = StyleSheet.create({
     height: 40,
   },
 });
-
-// <Button
-// styles={{ position: "absolute" }}
-// title="Go back"
-// onPress={() => this.props.navigation.goBack()}
-// />

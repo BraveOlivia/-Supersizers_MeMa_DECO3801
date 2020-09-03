@@ -2,16 +2,16 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
 import { StyleSheet, Text, Image, View, Button, Alert } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import {
-  createStackNavigator,
-  createAppContainer,
-} from "@react-navigation/stack";
+import * as firebase from "firebase";
 
 export default class Homescreen extends Component {
   constructor(props) {
     super(props);
   }
+
+  onSignoutPress = () => {
+    firebase.auth().signOut();
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -34,6 +34,8 @@ export default class Homescreen extends Component {
         </View>
 
         <View style={styles.menuContainer}>
+          <Button title="Sign out" onPress={this.onSignoutPress} />
+
           <Button
             title="Quests"
             onPress={() => this.props.navigation.navigate("Quest")}
