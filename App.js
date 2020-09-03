@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { AppLoading, Asset, Font } from "expo";
 import { StyleSheet, Text, View, Platform } from "react-native";
 import RootNavigation from "./navigation/RootNavigation";
-import MainTabNavigator from "./navigation/MainTabNavigation";
+import MainNavigator from "./navigation/MainNavigation";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import ApiKeys from "./src/firebase/APIKeys";
@@ -57,11 +57,7 @@ export default class App extends Component {
           {Platform.OS === "android" && (
             <View style={styles.statusBarUnderlay} />
           )}
-          {this.state.isAuthenticated ? (
-            <MainTabNavigator />
-          ) : (
-            <RootNavigation />
-          )}
+          {this.state.isAuthenticated ? <MainNavigator /> : <RootNavigation />}
         </View>
       );
       // <NavigationContainer>

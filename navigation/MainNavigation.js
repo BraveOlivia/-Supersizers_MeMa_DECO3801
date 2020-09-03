@@ -10,7 +10,7 @@ import {
 
 const Stack = createStackNavigator();
 
-export default class MainTabNavigator extends Component {
+export default class MainNavigator extends Component {
   render() {
     return (
       <NavigationContainer>
