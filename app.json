@@ -3,7 +3,7 @@
     "name": "Supersizers_MeMa_DECO3801",
     "slug": "Supersizers_MeMa_DECO3801",
     "version": "1.0.0",
-    "orientation": "landscape",
+    "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",

@@ -13,7 +13,7 @@ import { Tabs } from "@feuer/react-tabs";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { DataTable } from "react-native-paper";
 
-export default class NutritionScreen extends Component {
+export default class NutritionalScreen extends Component {
   constructor(props) {
     super(props);
   }
@@ -238,15 +238,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#5F7EB2",
-    alignItems: "centre",
-    justifyContent: "centre",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   tabs: {
     flex: 1,
     backgroundColor: "#D3E3F6",
-    alignItems: "top",
-    justifyContent: "top",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
     textAlign: "left",
   },
 });

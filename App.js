@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { AppLoading, Asset, Font } from "expo";
+import { AppLoading } from "expo";
+import { Asset, Font } from "expo-asset";
 import { StyleSheet, Text, View, Platform } from "react-native";
 import RootNavigation from "./navigation/RootNavigation";
 import MainNavigator from "./navigation/MainNavigation";
@@ -9,8 +10,6 @@ import ApiKeys from "./src/firebase/APIKeys";
 import * as firebase from "firebase";
 
 const Stack = createStackNavigator();
-// const firebase = require("firebase/app");
-// require("firebase/analytics");
 
 export default class App extends Component {
   constructor(props) {
@@ -79,13 +78,13 @@ export default class App extends Component {
         // require("./assets/images/robot-dev.png"),
         // require("./assets/images/robot-prod.png"),
       ]),
-      Font.loadAsync({
-        // This is the font that we are using for our tab bar
-        // ...Ionicons.font,
-        // We include SpaceMono because we use it in HomeScreen.js. Feel free
-        // to remove this if you are not using it in your app
-        // "space-mono": require("./assets/fonts/SpaceMono-Regular.ttf"),
-      }),
+      // Font.loadAsync({
+      //   // This is the font that we are using for our tab bar
+      //   // ...Ionicons.font,
+      //   // We include SpaceMono because we use it in HomeScreen.js. Feel free
+      //   // to remove this if you are not using it in your app
+      //   // "space-mono": require("./assets/fonts/SpaceMono-Regular.ttf"),
+      // }),
     ]);
   };
 

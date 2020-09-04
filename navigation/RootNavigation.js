@@ -1,7 +1,7 @@
 import { Notifications } from "expo";
 import React, { Component } from "react";
 import LogInScreen from "../components/auth/LogInScreen";
-import SignUpScreen from "../components/auth/SignupScreen";
+import SignUpScreen from "../components/auth/SignUpScreen";
 import ForgotPasswordScreen from "../components/auth/ForgotPasswordScreen";
 import { HomeScreen } from "../components/ScreenComponents";
 import { createStackNavigator } from "@react-navigation/stack";
