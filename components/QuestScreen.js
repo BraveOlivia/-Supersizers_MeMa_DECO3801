@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import {
   StyleSheet,
   Button,
@@ -7,71 +7,37 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import {
+  faHome,
+  faDollarSign,
+  faCogs,
+  faSmile,
+  faLeaf,
+} from "@fortawesome/free-solid-svg-icons";
+import CardView from "react-native-cardview";
 
 export default class QuestScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      count: 0,
-    };
   }
+
   render() {
     return (
       <View style={styles.MainContainer}>
-        <View style={styles.Header}>
-          <TouchableOpacity activeOpacity={0.5}>
-            <Image
-              source={require("../assets/home.png")}
-              style={styles.ImageStyle}
-            />
-            {/* <Text style={styles.TextStyle}>Home</Text> */}
-            <Button
-              style={{ justifyContent: "center" }}
-              title="Home"
-              onPress={() => this.props.navigation.navigate("Home")}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}>
-            <Image
-              source={require("../assets/help.png")}
-              style={styles.ImageStyle}
-            />
-            <Button
-              style={{ alignItems: "stretch" }}
-              title="Help"
-              onPress={() => console.log("help")}
-            />
-          </TouchableOpacity>
-          <View style={styles.TextStyle}>
-            <Text
-              style={{
-                fontSize: 32,
-              }}
-            >
-              Quest Page
-            </Text>
-          </View>
-          <TouchableOpacity
-            // style={{ right: 20 }}
-            activeOpacity={0.5}
-          >
-            <Image
-              source={require("../assets/money-bag.png")}
-              style={styles.ImageStyle}
-            />
-            <Button
-              style={{ alignItems: "stretch" }}
-              title="Rewards Point"
-              onPress={() => console.log("Your rewards is ", this.state.count)}
-            />
-          </TouchableOpacity>
+        <View style={styles.navBar}>
+          <FontAwesomeIcon icon={faHome} size={30} color={"grey"} />
+          <FontAwesomeIcon icon={faDollarSign} size={30} color={"grey"} />
+          <FontAwesomeIcon icon={faCogs} size={30} color={"grey"} />
         </View>
 
         <View style={styles.Content}>
           <View style={styles.QuestButtons}>
             <Button
               title="Daily Quest"
-              onPress={() => console.log("Daily Quest")}
+              onPress={() => console.log("hello Daily Quest")}
             />
             <Button
               title="Weekly Quest"
@@ -81,34 +47,51 @@ export default class QuestScreen extends Component {
               title="Group Quest"
               onPress={() => console.log("Group Quest")}
             />
-            <Button
-              title="Challenge Quest"
-              onPress={() => console.log("Challenge Quest")}
-            />
           </View>
-          <View style={styles.QuestDetails}>
-            <View style={styles.QuestCompletion}>
-              <View style={styles.QuestInProgress}>
-                <Button
-                  title="In Progress"
-                  onPress={() => console.log("Quest in progress")}
-                />
-              </View>
-              <View style={styles.QuestInComplete}>
-                <Button
-                  title="Complete"
-                  onPress={() => console.log("Quest incompleted")}
-                />
-              </View>
-              <View style={styles.QuestComplete}>
-                <Button
-                  title="Incomplete"
-                  onPress={() => console.log("Quest completed")}
-                />
-              </View>
+
+          <CardView style={styles.taskCard} cornerRadius={5}>
+            <View style={styles.taskDiv}>
+              <Text style={styles.taskTitle}>Get up at 8 am</Text>
+              <Text style={styles.rewardPoint}>
+                + 5
+                <FontAwesomeIcon icon={faSmile} size={21} color={"orange"} />
+              </Text>
             </View>
-            <View style={styles.QuestTask}></View>
-          </View>
+            <Text style={styles.taskbody}>Quest 1 to do</Text>
+            <Button
+              style={styles.taskToDo}
+              title="Complete"
+              onPress={() => console.log("Complete 1st request")}
+            />
+          </CardView>
+
+          <CardView style={styles.taskCard} cornerRadius={5}>
+            <View style={styles.taskDiv}>
+              <Text style={styles.taskTitle}>Walk 1000 meters</Text>
+              <Text style={styles.rewardPoint}>
+                + 5
+                <FontAwesomeIcon icon={faLeaf} size={21} color={"green"} />
+              </Text>
+            </View>
+            <Text style={styles.taskbody}>Quest 2 to do</Text>
+            <Button
+              style={styles.taskToDo}
+              title="Complete"
+              onPress={() => console.log("Complete 2nd request")}
+            />
+          </CardView>
+
+          <CardView style={styles.taskCard} cornerRadius={5}>
+            <View style={styles.taskDiv}>
+              <Text style={styles.taskTitle}>Eat an apple a day</Text>
+              <Text style={styles.rewardPoint}>
+                + 3
+                <FontAwesomeIcon icon={faLeaf} size={21} color={"green"} />
+              </Text>
+            </View>
+            <Text style={styles.taskbody}>Quest completed</Text>
+            <Button style={styles.taskDone} title="Done" />
+          </CardView>
         </View>
       </View>
     );
@@ -119,30 +102,60 @@ const styles = StyleSheet.create({
   MainContainer: {
     flex: 1,
     flexDirection: "column",
-    justifyContent: "space-between",
-    // alignItems: "flex-start",
   },
-  Header: {
+
+  navBar: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+
+  taskCard: {
+    flex: 5,
+    backgroundColor: "#fff",
+    borderColor: "black",
+    borderWidth: 1,
+    margin: 10,
+    justifyContent: "center",
+  },
+
+  taskDiv: {
     flex: 1,
-    left: 10,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
   },
+
+  taskTitle: {
+    fontSize: 20,
+  },
+
+  rewardPoint: {
+    fontSize: 20,
+    color: "darkblue",
+  },
+
+  taskbody: {
+    flex: 1,
+    fontSize: 14,
+  },
+
+  taskDone: {
+    borderColor: "#737373",
+    backgroundColor: "darkgrey",
+  },
+
   Content: {
-    flex: 0.8,
-    flexDirection: "row",
-    // top: "5%",
-    left: 10,
-    bottom: 100,
-    // flexWrap: "wrap",
+    flex: 10,
+    backgroundColor: "#fff",
+    marginTop: "15%",
   },
+
   QuestButtons: {
-    flex: 2.3,
-    flexDirection: "column",
+    flex: 1,
+    flexDirection: "row",
     justifyContent: "space-around",
-    alignItems: "stretch",
+    alignItems: "baseline",
   },
+
   QuestDetails: {
     backgroundColor: "#fff",
     justifyContent: "flex-start",
@@ -159,12 +172,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   ImageStyle: {
-    backgroundColor: "white",
-    width: 35,
-    height: 35,
-    //margin: 5,
-    marginBottom: 4,
-    marginRight: 20,
+    backgroundColor: "#fff",
+    width: "100%",
+    height: "100%",
   },
   SeparatorLine: {
     backgroundColor: "#fff",
