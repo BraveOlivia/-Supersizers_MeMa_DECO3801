@@ -58,7 +58,7 @@ export default class NutritionScreen extends Component {
         </Text>
 
         {/*  TABS  */}
-        <div className="NutritionPage">
+        <View className="NutritionPage">
           <Tabs
             tabsProps={{
               style: {
@@ -71,7 +71,7 @@ export default class NutritionScreen extends Component {
           >
             <View style={styles.tabs}>
               <Tabs.Tab id="tab1" title="Unread">
-                <div>
+                <View>
                   <DataTable>
                     <DataTable.Header>
                       <DataTable.Title>[Tip Name]</DataTable.Title>
@@ -145,12 +145,12 @@ export default class NutritionScreen extends Component {
                       </Text>
                     </DataTable.Row>
                   </DataTable>
-                </div>
+                </View>
               </Tabs.Tab>
 
               <View></View>
               <Tabs.Tab style={{ color: "#FFFFFF" }} id="tab2" title="Read">
-                <div>
+                <View>
                   <DataTable>
                     <DataTable.Header>
                       <DataTable.Title>[Tip Name]</DataTable.Title>
@@ -221,11 +221,11 @@ export default class NutritionScreen extends Component {
                       </Text>
                     </DataTable.Row>
                   </DataTable>
-                </div>
+                </View>
               </Tabs.Tab>
             </View>
           </Tabs>
-        </div>
+        </View>
       </View>
     );
   }
