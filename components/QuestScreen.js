@@ -19,7 +19,7 @@ import {
   faLeaf,
 } from "@fortawesome/free-solid-svg-icons";
 import CardView from "react-native-cardview";
-import { SaveJson } from "./SaveJson";
+// import { SaveJson } from "./SaveJson";
 
 export default class QuestScreen extends Component {
   constructor(props) {
