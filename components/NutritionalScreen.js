@@ -1,11 +1,5 @@
 //NutritionScreen.js
 
-{
-  /* 
-dependencies installed: 1. npm install @feuer/react-tabs
-                        2. npm install react-native-paper
-*/
-}
 import Icon from "react-native-vector-icons/Ionicons";
 import React, { Component } from "react";
 import {
