@@ -1,4 +1,6 @@
 {
+  "avatarHealth": 70,
+  "avatarStatus": 80,
   "response": {
     "quests": [
       {
