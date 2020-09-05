@@ -8,6 +8,7 @@ import {
   View,
   StatusBar,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
@@ -20,7 +21,23 @@ function ReadTab() {
       {tipData["Nutritional Tips"].map(function (item) {
         if (item.hasRead) {
           return (
-            <TouchableOpacity key={item.id} style={styles.textContainer}>
+            <TouchableOpacity
+              key={item.id}
+              style={styles.textContainer}
+              onPress={() =>
+                Alert.alert(
+                  item.title,
+                  item.content,
+                  [
+                    {
+                      text: "OK",
+                      onPress: () => console.log("tips read"),
+                    },
+                  ],
+                  { cancelable: false }
+                )
+              }
+            >
               <Text style={styles.text}>Title: {item.title}</Text>
               <Text>{item.description}</Text>
               <Text>{item.reward}</Text>
@@ -50,7 +67,19 @@ function UnreadTab() {
             <TouchableOpacity
               key={item.id}
               style={styles.textContainer}
-              // onPress={alert("hello world")}
+              onPress={() =>
+                Alert.alert(
+                  item.title,
+                  item.content,
+                  [
+                    {
+                      text: "OK",
+                      onPress: () => console.log("tips read"),
+                    },
+                  ],
+                  { cancelable: false }
+                )
+              }
             >
               <Text style={styles.text}>Title: {item.title}</Text>
               <Text>{item.description}</Text>
@@ -65,7 +94,7 @@ function UnreadTab() {
 UnreadTab.navigationOptions = {
   tabBarIcon: ({ tintColor, focused }) => (
     <Icon
-      name={focused ? "progress-check" : "progress-check"}
+      name={focused ? "ios-mail-unread" : "md-mail-unread"}
       color={tintColor}
       size={25}
     />

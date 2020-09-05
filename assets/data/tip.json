@@ -5,6 +5,7 @@
       "title": "tip 1",
       "type": "Exercise",
       "description": "This is the first tip",
+      "content": "Some nutritional contents. Some nutritional contents. Some nutritional contents.",
       "reward": 10,
       "hasRead": true
     },
@@ -13,6 +14,7 @@
       "title": "tip 2",
       "type": "Exercise",
       "description": "This is the second tip",
+      "content": "Some nutritional contents. Some nutritional contents. Some nutritional contents.",
       "reward": 10,
       "hasRead": false
     },
@@ -21,6 +23,7 @@
       "title": "tip 3",
       "type": "Exercise",
       "description": "This is the third tip",
+      "content": "Some nutritional contents. Some nutritional contents. Some nutritional contents.",
       "reward": 10,
       "hasRead": true
     },
@@ -29,6 +32,7 @@
       "title": "tip 4",
       "type": "Exercise",
       "description": "This is the forth tip",
+      "content": "Some nutritional contents. Some nutritional contents. Some nutritional contents.",
       "reward": 10,
       "hasRead": false
     },
@@ -37,6 +41,7 @@
       "title": "tip 5",
       "type": "Exercise",
       "description": "This is the fifth tip",
+      "content": "Some nutritional contents. Some nutritional contents. Some nutritional contents.",
       "reward": 10,
       "hasRead": false
     }
