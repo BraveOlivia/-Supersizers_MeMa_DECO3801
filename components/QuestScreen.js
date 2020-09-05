@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -18,12 +19,19 @@ import {
   faLeaf,
 } from "@fortawesome/free-solid-svg-icons";
 import CardView from "react-native-cardview";
+import { SaveJson } from "./SaveJson";
 
 export default class QuestScreen extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      questCompletion: 0,
+    };
   }
-
+  addCompletion = () => {
+    this.state.questCompletion += 10;
+    console.log(this.state.questCompletion);
+  };
   render() {
     return (
       <View style={styles.MainContainer}>
@@ -77,7 +85,27 @@ export default class QuestScreen extends Component {
             <Button
               style={styles.taskToDo}
               title="Complete"
-              onPress={() => console.log("Complete 2nd request")}
+              onPress={() =>
+                Alert.alert(
+                  "Task complete?",
+                  "Confirm and get rewards",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("click cancel"),
+                      // onPress: () => SaveJson.testJson("hello world"),
+                      style: "cancel",
+                    },
+                    {
+                      text: "OK",
+                      onPress: () => this.addCompletion(),
+                    },
+                  ],
+                  { cancelable: false }
+                )
+              }
+
+              // console.log("Complete 2nd request")}
             />
           </CardView>
 
@@ -149,36 +177,36 @@ const styles = StyleSheet.create({
     marginTop: "15%",
   },
 
-  QuestButtons: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "baseline",
-  },
+  // QuestButtons: {
+  //   flex: 1,
+  //   flexDirection: "row",
+  //   justifyContent: "space-around",
+  //   alignItems: "baseline",
+  // },
 
-  QuestDetails: {
-    backgroundColor: "#fff",
-    justifyContent: "flex-start",
-    flex: 10,
-  },
-  QuestCompletion: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-  },
-  TextStyle: {
-    backgroundColor: "#fff",
-    justifyContent: "center",
-  },
-  ImageStyle: {
-    backgroundColor: "#fff",
-    width: "100%",
-    height: "100%",
-  },
-  SeparatorLine: {
-    backgroundColor: "#fff",
-    width: 1,
-    height: 40,
-  },
+  // QuestDetails: {
+  //   backgroundColor: "#fff",
+  //   justifyContent: "flex-start",
+  //   flex: 10,
+  // },
+  // QuestCompletion: {
+  //   flex: 1,
+  //   flexDirection: "row",
+  //   justifyContent: "space-between",
+  //   alignItems: "flex-start",
+  // },
+  // TextStyle: {
+  //   backgroundColor: "#fff",
+  //   justifyContent: "center",
+  // },
+  // ImageStyle: {
+  //   backgroundColor: "#fff",
+  //   width: "100%",
+  //   height: "100%",
+  // },
+  // SeparatorLine: {
+  //   backgroundColor: "#fff",
+  //   width: 1,
+  //   height: 40,
+  // },
 });

@@ -32,55 +32,7 @@ export default class HomeScreen extends Component {
         </View>
 
         <View style={styles.avatarContainer}>
-          <Text style={styles.avatarDialogue}>
-            [AvatarName]: G'day[UserName], staying healthy?
-          </Text>
-          <Image
-            style={styles.avatar}
-            source={require("../assets/avatar.png")}
-          />
-          <View style={styles.emotionStatus}>
-            <Text>[Happiness Bar]</Text>
-          </View>
-          <View style={styles.healthStatus}>
-            <Text>[Status Bar]</Text>
-          </View>
-          {/* <Button
-          color="fuchsia"
-          title="Feed Avatar"
-          onPress={() => Alert.alert("Avatar:", "Thank you!")}
-        /> */}
-        </View>
-
-        <View style={styles.footMenu}>
-          <View style={styles.menurow}>
-            <FontAwesomeIcon icon={faCheckSquare} size={30} color={"grey"} />
-            <FontAwesomeIcon icon={faLightbulb} size={30} color={"grey"} />
-            <FontAwesomeIcon icon={faShoppingBag} size={30} color={"grey"} />
-            <FontAwesomeIcon icon={faUserFriends} size={30} color={"grey"} />
-          </View>
-
-          <View style={styles.menurow}>
-            <Button
-              title="Quests"
-              onPress={() => this.props.navigation.navigate("Quest")}
-            />
-
-            <Button
-              title="Nurtrition"
-              onPress={() => this.props.navigation.navigate("Nutritional")}
-            />
-
-            <Button
-              title="Shop"
-              onPress={() => this.props.navigation.navigate("Shop")}
-            />
-
-            <Button
-              title="Friends"
-              onPress={() => console.log("Socialise Button Pressed")}
-            />
-          </View>
+          <Text style={styles.avatarDialogue}>hello this is shop page.</Text>
         </View>
       </View>
     );

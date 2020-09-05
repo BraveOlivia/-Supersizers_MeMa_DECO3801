@@ -6,6 +6,7 @@ import {
   HomeScreen,
   QuestScreen,
   NutritionalScreen,
+  ShopScreen,
 } from "../components/ScreenComponents";
 
 const Stack = createStackNavigator();
@@ -18,6 +19,7 @@ export default class MainNavigator extends Component {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Quest" component={QuestScreen} />
           <Stack.Screen name="Nutritional" component={NutritionalScreen} />
+          <Stack.Screen name="Shop" component={ShopScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
