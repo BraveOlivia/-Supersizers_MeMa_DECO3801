@@ -19,7 +19,160 @@ import {
   faLeaf,
 } from "@fortawesome/free-solid-svg-icons";
 import CardView from "react-native-cardview";
+import questData from "../assets/data/data.json";
+import Icon from "react-native-vector-icons/Ionicons";
+import { createAppContainer } from "react-navigation";
+import { createMaterialTopTabNavigator } from "react-navigation-tabs";
+
 // import { SaveJson } from "./SaveJson";
+
+function ReadAllTab() {
+  return (
+    <View>
+      {questData.response["quests"].map(function (item) {
+        return (
+          <TouchableOpacity
+            key={item.questName}
+            style={styles.textContainer}
+            onPress={() =>
+              Alert.alert(
+                "Task Complete?",
+                "Confirm and get rewards:  \nHealth: " +
+                  item.questReward["avatarHealth"] +
+                  "\nHappiness: " +
+                  item.questReward["avatarStatus"],
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("click cancel"),
+                    style: "cancel",
+                  },
+                  {
+                    text: "OK",
+                    onPress: () => console.log("congratulations"),
+                  },
+                ],
+                { cancelable: false }
+              )
+            }
+          >
+            <Text style={styles.taskTitle}>Title: {item.questName}</Text>
+            <Text>{item.questDescription}</Text>
+            <Text>{item.questReward.avatarHealth}</Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+}
+ReadAllTab.navigationOptions = {
+  tabBarIcon: ({ tintColor, focused }) => (
+    <Icon name={focused ? "ios-cube" : "md-cube"} color={tintColor} size={25} />
+  ),
+};
+
+function InProgreeTab() {
+  return (
+    <View>
+      {questData.response["quests"].map(function (item) {
+        if (
+          item.questProgress.questCompletion != 0 &&
+          item.questProgress.questCompletion != item.questProgress.questMaxValue
+        ) {
+          return (
+            <TouchableOpacity
+              key={item.questID}
+              style={styles.textContainer}
+              onPress={() =>
+                Alert.alert(
+                  "Your Progress",
+                  "You have finished " +
+                    item.questReward["avatarHealth"] +
+                    "/" +
+                    item.questReward["avatarStatus"] +
+                    " of the task, good job and go on",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("click cancel"),
+                      style: "cancel",
+                    },
+                    {
+                      text: "OK",
+                      onPress: () => console.log("congratulations"),
+                    },
+                  ],
+                  { cancelable: false }
+                )
+              }
+            >
+              <Text style={styles.taskTitle}>Title: {item.questName}</Text>
+              <Text>{item.questDescription}</Text>
+              <Text>{item.questReward.avatarHealth}</Text>
+            </TouchableOpacity>
+          );
+        }
+      })}
+    </View>
+  );
+}
+InProgreeTab.navigationOptions = {
+  tabBarIcon: ({ tintColor, focused }) => (
+    <Icon
+      name={focused ? "ios-stats" : "ios-stats"}
+      color={tintColor}
+      size={25}
+    />
+  ),
+};
+
+function CompletionTab() {
+  return (
+    <View>
+      {questData.response["quests"].map(function (item) {
+        if (
+          item.questProgress.questCompletion == item.questProgress.questMaxValue
+        ) {
+          return (
+            <TouchableOpacity key={item.questID} style={styles.textContainer}>
+              <Text style={styles.taskTitle}>Title: {item.questName}</Text>
+              <Text>{item.questDescription}</Text>
+              <Text>{item.questReward.avatarHealth}</Text>
+            </TouchableOpacity>
+          );
+        }
+      })}
+    </View>
+  );
+}
+CompletionTab.navigationOptions = {
+  tabBarIcon: ({ tintColor, focused }) => (
+    <Icon
+      name={focused ? "ios-flag" : "ios-flag"}
+      color={tintColor}
+      size={25}
+    />
+  ),
+};
+
+const Tab = createMaterialTopTabNavigator(
+  {
+    All: ReadAllTab,
+    Inprogress: InProgreeTab,
+    Completed: CompletionTab,
+  },
+  {
+    tabBarOptions: {
+      activeTintColor: "white",
+      showIcon: true,
+      showLabel: true,
+      style: {
+        backgroundColor: "#5F7EB2",
+      },
+    },
+  }
+);
+const AppIndex = createAppContainer(Tab);
 
 export default class QuestScreen extends Component {
   constructor(props) {
@@ -32,17 +185,14 @@ export default class QuestScreen extends Component {
     this.state.questCompletion += 10;
     console.log(this.state.questCompletion);
   };
+
   render() {
     return (
       <View style={styles.MainContainer}>
-        <View style={styles.navBar}>
-          <FontAwesomeIcon icon={faHome} size={30} color={"grey"} />
-          <FontAwesomeIcon icon={faDollarSign} size={30} color={"grey"} />
-          <FontAwesomeIcon icon={faCogs} size={30} color={"grey"} />
-        </View>
+        <AppIndex />
 
-        <View style={styles.Content}>
-          <View style={styles.QuestButtons}>
+        {/* <View style={styles.Content}> */}
+        {/* <View style={styles.QuestButtons}>
             <Button
               title="Daily Quest"
               onPress={() => console.log("hello Daily Quest")}
@@ -55,9 +205,9 @@ export default class QuestScreen extends Component {
               title="Group Quest"
               onPress={() => console.log("Group Quest")}
             />
-          </View>
+          </View> */}
 
-          <CardView style={styles.taskCard} cornerRadius={5}>
+        {/* <CardView style={styles.taskCard} cornerRadius={5}>
             <View style={styles.taskDiv}>
               <Text style={styles.taskTitle}>Get up at 8 am</Text>
               <Text style={styles.rewardPoint}>
@@ -107,9 +257,9 @@ export default class QuestScreen extends Component {
 
               // console.log("Complete 2nd request")}
             />
-          </CardView>
+          </CardView> */}
 
-          <CardView style={styles.taskCard} cornerRadius={5}>
+        {/* <CardView style={styles.taskCard} cornerRadius={5}>
             <View style={styles.taskDiv}>
               <Text style={styles.taskTitle}>Eat an apple a day</Text>
               <Text style={styles.rewardPoint}>
@@ -119,8 +269,8 @@ export default class QuestScreen extends Component {
             </View>
             <Text style={styles.taskbody}>Quest completed</Text>
             <Button style={styles.taskDone} title="Done" />
-          </CardView>
-        </View>
+          </CardView> */}
+        {/* </View> */}
       </View>
     );
   }
@@ -177,36 +327,10 @@ const styles = StyleSheet.create({
     marginTop: "15%",
   },
 
-  // QuestButtons: {
-  //   flex: 1,
-  //   flexDirection: "row",
-  //   justifyContent: "space-around",
-  //   alignItems: "baseline",
-  // },
-
-  // QuestDetails: {
-  //   backgroundColor: "#fff",
-  //   justifyContent: "flex-start",
-  //   flex: 10,
-  // },
-  // QuestCompletion: {
-  //   flex: 1,
-  //   flexDirection: "row",
-  //   justifyContent: "space-between",
-  //   alignItems: "flex-start",
-  // },
-  // TextStyle: {
-  //   backgroundColor: "#fff",
-  //   justifyContent: "center",
-  // },
-  // ImageStyle: {
-  //   backgroundColor: "#fff",
-  //   width: "100%",
-  //   height: "100%",
-  // },
-  // SeparatorLine: {
-  //   backgroundColor: "#fff",
-  //   width: 1,
-  //   height: 40,
-  // },
+  textContainer: {
+    padding: 10,
+    marginTop: 3,
+    backgroundColor: "lightgrey",
+    alignItems: "center",
+  },
 });

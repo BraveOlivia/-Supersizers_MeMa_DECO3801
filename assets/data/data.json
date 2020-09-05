@@ -13,7 +13,7 @@
           "shopCurrency": 0
         },
         "questProgress": {
-          "questCompletion": 0,
+          "questCompletion": 5,
           "questMaxValue": 20
         },
         "questID": "1001"
@@ -33,7 +33,41 @@
           "questCompletion": 0,
           "questMaxValue": 50
         },
-        "questID": "1001"
+        "questID": "1002"
+      },
+      {
+        "questName": "Task 3",
+        "questType": "0",
+        "questCategory": "0",
+        "questDifficulty": "0",
+        "questDescription": "Running is a great way to improve fitness. Start running today!",
+        "questReward": {
+          "avatarHealth": 10,
+          "avatarStatus": 30,
+          "shopCurrency": 0
+        },
+        "questProgress": {
+          "questCompletion": 10,
+          "questMaxValue": 20
+        },
+        "questID": "1003"
+      },
+      {
+        "questName": "Task 4",
+        "questType": "0",
+        "questCategory": "0",
+        "questDifficulty": "0",
+        "questDescription": "Running is a great way to improve fitness. Start running today!",
+        "questReward": {
+          "avatarHealth": 30,
+          "avatarStatus": 30,
+          "shopCurrency": 0
+        },
+        "questProgress": {
+          "questCompletion": 20,
+          "questMaxValue": 20
+        },
+        "questID": "1004"
       }
     ],
     "nutritionalTips": [

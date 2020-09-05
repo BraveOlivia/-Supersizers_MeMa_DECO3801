@@ -1,11 +1,5 @@
 //NutritionScreen.js
 
-{
-  /* 
-dependencies installed: 1. npm install @feuer/react-tabs
-                        2. npm install react-native-paper
-*/
-}
 import Icon from "react-native-vector-icons/Ionicons";
 import React, { Component } from "react";
 import {
@@ -19,42 +13,6 @@ import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import tipData from "../assets/data/tip.json";
-
-// export default NutritionalScreen(
-//   {
-//     Home: { screen: HomeScreen },
-//     Quest: { screen: QuestScreen },
-//     NutritionalTips: { screen: NutritionalScreen },
-//   },
-//   {
-//     navigationOptions: ({ navigation }) => ({
-//       tabBarIcon: ({ focused }) => {
-//         const { routeName } = navigation.state;
-//         let iconName;
-//         switch (routeName) {
-//           case "Home":
-//             iconName =
-//               Platform.OS === "ios"
-//                 ? `ios-information-circle${focused ? "" : "-outline"}`
-//                 : "md-information-circle";
-//             break;
-//         }
-//         return (
-//           <Ionicons
-//             name={iconName}
-//             size={28}
-//             style={{ marginBottom: -3 }}
-//             color={focused ? Design.tabIconSelected : Design.tabIconDefault}
-//           />
-//         );
-//       },
-//     }),
-//     tabBarComponent: TabBarBottom,
-//     tabBarPosition: "bottom",
-//     animationEnabled: false,
-//     swipeEnabled: false,
-//   }
-// );
 
 function ReadTab() {
   return (
@@ -89,7 +47,11 @@ function UnreadTab() {
       {tipData["Nutritional Tips"].map(function (item) {
         if (!item.hasRead) {
           return (
-            <TouchableOpacity key={item.id} style={styles.textContainer}>
+            <TouchableOpacity
+              key={item.id}
+              style={styles.textContainer}
+              // onPress={alert("hello world")}
+            >
               <Text style={styles.text}>Title: {item.title}</Text>
               <Text>{item.description}</Text>
               <Text>{item.reward}</Text>
@@ -103,7 +65,7 @@ function UnreadTab() {
 UnreadTab.navigationOptions = {
   tabBarIcon: ({ tintColor, focused }) => (
     <Icon
-      name={focused ? "ios-mail-unread" : "md-mail-unread"}
+      name={focused ? "progress-check" : "progress-check"}
       color={tintColor}
       size={25}
     />
