@@ -14,62 +14,41 @@ import {
   View,
   StatusBar,
   TouchableOpacity,
+  SafeAreaView,
+  ScrollView,
+  Alert,
 } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import tipData from "../assets/data/tip.json";
-
-// export default NutritionalScreen(
-//   {
-//     Home: { screen: HomeScreen },
-//     Quest: { screen: QuestScreen },
-//     NutritionalTips: { screen: NutritionalScreen },
-//   },
-//   {
-//     navigationOptions: ({ navigation }) => ({
-//       tabBarIcon: ({ focused }) => {
-//         const { routeName } = navigation.state;
-//         let iconName;
-//         switch (routeName) {
-//           case "Home":
-//             iconName =
-//               Platform.OS === "ios"
-//                 ? `ios-information-circle${focused ? "" : "-outline"}`
-//                 : "md-information-circle";
-//             break;
-//         }
-//         return (
-//           <Ionicons
-//             name={iconName}
-//             size={28}
-//             style={{ marginBottom: -3 }}
-//             color={focused ? Design.tabIconSelected : Design.tabIconDefault}
-//           />
-//         );
-//       },
-//     }),
-//     tabBarComponent: TabBarBottom,
-//     tabBarPosition: "bottom",
-//     animationEnabled: false,
-//     swipeEnabled: false,
-//   }
-// );
+import jsonData from "../assets/data/data.json";
 
 function ReadTab() {
   return (
     <View>
-      {tipData["Nutritional Tips"].map(function (item) {
-        if (item.hasRead) {
-          return (
-            <TouchableOpacity key={item.id} style={styles.textContainer}>
-              <Text style={styles.text}>Title: {item.title}</Text>
-              <Text>{item.description}</Text>
-              <Text>{item.reward}</Text>
-            </TouchableOpacity>
-          );
-        }
-      })}
+      <SafeAreaView>
+        <ScrollView>
+          {jsonData.response["nutritionalTips"].map(function (item) {
+            if (item.complete) {
+              return (
+                <TouchableOpacity
+                  key={item.tipID}
+                  style={styles.textContainer}
+                  onPress={() => console.log(item.tip)}
+                >
+                  <Text style={styles.text}>Type: {item.tipType}</Text>
+                  <Text style={styles.text}>Title: {item.tipName}</Text>
+                  <Text style={styles.text}>Description: {item.tip}</Text>
+                  <Text style={styles.text}>
+                    Rewards: {item.tipReward.shopCurrency}
+                  </Text>
+                </TouchableOpacity>
+              );
+            }
+          })}
+        </ScrollView>
+      </SafeAreaView>
     </View>
   );
 }
@@ -82,21 +61,52 @@ ReadTab.navigationOptions = {
     />
   ),
 };
-
 function UnreadTab() {
+  const readData = (item) => {
+    Alert.alert(
+      item.tipName,
+      item.tip,
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("cancel"),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => {
+            item.complete = true;
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+    console.log(item);
+  };
   return (
     <View>
-      {tipData["Nutritional Tips"].map(function (item) {
-        if (!item.hasRead) {
-          return (
-            <TouchableOpacity key={item.id} style={styles.textContainer}>
-              <Text style={styles.text}>Title: {item.title}</Text>
-              <Text>{item.description}</Text>
-              <Text>{item.reward}</Text>
-            </TouchableOpacity>
-          );
-        }
-      })}
+      <SafeAreaView>
+        <ScrollView>
+          {jsonData.response["nutritionalTips"].map(function (item) {
+            if (!item.complete) {
+              return (
+                <TouchableOpacity
+                  key={item.tipID}
+                  style={styles.textContainer}
+                  onPress={() => readData(item)}
+                >
+                  <Text style={styles.text}>Type: {item.tipType}</Text>
+                  <Text style={styles.text}>Title: {item.tipName}</Text>
+                  <Text style={styles.text}>Description: {item.tip}</Text>
+                  <Text style={styles.text}>
+                    Rewards: {item.tipReward.shopCurrency}
+                  </Text>
+                </TouchableOpacity>
+              );
+            }
+          })}
+        </ScrollView>
+      </SafeAreaView>
     </View>
   );
 }
@@ -128,11 +138,26 @@ const Tab = createMaterialTopTabNavigator(
 );
 const AppIndex = createAppContainer(Tab);
 
+function onPressHandler(id) {
+  console.log(id);
+}
+
 export default class NutritionalScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
+
+  // readData = (data) => {
+  //   data.title = "Hello world1";
+  //   data.hasRead = false;
+  //   console.log(data);
+  // };
+  // unreadData = (data) => {
+  //   data.title = "this is unread!!";
+  //   data.hasRead = true;
+  //   console.log(data);
+  // };
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "#5F7EB2" }}>

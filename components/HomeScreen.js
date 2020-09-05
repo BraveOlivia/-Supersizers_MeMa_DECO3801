@@ -67,7 +67,7 @@ export default class HomeScreen extends Component {
             />
 
             <Button
-              title="Nurtrition"
+              title="Nutrition"
               onPress={() => this.props.navigation.navigate("Nutritional")}
             />
 

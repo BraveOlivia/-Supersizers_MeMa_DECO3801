@@ -39,6 +39,46 @@
       "description": "This is the fifth tip",
       "reward": 10,
       "hasRead": false
+    },
+    {
+      "id": 5,
+      "title": "tip 6",
+      "type": "Exercise",
+      "description": "This is the sixth tip",
+      "reward": 10,
+      "hasRead": false
+    },
+    {
+      "id": 6,
+      "title": "tip 7",
+      "type": "Exercise",
+      "description": "This is the seventh tip",
+      "reward": 10,
+      "hasRead": false
+    },
+    {
+      "id": 7,
+      "title": "tip 8",
+      "type": "Exercise",
+      "description": "This is the eighth tip",
+      "reward": 10,
+      "hasRead": false
+    },
+    {
+      "id": 8,
+      "title": "tip 9",
+      "type": "Exercise",
+      "description": "This is the ninth tip",
+      "reward": 10,
+      "hasRead": false
+    },
+    {
+      "id": 9,
+      "title": "tip 10",
+      "type": "Exercise",
+      "description": "This is the tenth tip",
+      "reward": 10,
+      "hasRead": false
     }
   ]
 }
