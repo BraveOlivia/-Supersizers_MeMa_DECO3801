@@ -3,19 +3,12 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, Image, View, Button, Alert } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import {
-  createStackNavigator,
-  createAppContainer,
-} from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faHome,
   faDollarSign,
   faCogs,
-  faCheckSquare,
-  faLightbulb,
-  faShoppingBag,
-  faUserFriends,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default class HomeScreen extends Component {
