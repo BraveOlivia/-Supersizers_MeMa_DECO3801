@@ -1,7 +1,7 @@
 {
-  "avatarHealth": 70,
-  "avatarStatus": 80,
   "response": {
+    "avatarStatus": 80,
+    "avatarHealth": 70,
     "quests": [
       {
         "questName": "Run Barry Run!",
