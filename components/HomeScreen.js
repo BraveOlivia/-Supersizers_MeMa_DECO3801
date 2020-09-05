@@ -18,7 +18,7 @@ import {
   faUserFriends,
 } from "@fortawesome/free-solid-svg-icons";
 
-export default class Homescreen extends Component {
+export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
   }

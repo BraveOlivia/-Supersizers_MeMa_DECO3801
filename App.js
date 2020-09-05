@@ -8,6 +8,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import ApiKeys from "./src/firebase/APIKeys";
 import * as firebase from "firebase";
+import { StatusBar } from "expo-status-bar";
 
 const Stack = createStackNavigator();
 
