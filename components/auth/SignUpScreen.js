@@ -42,7 +42,6 @@ export default class SignUpScreen extends Component {
     return (
       <View style={{ paddingTop: 50, alignItems: "center" }}>
         <Text>Signup</Text>
-
         <TextInput
           style={{ width: 200, height: 40, borderWidth: 1 }}
           value={this.state.email}

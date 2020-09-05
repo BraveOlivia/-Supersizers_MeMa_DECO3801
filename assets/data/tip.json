@@ -1,0 +1,44 @@
+{
+  "Nutritional Tips": [
+    {
+      "id": 0,
+      "title": "tip 1",
+      "type": "Exercise",
+      "description": "This is the first tip",
+      "reward": 10,
+      "hasRead": true
+    },
+    {
+      "id": 1,
+      "title": "tip 2",
+      "type": "Exercise",
+      "description": "This is the second tip",
+      "reward": 10,
+      "hasRead": false
+    },
+    {
+      "id": 2,
+      "title": "tip 3",
+      "type": "Exercise",
+      "description": "This is the third tip",
+      "reward": 10,
+      "hasRead": true
+    },
+    {
+      "id": 3,
+      "title": "tip 4",
+      "type": "Exercise",
+      "description": "This is the forth tip",
+      "reward": 10,
+      "hasRead": false
+    },
+    {
+      "id": 4,
+      "title": "tip 5",
+      "type": "Exercise",
+      "description": "This is the fifth tip",
+      "reward": 10,
+      "hasRead": false
+    }
+  ]
+}
