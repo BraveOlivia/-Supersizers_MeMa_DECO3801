@@ -9,6 +9,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import ApiKeys from "./src/firebase/APIKeys";
 import * as firebase from "firebase";
+import { StatusBar } from "expo-status-bar";
 
 const Stack = createStackNavigator();
 
@@ -60,17 +61,6 @@ export default class App extends Component {
           {this.state.isAuthenticated ? <MainNavigator /> : <RootNavigation />}
         </View>
       );
-      // <NavigationContainer>
-      //   <Stack.Navigator>
-      //     <Stack.Screen
-      //       name="Home"
-      //       component={HomeScreen}
-      //       options={{ title: "Supersizers" }}
-      //     />
-      //     <Stack.Screen name="Quest" component={QuestScreen} />
-      //     <Stack.Screen name="Nutritional" component={NutritionalScreen} />
-      //   </Stack.Navigator>
-      // </NavigationContainer>;
     }
   }
   _loadResourcesAsync = async () => {
