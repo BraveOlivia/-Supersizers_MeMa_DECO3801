@@ -27,7 +27,7 @@
         "questDifficulty": "0",
         "questDescription": "Lifting is a great way to build your body!",
         "questReward": {
-          "avatarHealth": 0,
+          "avatarHealth": 15,
           "avatarStatus": 60,
           "shopCurrency": 0
         },

@@ -11,19 +11,12 @@ import {
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faHome,
-  faDollarSign,
-  faCogs,
-  faSmile,
-  faLeaf,
-} from "@fortawesome/free-solid-svg-icons";
 import CardView from "react-native-cardview";
 import questData from "../assets/data/data.json";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
+import AsyncStorage from "@react-native-community/async-storage";
 
 // import { SaveJson } from "./SaveJson";
 
@@ -58,9 +51,14 @@ function ReadAllTab() {
               )
             }
           >
-            <Text style={styles.taskTitle}>Title: {item.questName}</Text>
-            <Text>{item.questDescription}</Text>
-            <Text>{item.questReward.avatarHealth}</Text>
+            <View style={styles.taskDiv}>
+              <Text style={styles.taskTitle}> {item.questName}</Text>
+              <Text style={styles.rewardPoint}>
+                + {item.questReward.avatarHealth}
+                <Icon name={"md-heart"} color={"red"} size={20} />
+              </Text>
+            </View>
+            <Text> {item.questDescription}</Text>
           </TouchableOpacity>
         );
       })}
@@ -111,9 +109,14 @@ function InProgreeTab() {
                 )
               }
             >
-              <Text style={styles.taskTitle}>Title: {item.questName}</Text>
-              <Text>{item.questDescription}</Text>
-              <Text>{item.questReward.avatarHealth}</Text>
+              <View style={styles.taskDiv}>
+                <Text style={styles.taskTitle}> {item.questName}</Text>
+                <Text style={styles.rewardPoint}>
+                  + {item.questReward.avatarHealth}
+                  <Icon name={"md-heart"} color={"red"} size={20} />
+                </Text>
+              </View>
+              <Text> {item.questDescription}</Text>
             </TouchableOpacity>
           );
         }
@@ -140,9 +143,14 @@ function CompletionTab() {
         ) {
           return (
             <TouchableOpacity key={item.questID} style={styles.textContainer}>
-              <Text style={styles.taskTitle}>Title: {item.questName}</Text>
-              <Text>{item.questDescription}</Text>
-              <Text>{item.questReward.avatarHealth}</Text>
+              <View style={styles.taskDiv}>
+                <Text style={styles.taskTitle}> {item.questName}</Text>
+                <Text style={styles.rewardPoint}>
+                  + {item.questReward.avatarHealth}
+                  <Icon name={"md-checkmark"} color={"green"} size={20} />
+                </Text>
+              </View>
+              <Text> {item.questDescription}</Text>
             </TouchableOpacity>
           );
         }
@@ -207,6 +215,23 @@ export default class QuestScreen extends Component {
       console.log(this.state);
     };
   }
+
+  // addCompletion = () => {
+  //   this.state.questCompletion += 10;
+  //   console.log(this.state.questCompletion);
+  // };
+  // addCompletion = () => {
+  //   this.setState({
+  //     questCompletion: this.state.questCompletion + 10,
+  //   });
+  // };
+
+  // try {
+  //   await AsyncStorage.setItem("avatarHealth", this.state.questCompletion);
+  //   console.log(this.state.questCompletion);
+  // } catch (e) {
+  //   console.log("Fail to store health");
+  // }
 
   render() {
     return (
@@ -319,7 +344,7 @@ const styles = StyleSheet.create({
   },
 
   taskDiv: {
-    flex: 1,
+    // flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -352,7 +377,8 @@ const styles = StyleSheet.create({
   textContainer: {
     padding: 10,
     marginTop: 3,
-    backgroundColor: "lightgrey",
-    alignItems: "center",
+    backgroundColor: "white",
+    borderColor: "darkgrey",
+    borderWidth: 1,
   },
 });
