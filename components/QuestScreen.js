@@ -43,7 +43,7 @@ function ReadAllTab() {
                   {
                     text: "OK",
                     onPress: () => {
-                      this.addCompletion();
+                      // this.addCompletion();
                       console.log("click 111");
                       console.log("click 222");
                     },
