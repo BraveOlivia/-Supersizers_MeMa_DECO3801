@@ -193,15 +193,15 @@ export default class QuestScreen extends Component {
       questCompletion: 0,
     };
   }
-  // addCompletion = () => {
-  //   this.state.questCompletion += 10;
-  //   console.log(this.state.questCompletion);
-  // };
   addCompletion = () => {
-    this.setState({
-      questCompletion: this.state.questCompletion + 10,
-    });
+    this.state.questCompletion += 10;
+    console.log(this.state.questCompletion);
   };
+  // addCompletion = () => {
+  //   this.setState({
+  //     questCompletion: this.state.questCompletion + 10,
+  //   });
+  // };
 
   // try {
   //   await AsyncStorage.setItem("avatarHealth", this.state.questCompletion);
