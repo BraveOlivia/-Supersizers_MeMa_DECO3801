@@ -23,19 +23,21 @@ function ReadTab() {
     <View>
       <SafeAreaView>
         <ScrollView>
-          {jsonData.response["nutritionalTips"].map(function (item) {
-            if (item.complete) {
+          {tipData["Nutritional Tips"].map(function (item) {
+            if (item.hasRead) {
               return (
                 <TouchableOpacity
-                  key={item.tipID}
+                  key={item.id}
                   style={styles.textContainer}
-                  onPress={() => console.log(item.tip)}
+                  onPress={() => console.log(item.content)}
                 >
-                  <Text style={styles.text}>Type: {item.tipType}</Text>
-                  <Text style={styles.text}>Title: {item.tipName}</Text>
-                  <Text style={styles.text}>Description: {item.tip}</Text>
+                  <Text style={styles.text}>Type: {item.type}</Text>
+                  <Text style={styles.text}>Title: {item.title}</Text>
                   <Text style={styles.text}>
-                    Rewards: {item.tipReward.shopCurrency}
+                    Description: {item.description}
+                  </Text>
+                  <Text style={styles.text}>
+                    Rewards: {item.reward.shopCurrency}
                   </Text>
                 </TouchableOpacity>
               );
@@ -58,8 +60,8 @@ ReadTab.navigationOptions = {
 function UnreadTab() {
   const readData = (item) => {
     Alert.alert(
-      item.tipName,
-      item.tip,
+      item.title,
+      item.content,
       [
         {
           text: "Cancel",
@@ -69,7 +71,7 @@ function UnreadTab() {
         {
           text: "OK",
           onPress: () => {
-            item.complete = true;
+            item.hasRead = true;
           },
         },
       ],
@@ -81,19 +83,21 @@ function UnreadTab() {
     <View>
       <SafeAreaView>
         <ScrollView>
-          {jsonData.response["nutritionalTips"].map(function (item) {
-            if (!item.complete) {
+          {tipData["Nutritional Tips"].map(function (item) {
+            if (!item.hasRead) {
               return (
                 <TouchableOpacity
-                  key={item.tipID}
+                  key={item.id}
                   style={styles.textContainer}
                   onPress={() => readData(item)}
                 >
-                  <Text style={styles.text}>Type: {item.tipType}</Text>
-                  <Text style={styles.text}>Title: {item.tipName}</Text>
-                  <Text style={styles.text}>Description: {item.tip}</Text>
+                  <Text style={styles.text}>Type: {item.type}</Text>
+                  <Text style={styles.text}>Title: {item.title}</Text>
                   <Text style={styles.text}>
-                    Rewards: {item.tipReward.shopCurrency}
+                    Description: {item.description}
+                  </Text>
+                  <Text style={styles.text}>
+                    Rewards: {item.reward.shopCurrency}
                   </Text>
                 </TouchableOpacity>
               );
