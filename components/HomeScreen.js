@@ -1,7 +1,15 @@
 // Homescreen.js
 
 import React, { Component } from "react";
-import { StyleSheet, Text, Image, View, Button, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Image,
+  View,
+  Button,
+  Alert,
+  AsyncStorage,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createStackNavigator,
@@ -19,10 +27,16 @@ import {
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import * as firebase from "firebase";
+import QuestScreen from "./QuestScreen";
 
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      questCompletion: 0,
+      avatarStatus: 80,
+      avatarHealth: 70,
+    };
   }
 
   //Occurs when signout is pressed;
@@ -30,7 +44,66 @@ export default class HomeScreen extends Component {
     firebase.auth().signOut();
   };
 
+  handleAvatarHealthChange = (props) => {
+    const avatarHealth = props.health;
+    if (avatarHealth > 80) {
+      return (
+        <Image
+          style={styles.avatar}
+          source={require("../assets/avatar/avatar_1.png")}
+        />
+      );
+    } else if (avatarHealth > 60 && avatarHealth <= 80) {
+      return (
+        <Image
+          style={styles.avatar}
+          source={require("../assets/avatar/avatar_2.png")}
+        />
+      );
+    } else if (avatarHealth > 40 && avatarHealth <= 60) {
+      return (
+        <Image
+          style={styles.avatar}
+          source={require("../assets/avatar/avatar_3.png")}
+        />
+      );
+    } else if (avatarHealth > 20 && avatarHealth <= 40) {
+      return (
+        <Image
+          style={styles.avatar}
+          source={require("../assets/avatar/avatar_4.png")}
+        />
+      );
+    } else {
+      return (
+        <Image
+          style={styles.avatar}
+          source={require("../assets/avatar/avatar_5.png")}
+        />
+      );
+    }
+  };
+
+  // _retrieveData = async () => {
+  //   try {
+  //     const health = await AsyncStorage.getItem("avatarHealth");
+  //     if (health !== null) {
+  //       console.log(health);
+  //       return health;
+  //     }
+  //   } catch (error) {
+  //     // Error retrieving data
+  //   }
+  // };
+
   render() {
+    // this._retrieveData();
+    var health = this.state.avatarHealth;
+    // var intervalID = setInterval(() => {
+    //   this.health -= 5;
+    // }, 1000);
+    console.log(health);
+
     return (
       <View style={styles.container}>
         <View style={styles.navBar}>
@@ -49,10 +122,11 @@ export default class HomeScreen extends Component {
           <Text style={styles.avatarDialogue}>
             [AvatarName]: G'day[UserName], staying healthy?
           </Text>
-          <Image
+          <this.handleAvatarHealthChange health={health} />
+          {/* <Image
             style={styles.avatar}
-            source={require("../assets/avatar.png")}
-          />
+            source={require("../assets/avatar/avatar_2.png")}
+          /> */}
           <View style={styles.emotionStatus}>
             <Text>[Happiness Bar]</Text>
           </View>
