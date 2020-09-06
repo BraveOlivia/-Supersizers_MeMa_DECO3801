@@ -16,12 +16,20 @@ import {
   faLightbulb,
   faShoppingBag,
   faUserFriends,
+  faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import * as firebase from "firebase";
 
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
   }
+
+  //Occurs when signout is pressed;
+  signOutPress = () => {
+    firebase.auth().signOut();
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -29,6 +37,12 @@ export default class HomeScreen extends Component {
           <FontAwesomeIcon icon={faHome} size={30} color={"grey"} />
           <FontAwesomeIcon icon={faDollarSign} size={30} color={"grey"} />
           <FontAwesomeIcon icon={faCogs} size={30} color={"grey"} />
+          <FontAwesomeIcon
+            icon={faSignOutAlt}
+            size={30}
+            color={"grey"}
+            onPress={this.signOutPress}
+          />
         </View>
 
         <View style={styles.avatarContainer}>
