@@ -6,7 +6,11 @@
       "type": "Exercise",
       "description": "This is the first tip",
       "content": "Some nutritional contents. Some nutritional contents. Some nutritional contents.",
-      "reward": 10,
+      "reward": {
+        "avatarHealth": 0,
+        "avatarStatus": 0,
+        "shopCurrency": 60
+      },
       "hasRead": true
     },
     {
@@ -15,7 +19,11 @@
       "type": "Exercise",
       "description": "This is the second tip",
       "content": "Some nutritional contents. Some nutritional contents. Some nutritional contents.",
-      "reward": 10,
+      "reward": {
+        "avatarHealth": 0,
+        "avatarStatus": 0,
+        "shopCurrency": 60
+      },
       "hasRead": false
     },
     {
@@ -24,7 +32,11 @@
       "type": "Exercise",
       "description": "This is the third tip",
       "content": "Some nutritional contents. Some nutritional contents. Some nutritional contents.",
-      "reward": 10,
+      "reward": {
+        "avatarHealth": 0,
+        "avatarStatus": 0,
+        "shopCurrency": 60
+      },
       "hasRead": true
     },
     {
@@ -33,7 +45,11 @@
       "type": "Exercise",
       "description": "This is the forth tip",
       "content": "Some nutritional contents. Some nutritional contents. Some nutritional contents.",
-      "reward": 10,
+      "reward": {
+        "avatarHealth": 0,
+        "avatarStatus": 0,
+        "shopCurrency": 60
+      },
       "hasRead": false
     },
     {
@@ -42,7 +58,11 @@
       "type": "Exercise",
       "description": "This is the fifth tip",
       "content": "Some nutritional contents. Some nutritional contents. Some nutritional contents.",
-      "reward": 10,
+      "reward": {
+        "avatarHealth": 0,
+        "avatarStatus": 0,
+        "shopCurrency": 60
+      },
       "hasRead": false
     },
     {
@@ -50,7 +70,11 @@
       "title": "tip 6",
       "type": "Exercise",
       "description": "This is the sixth tip",
-      "reward": 10,
+      "reward": {
+        "avatarHealth": 0,
+        "avatarStatus": 0,
+        "shopCurrency": 60
+      },
       "hasRead": false
     },
     {
@@ -58,7 +82,11 @@
       "title": "tip 7",
       "type": "Exercise",
       "description": "This is the seventh tip",
-      "reward": 10,
+      "reward": {
+        "avatarHealth": 0,
+        "avatarStatus": 0,
+        "shopCurrency": 60
+      },
       "hasRead": false
     },
     {
@@ -66,7 +94,11 @@
       "title": "tip 8",
       "type": "Exercise",
       "description": "This is the eighth tip",
-      "reward": 10,
+      "reward": {
+        "avatarHealth": 0,
+        "avatarStatus": 0,
+        "shopCurrency": 60
+      },
       "hasRead": false
     },
     {
@@ -74,7 +106,11 @@
       "title": "tip 9",
       "type": "Exercise",
       "description": "This is the ninth tip",
-      "reward": 10,
+      "reward": {
+        "avatarHealth": 0,
+        "avatarStatus": 0,
+        "shopCurrency": 60
+      },
       "hasRead": false
     },
     {
@@ -82,7 +118,11 @@
       "title": "tip 10",
       "type": "Exercise",
       "description": "This is the tenth tip",
-      "reward": 10,
+      "reward": {
+        "avatarHealth": 0,
+        "avatarStatus": 0,
+        "shopCurrency": 60
+      },
       "hasRead": false
     }
   ]
