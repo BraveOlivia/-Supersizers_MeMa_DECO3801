@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  AsyncStorage,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -200,21 +199,23 @@ export default class QuestScreen extends Component {
       this.state.questCompletion += 10;
       this.state.avatarStatus += quest.questReward.avatarStatus;
       this.state.avatarHealth += quest.questReward.avatarHealth;
-      // _storeData = async () => {
-      //   try {
-      //     await AsyncStorage.setItem({
-      //       questCompletion: this.state.questCompletion,
-      //       avatarStatus: this.state.avatarStatus,
-      //       avatarHealth: this.state.avatarHealth,
-      //     });
-      //     console.log("upload completed");
-      //   } catch (error) {
-      //     // Error saving data
-      //   }
-      // };
+      this.uploadData();
       console.log(this.state);
     };
   }
+
+  uploadData = async () => {
+    try {
+      await AsyncStorage.setItem(
+        "avatarHealth",
+        this.state.avatarHealth.toString()
+      );
+      console.log("upload completed");
+    } catch (error) {
+      // Error saving data
+      console.log(error);
+    }
+  };
 
   // addCompletion = () => {
   //   this.state.questCompletion += 10;

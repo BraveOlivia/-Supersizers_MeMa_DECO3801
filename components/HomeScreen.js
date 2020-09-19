@@ -1,15 +1,7 @@
 // Homescreen.js
 
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  Text,
-  Image,
-  View,
-  Button,
-  Alert,
-  AsyncStorage,
-} from "react-native";
+import { StyleSheet, Text, Image, View, Button, Alert } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createStackNavigator,
@@ -28,6 +20,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import * as firebase from "firebase";
 import QuestScreen from "./QuestScreen";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default class HomeScreen extends Component {
   constructor(props) {
@@ -35,8 +28,10 @@ export default class HomeScreen extends Component {
     this.state = {
       questCompletion: 0,
       avatarStatus: 80,
-      avatarHealth: 70,
+      avatarHealth: 0,
     };
+    console.log("home");
+    this.updateHealth();
   }
 
   //Occurs when signout is pressed;
@@ -84,20 +79,20 @@ export default class HomeScreen extends Component {
     }
   };
 
-  // _retrieveData = async () => {
-  //   try {
-  //     const health = await AsyncStorage.getItem("avatarHealth");
-  //     if (health !== null) {
-  //       console.log(health);
-  //       return health;
-  //     }
-  //   } catch (error) {
-  //     // Error retrieving data
-  //   }
-  // };
+  updateHealth = async () => {
+    try {
+      const health = await AsyncStorage.getItem("avatarHealth");
+      if (health !== null) {
+        this.setState({
+          avatarHealth: this.state.avatarHealth + parseInt(health),
+        });
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
 
   render() {
-    // this._retrieveData();
     var health = this.state.avatarHealth;
     // var intervalID = setInterval(() => {
     //   this.health -= 5;
