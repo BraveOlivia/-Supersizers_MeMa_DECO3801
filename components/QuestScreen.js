@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  AsyncStorage,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -42,11 +43,16 @@ function ReadAllTab() {
                   },
                   {
                     text: "OK",
+<<<<<<< HEAD
                     onPress: () => {
                       // this.addCompletion();
                       console.log("click 111");
                       console.log("click 222");
                     },
+=======
+                    onPress: () => addCompletion(item),
+                    //onPress: () => console.log("congratulations"),
+>>>>>>> 56175c24b79cf2aded4dc60286aabff1ecb556ed
                   },
                 ],
                 { cancelable: false }
@@ -101,7 +107,10 @@ function InProgreeTab() {
                     },
                     {
                       text: "OK",
-                      onPress: () => console.log("congratulations"),
+                      onPress: () => {
+                        this.addCompletion(item);
+                      },
+                      //onPress: () => console.log("congratulations"),
                     },
                   ],
                   { cancelable: false }
@@ -191,12 +200,34 @@ export default class QuestScreen extends Component {
     super(props);
     this.state = {
       questCompletion: 0,
+      avatarStatus: 0,
+      avatarHealth: 0,
+    };
+
+    addCompletion = (quest) => {
+      this.state.questCompletion += 10;
+      this.state.avatarStatus += quest.questReward.avatarStatus;
+      this.state.avatarHealth += quest.questReward.avatarHealth;
+      // _storeData = async () => {
+      //   try {
+      //     await AsyncStorage.setItem({
+      //       questCompletion: this.state.questCompletion,
+      //       avatarStatus: this.state.avatarStatus,
+      //       avatarHealth: this.state.avatarHealth,
+      //     });
+      //     console.log("upload completed");
+      //   } catch (error) {
+      //     // Error saving data
+      //   }
+      // };
+      console.log(this.state);
     };
   }
-  addCompletion = () => {
-    this.state.questCompletion += 10;
-    console.log(this.state.questCompletion);
-  };
+
+  // addCompletion = () => {
+  //   this.state.questCompletion += 10;
+  //   console.log(this.state.questCompletion);
+  // };
   // addCompletion = () => {
   //   this.setState({
   //     questCompletion: this.state.questCompletion + 10,
