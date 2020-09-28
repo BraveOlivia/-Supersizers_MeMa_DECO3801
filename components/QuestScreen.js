@@ -44,8 +44,19 @@ function ReadAllTab() {
                   {
                     text: "OK",
 <<<<<<< HEAD
+<<<<<<< HEAD
                     onPress: () => {
                       // this.addCompletion();
+                      console.log("click 111");
+                      console.log("click 222");
+                    },
+=======
+                    onPress: () => addCompletion(item),
+                    //onPress: () => console.log("congratulations"),
+>>>>>>> 56175c24b79cf2aded4dc60286aabff1ecb556ed
+||||||| merged common ancestors
+                    onPress: () => {
+                      this.addCompletion();
                       console.log("click 111");
                       console.log("click 222");
                     },
