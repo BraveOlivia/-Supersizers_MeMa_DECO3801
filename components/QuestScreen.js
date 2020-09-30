@@ -11,12 +11,11 @@ import {
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import CardView from "react-native-cardview";
 import questData from "../assets/data/data.json";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import AsyncStorage from "@react-native-community/async-storage";
+//import AsyncStorage from "@react-native-community/async-storage";
 
 // import { SaveJson } from "./SaveJson";
 
@@ -43,27 +42,8 @@ function ReadAllTab() {
                   },
                   {
                     text: "OK",
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    onPress: () => {
-                      // this.addCompletion();
-                      console.log("click 111");
-                      console.log("click 222");
-                    },
-=======
                     onPress: () => addCompletion(item),
                     //onPress: () => console.log("congratulations"),
->>>>>>> 56175c24b79cf2aded4dc60286aabff1ecb556ed
-||||||| merged common ancestors
-                    onPress: () => {
-                      this.addCompletion();
-                      console.log("click 111");
-                      console.log("click 222");
-                    },
-=======
-                    onPress: () => addCompletion(item),
-                    //onPress: () => console.log("congratulations"),
->>>>>>> 56175c24b79cf2aded4dc60286aabff1ecb556ed
                   },
                 ],
                 { cancelable: false }
