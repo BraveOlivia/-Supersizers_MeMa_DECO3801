@@ -19,19 +19,21 @@ import {
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import * as firebase from "firebase";
-import QuestScreen from "./QuestScreen";
-import AsyncStorage from "@react-native-community/async-storage";
 
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      questCompletion: 0,
-      avatarStatus: 80,
+      avatarStatus: 0,
       avatarHealth: 0,
     };
-    console.log("home");
-    this.updateHealth();
+
+    firebase
+      .database()
+      .ref("response/avatarHealth")
+      .once("value", (dataSnapShot) => {
+        this.setState({ avatarHealth: dataSnapShot.val() });
+      });
   }
 
   //Occurs when signout is pressed;
@@ -79,26 +81,34 @@ export default class HomeScreen extends Component {
     }
   };
 
-  updateHealth = async () => {
-    try {
-      const health = await AsyncStorage.getItem("avatarHealth");
-      if (health !== null) {
-        this.setState({
-          avatarHealth: this.state.avatarHealth + parseInt(health),
-        });
-      }
-    } catch (error) {
-      // Error retrieving data
-    }
-  };
+  // _retrieveData = async () => {
+  //   try {
+  //     const health = await AsyncStorage.getItem("avatarHealth");
+  //     if (health !== null) {
+  //       console.log(health);
+  //       return health;
+  //     }
+  //   } catch (error) {
+  //     // Error retrieving data
+  //   }
+  // };
 
   render() {
-    var health = this.state.avatarHealth;
+    // this._retrieveData();
+    // var health = 0;
+    // if (!firebase.apps.length) {
+    //   firebase.initializeApp(ApiKeys.FirebaseConfig);
+    // }
+    // firebase
+    //   .database()
+    //   .ref("response/avatarHealth")
+    //   .once("value", (dataSnapShot) => {
+    //     console.log(dataSnapShot.val());
+    //     health = dataSnapShot.val();
+    //   });
     // var intervalID = setInterval(() => {
     //   this.health -= 5;
     // }, 1000);
-    console.log(health);
-
     return (
       <View style={styles.container}>
         <View style={styles.navBar}>
@@ -117,7 +127,7 @@ export default class HomeScreen extends Component {
           <Text style={styles.avatarDialogue}>
             [AvatarName]: G'day[UserName], staying healthy?
           </Text>
-          <this.handleAvatarHealthChange health={health} />
+          <this.handleAvatarHealthChange health={this.state.avatarHealth} />
           {/* <Image
             style={styles.avatar}
             source={require("../assets/avatar/avatar_2.png")}

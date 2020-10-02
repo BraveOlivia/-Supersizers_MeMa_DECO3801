@@ -11,18 +11,55 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import CardView from "react-native-cardview";
-import questData from "../assets/data/data.json";
+//import questData from "../assets/data/data.json";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import AsyncStorage from "@react-native-community/async-storage";
+import RNRestart from "react-native-restart";
 
+import ApiKeys from "../src/firebase/APIKeys";
+import * as firebase from "firebase";
 // import { SaveJson } from "./SaveJson";
+
+var questData = {};
+var baseHealth = 0;
+if (!firebase.apps.length) {
+  firebase.initializeApp(ApiKeys.FirebaseConfig);
+}
+firebase
+  .database()
+  .ref("response/quests")
+  .once("value", (dataSnapShot) => {
+    questData = dataSnapShot.val();
+  });
+firebase
+  .database()
+  .ref("response/avatarHealth")
+  .once("value", (dataSnapShot) => {
+    baseHealth = dataSnapShot.val();
+  });
+
+function completeQuest(rewardHealth) {
+  firebase
+    .database()
+    .ref("response/")
+    .update({
+      avatarHealth: baseHealth + rewardHealth,
+    })
+    .then(() => {
+      console.log("Completed a quest");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  //window.location.reload(false);
+  RNRestart.Restart();
+}
 
 function ReadAllTab() {
   return (
     <View>
-      {questData.response["quests"].map(function (item) {
+      {questData.map(function (item) {
         return (
           <TouchableOpacity
             key={item.questName}
@@ -31,9 +68,9 @@ function ReadAllTab() {
               Alert.alert(
                 "Task Complete?",
                 "Confirm and get rewards:  \nHealth: " +
-                  item.questReward["avatarHealth"] +
+                  item.questReward.avatarHealth +
                   "\nHappiness: " +
-                  item.questReward["avatarStatus"],
+                  item.questReward.avatarStatus,
                 [
                   {
                     text: "Cancel",
@@ -42,7 +79,7 @@ function ReadAllTab() {
                   },
                   {
                     text: "OK",
-                    onPress: () => addCompletion(item),
+                    onPress: () => completeQuest(item.questReward.avatarHealth),
                     //onPress: () => console.log("congratulations"),
                   },
                 ],
@@ -73,7 +110,7 @@ ReadAllTab.navigationOptions = {
 function InProgreeTab() {
   return (
     <View>
-      {questData.response["quests"].map(function (item) {
+      {questData.map(function (item) {
         if (
           item.questProgress.questCompletion != 0 &&
           item.questProgress.questCompletion != item.questProgress.questMaxValue
@@ -86,9 +123,9 @@ function InProgreeTab() {
                 Alert.alert(
                   "Your Progress",
                   "You have finished " +
-                    item.questReward["avatarHealth"] +
+                    item.questReward.avatarHealth +
                     "/" +
-                    item.questReward["avatarStatus"] +
+                    item.questReward.avatarStatus +
                     " of the task, good job and go on",
                   [
                     {
@@ -98,9 +135,8 @@ function InProgreeTab() {
                     },
                     {
                       text: "OK",
-                      onPress: () => {
-                        this.addCompletion(item);
-                      },
+                      onPress: () =>
+                        completeQuest(item.questReward.avatarHealth),
                       //onPress: () => console.log("congratulations"),
                     },
                   ],
@@ -136,7 +172,7 @@ InProgreeTab.navigationOptions = {
 function CompletionTab() {
   return (
     <View>
-      {questData.response["quests"].map(function (item) {
+      {questData.map(function (item) {
         if (
           item.questProgress.questCompletion == item.questProgress.questMaxValue
         ) {
@@ -194,45 +230,7 @@ export default class QuestScreen extends Component {
       avatarStatus: 0,
       avatarHealth: 0,
     };
-
-    addCompletion = (quest) => {
-      this.state.questCompletion += 10;
-      this.state.avatarStatus += quest.questReward.avatarStatus;
-      this.state.avatarHealth += quest.questReward.avatarHealth;
-      this.uploadData();
-      console.log(this.state);
-    };
   }
-
-  uploadData = async () => {
-    try {
-      await AsyncStorage.setItem(
-        "avatarHealth",
-        this.state.avatarHealth.toString()
-      );
-      console.log("upload completed");
-    } catch (error) {
-      // Error saving data
-      console.log(error);
-    }
-  };
-
-  // addCompletion = () => {
-  //   this.state.questCompletion += 10;
-  //   console.log(this.state.questCompletion);
-  // };
-  // addCompletion = () => {
-  //   this.setState({
-  //     questCompletion: this.state.questCompletion + 10,
-  //   });
-  // };
-
-  // try {
-  //   await AsyncStorage.setItem("avatarHealth", this.state.questCompletion);
-  //   console.log(this.state.questCompletion);
-  // } catch (e) {
-  //   console.log("Fail to store health");
-  // }
 
   render() {
     return (
