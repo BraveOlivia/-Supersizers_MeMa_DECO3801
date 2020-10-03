@@ -15,7 +15,6 @@ import CardView from "react-native-cardview";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import RNRestart from "react-native-restart";
 
 import ApiKeys from "../src/firebase/APIKeys";
 import * as firebase from "firebase";
@@ -23,21 +22,26 @@ import * as firebase from "firebase";
 
 var questData = {};
 var baseHealth = 0;
+
 if (!firebase.apps.length) {
   firebase.initializeApp(ApiKeys.FirebaseConfig);
 }
-firebase
-  .database()
-  .ref("response/quests")
-  .once("value", (dataSnapShot) => {
-    questData = dataSnapShot.val();
-  });
-firebase
-  .database()
-  .ref("response/avatarHealth")
-  .once("value", (dataSnapShot) => {
-    baseHealth = dataSnapShot.val();
-  });
+readData();
+
+function readData() {
+  firebase
+    .database()
+    .ref("response/quests")
+    .once("value", (dataSnapShot) => {
+      questData = dataSnapShot.val();
+    });
+  firebase
+    .database()
+    .ref("response/avatarHealth")
+    .once("value", (dataSnapShot) => {
+      baseHealth = dataSnapShot.val();
+    });
+}
 
 function completeQuest(rewardHealth) {
   firebase
@@ -52,8 +56,6 @@ function completeQuest(rewardHealth) {
     .catch((error) => {
       console.log(error);
     });
-  //window.location.reload(false);
-  RNRestart.Restart();
 }
 
 function ReadAllTab() {
@@ -230,9 +232,13 @@ export default class QuestScreen extends Component {
       avatarStatus: 0,
       avatarHealth: 0,
     };
+    if (!firebase.apps.length) {
+      firebase.initializeApp(ApiKeys.FirebaseConfig);
+    }
   }
 
   render() {
+    readData();
     return (
       <View style={styles.MainContainer}>
         <AppIndex />

@@ -27,13 +27,16 @@ export default class HomeScreen extends Component {
       avatarStatus: 0,
       avatarHealth: 0,
     };
-
-    firebase
-      .database()
-      .ref("response/avatarHealth")
-      .once("value", (dataSnapShot) => {
-        this.setState({ avatarHealth: dataSnapShot.val() });
-      });
+    // firebase
+    //   .database()
+    //   .ref("response/avatarHealth")
+    //   .once("value", (dataSnapShot) => {
+    //     this.setState({ avatarHealth: dataSnapShot.val() });
+    //   });
+    if (!firebase.apps.length) {
+      firebase.initializeApp(ApiKeys.FirebaseConfig);
+    }
+    () => this.readData();
   }
 
   //Occurs when signout is pressed;
@@ -93,8 +96,41 @@ export default class HomeScreen extends Component {
   //   }
   // };
 
+  readData() {
+    firebase
+      .database()
+      .ref("response/avatarHealth")
+      .once("value", (dataSnapShot) => {
+        var tempHealth = dataSnapShot.val();
+        this.setState({ avatarHealth: tempHealth });
+      });
+  }
+
+  writeData() {
+    firebase.database().ref("response/").update({
+      avatarHealth: this.state.avatarHealth,
+    });
+  }
+
+  componentDidMount() {
+    this.timerID1 = setInterval(() => this.readData(), 1000);
+    this.timerID1 = setInterval(() => this.reduceHealth(), 10000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID1);
+  }
+
+  reduceHealth() {
+    this.setState((state) => {
+      return { avatarHealth: state.avatarHealth - 1 };
+    });
+    this.writeData();
+    console.log("reducing health");
+  }
+
   render() {
-    // this._retrieveData();
+    console.log(this.state.avatarHealth);
     // var health = 0;
     // if (!firebase.apps.length) {
     //   firebase.initializeApp(ApiKeys.FirebaseConfig);
