@@ -70,7 +70,11 @@ export default class LogInScreen extends Component {
           autoCorrect={false}
         />
 
-        <Button title="Login" onPress={this.onLoginPress} />
+        <Button
+          title="Login"
+          containerStyle={{ paddingTop: 10 }}
+          onPress={this.onLoginPress}
+        />
         <Button
           title="Create account..."
           onPress={() => this.props.navigation.navigate("Signup")}

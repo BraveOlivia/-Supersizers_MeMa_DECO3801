@@ -15,6 +15,10 @@ import CardView from "react-native-cardview";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
+import questData from "../assets/data/data.json";
+import Icon from "react-native-vector-icons/Ionicons";
+import { createAppContainer } from "react-navigation";
+import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 
 import ApiKeys from "../src/firebase/APIKeys";
 import * as firebase from "firebase";

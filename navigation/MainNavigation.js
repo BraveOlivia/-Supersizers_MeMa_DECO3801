@@ -8,6 +8,7 @@ import {
   NutritionalScreen,
   ShopScreen,
 } from "../components/ScreenComponents";
+import ChatScreen from "../components/ChatScreen";
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ export default class MainNavigator extends Component {
           <Stack.Screen name="Quest" component={QuestScreen} />
           <Stack.Screen name="Nutritional" component={NutritionalScreen} />
           <Stack.Screen name="Shop" component={ShopScreen} />
+          <Stack.Screen name="Chat" component={ChatScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
