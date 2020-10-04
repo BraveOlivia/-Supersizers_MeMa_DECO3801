@@ -7,15 +7,51 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  AsyncStorage,
 } from "react-native";
+import { fb } from "../src/firebase/APIKeys";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-// import AsyncStorage from "@react-native-community/async-storage";
-import { fb } from "../src/firebase/APIKeys";
+import ApiKeys from "../src/firebase/APIKeys";
+import * as firebase from "firebase";
 
-// import { SaveJson } from "./SaveJson";
+var questData = {};
+var baseHealth = 0;
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(ApiKeys.FirebaseConfig);
+}
+readData();
+
+function readData() {
+  firebase
+    .database()
+    .ref("response/quests")
+    .once("value", (dataSnapShot) => {
+      questData = dataSnapShot.val();
+    });
+  firebase
+    .database()
+    .ref("response/avatarHealth")
+    .once("value", (dataSnapShot) => {
+      baseHealth = dataSnapShot.val();
+    });
+}
+
+function completeQuest(rewardHealth) {
+  firebase
+    .database()
+    .ref("response/")
+    .update({
+      avatarHealth: baseHealth + rewardHealth,
+    })
+    .then(() => {
+      console.log("Completed a quest");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
 
 function ReadAllTab() {
   const [questData, allQuests] = useState([]);
@@ -43,9 +79,12 @@ function ReadAllTab() {
               Alert.alert(
                 "Task Complete?",
                 "Confirm and get rewards:  \nHealth: " +
-                  item["questReward"]["avatarHealth"] +
+                  // item["questReward"]["avatarHealth"] +
+                  // "\nHappiness: " +
+                  // item["questReward"]["avatarStatus"],
+                  item.questReward.avatarHealth +
                   "\nHappiness: " +
-                  item["questReward"]["avatarStatus"],
+                  item.questReward.avatarStatus,
                 [
                   {
                     text: "Cancel",
@@ -54,7 +93,7 @@ function ReadAllTab() {
                   },
                   {
                     text: "OK",
-                    onPress: () => addCompletion(item),
+                    onPress: () => completeQuest(item.questReward.avatarHealth),
                     //onPress: () => console.log("congratulations"),
                   },
                 ],
@@ -90,7 +129,6 @@ function InProgreeTab() {
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allInProgressQuests([]);
       snapshot.forEach(function (childSnapshot) {
-        // console.log(childSnapshot.val());
         if (
           childSnapshot.val()["questProgress"]["questCompletion"] != 0 &&
           childSnapshot.val()["questProgress"]["questCompletion"] !=
@@ -110,10 +148,6 @@ function InProgreeTab() {
   return (
     <View>
       {inProgress.map(function (item) {
-        // if (
-        //   item.questProgress.questCompletion != 0 &&
-        //   item.questProgress.questCompletion != item.questProgress.questMaxValue
-        //)
         {
           return (
             <TouchableOpacity
@@ -135,9 +169,8 @@ function InProgreeTab() {
                     },
                     {
                       text: "OK",
-                      onPress: () => {
-                        this.addCompletion(item);
-                      },
+                      onPress: () =>
+                        completeQuest(item.questReward.avatarHealth),
                       //onPress: () => console.log("congratulations"),
                     },
                   ],
@@ -197,9 +230,6 @@ function CompletionTab() {
   return (
     <View>
       {completedQuest.map(function (item) {
-        // if (
-        //   item.questProgress.questCompletion == item.questProgress.questMaxValue
-        // )
         {
           return (
             <TouchableOpacity
@@ -258,45 +288,13 @@ export default class QuestScreen extends Component {
       avatarStatus: 0,
       avatarHealth: 0,
     };
-
-    addCompletion = (quest) => {
-      this.state.questCompletion += 10;
-      this.state.avatarStatus += quest.questReward.avatarStatus;
-      this.state.avatarHealth += quest.questReward.avatarHealth;
-      // _storeData = async () => {
-      //   try {
-      //     await AsyncStorage.setItem({
-      //       questCompletion: this.state.questCompletion,
-      //       avatarStatus: this.state.avatarStatus,
-      //       avatarHealth: this.state.avatarHealth,
-      //     });
-      //     console.log("upload completed");
-      //   } catch (error) {
-      //     // Error saving data
-      //   }
-      // };
-      console.log(this.state);
-    };
+    if (!firebase.apps.length) {
+      firebase.initializeApp(ApiKeys.FirebaseConfig);
+    }
   }
 
-  // addCompletion = () => {
-  //   this.state.questCompletion += 10;
-  //   console.log(this.state.questCompletion);
-  // };
-  // addCompletion = () => {
-  //   this.setState({
-  //     questCompletion: this.state.questCompletion + 10,
-  //   });
-  // };
-
-  // try {
-  //   await AsyncStorage.setItem("avatarHealth", this.state.questCompletion);
-  //   console.log(this.state.questCompletion);
-  // } catch (e) {
-  //   console.log("Fail to store health");
-  // }
-
   render() {
+    readData();
     return (
       <View style={styles.MainContainer}>
         <AppIndex />
