@@ -7,7 +7,7 @@ import RootNavigation from "./navigation/RootNavigation";
 import MainNavigator from "./navigation/MainNavigation";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import ApiKeys from "./src/firebase/APIKeys";
+import { fb } from "./src/firebase/APIKeys";
 import * as firebase from "firebase";
 import { StatusBar } from "expo-status-bar";
 
@@ -22,16 +22,16 @@ export default class App extends Component {
       isAuthenticated: false,
     };
 
-    if (!firebase.apps.length) {
-      firebase.initializeApp(ApiKeys.FirebaseConfig);
-      // firebase.analytics = firebase.analytics();
-      // firebase.analytics.isSupported().then((isSupported) => {
-      //   if (isSupported) {
-      //     analytics = firebase.analytics();
-      //   }
-      // });
-    }
-    firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
+    // if (!firebase.apps.length) {
+    //   firebase.initializeApp(ApiKeys.FirebaseConfig);
+    //   // firebase.analytics = firebase.analytics();
+    //   // firebase.analytics.isSupported().then((isSupported) => {
+    //   //   if (isSupported) {
+    //   //     analytics = firebase.analytics();
+    //   //   }
+    //   // });
+    // }
+    fb.auth().onAuthStateChanged(this.onAuthStateChanged);
   }
 
   onAuthStateChanged = (user) => {

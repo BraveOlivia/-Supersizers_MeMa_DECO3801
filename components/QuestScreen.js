@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import {
   StyleSheet,
   Button,
@@ -9,32 +9,43 @@ import {
   Alert,
   AsyncStorage,
 } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import CardView from "react-native-cardview";
-import questData from "../assets/data/data.json";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import AsyncStorage from "@react-native-community/async-storage";
+// import AsyncStorage from "@react-native-community/async-storage";
+import { fb } from "../src/firebase/APIKeys";
 
 // import { SaveJson } from "./SaveJson";
 
 function ReadAllTab() {
+  const [questData, allQuests] = useState([]);
+  useEffect(() => {
+    const questRef = fb.database().ref("/response/quests");
+    const OnLoadingListener = questRef.on("value", (snapshot) => {
+      allQuests([]);
+      snapshot.forEach(function (childSnapshot) {
+        // console.log(childSnapshot.val());
+        allQuests((questData) => [...questData, childSnapshot.val()]);
+      });
+    });
+    return () => {
+      questRef.off("value", OnLoadingListener);
+    };
+  }, []);
   return (
     <View>
-      {questData.response["quests"].map(function (item) {
+      {questData.map(function (item) {
         return (
           <TouchableOpacity
-            key={item.questName}
+            key={item["questID"]}
             style={styles.textContainer}
             onPress={() =>
               Alert.alert(
                 "Task Complete?",
                 "Confirm and get rewards:  \nHealth: " +
-                  item.questReward["avatarHealth"] +
+                  item["questReward"]["avatarHealth"] +
                   "\nHappiness: " +
-                  item.questReward["avatarStatus"],
+                  item["questReward"]["avatarStatus"],
                 [
                   {
                     text: "Cancel",
@@ -52,13 +63,13 @@ function ReadAllTab() {
             }
           >
             <View style={styles.taskDiv}>
-              <Text style={styles.taskTitle}> {item.questName}</Text>
+              <Text style={styles.taskTitle}> {item["questName"]}</Text>
               <Text style={styles.rewardPoint}>
-                + {item.questReward.avatarHealth}
+                + {item["questReward"]["avatarHealth"]}
                 <Icon name={"md-heart"} color={"red"} size={20} />
               </Text>
             </View>
-            <Text> {item.questDescription}</Text>
+            <Text> {item["questDescription"]}</Text>
           </TouchableOpacity>
         );
       })}
@@ -72,24 +83,49 @@ ReadAllTab.navigationOptions = {
 };
 
 function InProgreeTab() {
+  const [inProgress, allInProgressQuests] = useState([]);
+
+  useEffect(() => {
+    const questRef = fb.database().ref("/response/quests");
+    const OnLoadingListener = questRef.on("value", (snapshot) => {
+      allInProgressQuests([]);
+      snapshot.forEach(function (childSnapshot) {
+        // console.log(childSnapshot.val());
+        if (
+          childSnapshot.val()["questProgress"]["questCompletion"] != 0 &&
+          childSnapshot.val()["questProgress"]["questCompletion"] !=
+            childSnapshot.val()["questProgress"]["questMaxValue"]
+        ) {
+          allInProgressQuests((inProgress) => [
+            ...inProgress,
+            childSnapshot.val(),
+          ]);
+        }
+      });
+    });
+    return () => {
+      questRef.off("value", OnLoadingListener);
+    };
+  }, []);
   return (
     <View>
-      {questData.response["quests"].map(function (item) {
-        if (
-          item.questProgress.questCompletion != 0 &&
-          item.questProgress.questCompletion != item.questProgress.questMaxValue
-        ) {
+      {inProgress.map(function (item) {
+        // if (
+        //   item.questProgress.questCompletion != 0 &&
+        //   item.questProgress.questCompletion != item.questProgress.questMaxValue
+        //)
+        {
           return (
             <TouchableOpacity
-              key={item.questID}
+              key={item["questID"]}
               style={styles.textContainer}
               onPress={() =>
                 Alert.alert(
                   "Your Progress",
                   "You have finished " +
-                    item.questReward["avatarHealth"] +
+                    item["questReward"]["avatarHealth"] +
                     "/" +
-                    item.questReward["avatarStatus"] +
+                    item["questReward"]["avatarStatus"] +
                     " of the task, good job and go on",
                   [
                     {
@@ -110,13 +146,13 @@ function InProgreeTab() {
               }
             >
               <View style={styles.taskDiv}>
-                <Text style={styles.taskTitle}> {item.questName}</Text>
+                <Text style={styles.taskTitle}> {item["questName"]}</Text>
                 <Text style={styles.rewardPoint}>
-                  + {item.questReward.avatarHealth}
+                  + {item["questReward"]["avatarHealth"]}
                   <Icon name={"md-heart"} color={"red"} size={20} />
                 </Text>
               </View>
-              <Text> {item.questDescription}</Text>
+              <Text> {item["questDescription"]}</Text>
             </TouchableOpacity>
           );
         }
@@ -135,22 +171,49 @@ InProgreeTab.navigationOptions = {
 };
 
 function CompletionTab() {
+  const [completedQuest, allCompletedQuests] = useState([]);
+
+  useEffect(() => {
+    const questRef = fb.database().ref("/response/quests");
+    const OnLoadingListener = questRef.on("value", (snapshot) => {
+      allCompletedQuests([]);
+      snapshot.forEach(function (childSnapshot) {
+        // console.log(childSnapshot.val());
+        if (
+          childSnapshot.val()["questProgress"]["questCompletion"] ==
+          childSnapshot.val()["questProgress"]["questMaxValue"]
+        ) {
+          allCompletedQuests((completedQuest) => [
+            ...completedQuest,
+            childSnapshot.val(),
+          ]);
+        }
+      });
+    });
+    return () => {
+      questRef.off("value", OnLoadingListener);
+    };
+  }, []);
   return (
     <View>
-      {questData.response["quests"].map(function (item) {
-        if (
-          item.questProgress.questCompletion == item.questProgress.questMaxValue
-        ) {
+      {completedQuest.map(function (item) {
+        // if (
+        //   item.questProgress.questCompletion == item.questProgress.questMaxValue
+        // )
+        {
           return (
-            <TouchableOpacity key={item.questID} style={styles.textContainer}>
+            <TouchableOpacity
+              key={item["questID"]}
+              style={styles.textContainer}
+            >
               <View style={styles.taskDiv}>
-                <Text style={styles.taskTitle}> {item.questName}</Text>
+                <Text style={styles.taskTitle}> {item["questName"]}</Text>
                 <Text style={styles.rewardPoint}>
-                  + {item.questReward.avatarHealth}
+                  + {item["questReward"]["avatarHealth"]}
                   <Icon name={"md-checkmark"} color={"green"} size={20} />
                 </Text>
               </View>
-              <Text> {item.questDescription}</Text>
+              <Text> {item["questDescription"]}</Text>
             </TouchableOpacity>
           );
         }
