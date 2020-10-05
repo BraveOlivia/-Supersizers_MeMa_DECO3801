@@ -18,20 +18,13 @@ import * as firebase from "firebase";
 var questData = {};
 var baseHealth = 0;
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(ApiKeys.FirebaseConfig);
-}
-readData();
-
 function readData() {
-  firebase
-    .database()
+  fb.database()
     .ref("response/quests")
     .once("value", (dataSnapShot) => {
       questData = dataSnapShot.val();
     });
-  firebase
-    .database()
+  fb.database()
     .ref("response/avatarHealth")
     .once("value", (dataSnapShot) => {
       baseHealth = dataSnapShot.val();
@@ -39,8 +32,7 @@ function readData() {
 }
 
 function completeQuest(rewardHealth) {
-  firebase
-    .database()
+  fb.database()
     .ref("response/")
     .update({
       avatarHealth: baseHealth + rewardHealth,
@@ -53,6 +45,47 @@ function completeQuest(rewardHealth) {
     });
 }
 
+// Updating Quest after a quest has been completed.
+const updateQuest = (
+  id,
+  name,
+  progress,
+  type,
+  reward,
+  desc,
+  difficulty,
+  category
+) => {
+  return new Promise(function (resolve, reject) {
+    let key;
+    if (id != null) {
+      key = id;
+    } else {
+      key = fb.database().ref().push().key;
+    }
+    let dataToSave = {
+      questID: key,
+      questName: name,
+      questProgress: progress,
+      questReward: reward,
+      questDescription: desc,
+      questDifficulty: difficulty,
+      questType: type,
+      questCategory: category,
+    };
+    console.log(dataToSave);
+    fb.database()
+      .ref("/response/quests/" + key)
+      .update(dataToSave)
+      .then((snapshot) => {
+        resolve(snapshot);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
 function ReadAllTab() {
   const [questData, allQuests] = useState([]);
   useEffect(() => {
@@ -60,7 +93,6 @@ function ReadAllTab() {
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allQuests([]);
       snapshot.forEach(function (childSnapshot) {
-        // console.log(childSnapshot.val());
         allQuests((questData) => [...questData, childSnapshot.val()]);
       });
     });
@@ -79,12 +111,9 @@ function ReadAllTab() {
               Alert.alert(
                 "Task Complete?",
                 "Confirm and get rewards:  \nHealth: " +
-                  // item["questReward"]["avatarHealth"] +
-                  // "\nHappiness: " +
-                  // item["questReward"]["avatarStatus"],
-                  item.questReward.avatarHealth +
+                  item["questReward"]["avatarHealth"] +
                   "\nHappiness: " +
-                  item.questReward.avatarStatus,
+                  item["questReward"]["avatarStatus"],
                 [
                   {
                     text: "Cancel",
@@ -93,7 +122,8 @@ function ReadAllTab() {
                   },
                   {
                     text: "OK",
-                    onPress: () => completeQuest(item.questReward.avatarHealth),
+                    onPress: () =>
+                      completeQuest(item["questReward"]["avatarHealth"]),
                     //onPress: () => console.log("congratulations"),
                   },
                 ],
@@ -170,7 +200,7 @@ function InProgreeTab() {
                     {
                       text: "OK",
                       onPress: () =>
-                        completeQuest(item.questReward.avatarHealth),
+                        completeQuest(item["questReward"]["avatarHealth"]),
                       //onPress: () => console.log("congratulations"),
                     },
                   ],

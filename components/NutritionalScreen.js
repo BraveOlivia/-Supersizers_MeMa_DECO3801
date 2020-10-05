@@ -27,20 +27,20 @@ function ReadTab() {
         allReads((read) => [...read, childSnapshot.val()]);
       });
     });
-    const childRemovedListener = readRef.on("child_removed", (snapshot) => {
-      // Set Your Functioanlity Whatever you want.
-      alert("Child Removed");
-    });
+    // const childRemovedListener = readRef.on("child_removed", (snapshot) => {
+    //   // Set Your Functioanlity Whatever you want.
+    //   alert("Child Removed");
+    // });
 
-    const childChangedListener = readRef.on("child_changed", (snapshot) => {
-      // Set Your Functioanlity Whatever you want.
-      alert("Child Updated/Changed");
-    });
+    // const childChangedListener = readRef.on("child_changed", (snapshot) => {
+    //   // Set Your Functioanlity Whatever you want.
+    //   alert("Child Updated/Changed");
+    // });
 
     return () => {
       readRef.off("value", OnLoadingListener);
-      readRef.off("child_removed", childRemovedListener);
-      readRef.off("child_changed", childChangedListener);
+      // readRef.off("child_removed", childRemovedListener);
+      // readRef.off("child_changed", childChangedListener);
     };
   }, []);
   return (
@@ -53,7 +53,7 @@ function ReadTab() {
                 <TouchableOpacity
                   key={item["tipID"]}
                   style={styles.textContainer}
-                  onPress={() => readData(item)}
+                  onPress={() => reading(item)}
                 >
                   <Text style={styles.text}>Type: {item["tipType"]}</Text>
                   <Text style={styles.text}>Title: {item["tipName"]}</Text>
@@ -80,11 +80,11 @@ ReadTab.navigationOptions = {
   ),
 };
 
+// Update tip after the tip has been read
 const submitTip = (id, name, tip, type, reward, complete) => {
   return new Promise(function (resolve, reject) {
-    console.log("!!!!" + id);
     let key;
-    if (Id != null) {
+    if (id != null) {
       key = id;
     } else {
       key = fb.database().ref().push().key;
@@ -97,8 +97,9 @@ const submitTip = (id, name, tip, type, reward, complete) => {
       tip: tip,
       tipType: type,
     };
-    database()
-      .ref("/response/nutritionalTips" + key)
+    console.log(dataToSave);
+    fb.database()
+      .ref("/response/nutritionalTips/" + key)
       .update(dataToSave)
       .then((snapshot) => {
         resolve(snapshot);
@@ -109,20 +110,11 @@ const submitTip = (id, name, tip, type, reward, complete) => {
   });
 };
 
-function handleUnreadTipClick() {
-  setComplete(item["complete"]);
-}
-
+// Reading Alert to verify if the tip is read.
 function reading(item) {
-  // useEffect(() => {
-  setStateComplete(item["complete"]);
-  setStateTip(item);
-  // });
-  // const [complete, setStateComplete] = useState(item["complete"]);
-  // const [tip, setStateTip] = useState(item);
   Alert.alert(
-    tip["tipName"],
-    tip["tip"],
+    item["tipName"],
+    item["tip"],
     [
       {
         text: "Cancel",
@@ -132,12 +124,14 @@ function reading(item) {
       {
         text: "OK",
         onPress: () => {
-          setStateComplete(!item["complete"]);
-          setStateTip((currentTip) => ({
-            ...currentTip,
-            complete: !item["complete"],
-          }));
-          console.log(tip);
+          submitTip(
+            item["tipID"],
+            item["tipName"],
+            item["tip"],
+            item["tipType"],
+            item["tipReward"],
+            !item["complete"]
+          );
         },
       },
     ],
@@ -145,8 +139,6 @@ function reading(item) {
   );
 }
 function UnreadTab() {
-  const [complete, setStateComplete] = useState(false);
-  const [tip, setStateTip] = useState(null);
   const [unread, allUnreads] = useState([]);
 
   useEffect(() => {
@@ -158,66 +150,11 @@ function UnreadTab() {
         allUnreads((unread) => [...unread, childSnapshot.val()]);
       });
     });
-    // const childRemovedListener = unreadRef.on("child_removed", (snapshot) => {
-    //   alert("Child Removed");
-    // });
-
-    // const childChangedListener = unreadRef.on("child_changed", (snapshot) => {
-
-    //   alert("Child Updated/Changed");
-    // });
 
     return () => {
       unreadRef.off("value", OnLoadingListener);
-      // unreadRef.off("child_removed", childRemovedListener);
-      // unreadRef.off("child_changed", childChangedListener);
     };
   }, []);
-  // const toggle = useCallback(() => setComplete((state) => !state), [
-  //   setComplete,
-  // ]);
-  const readTip = (item) => {
-    setStateComplete(item["complete"]);
-    setStateTip(item);
-    console.log(tip);
-    console.log(complete);
-    if (tip !== null) {
-      Alert.alert(tip["tipName"]);
-    }
-  };
-
-  // const readData = (item) => {
-  //   // setStateComplete(!item["complete"]);
-  //   // console.log(Complete);
-  //   setTip(item);
-  //   console.log(tip);
-  //   reading(tip);
-  //   // Alert.alert(
-  //   //   tip["tipName"],
-  //   //   tip["tip"],
-  //   //   [
-  //   //     {
-  //   //       text: "Cancel",
-  //   //       onPress: () => console.log("cancel"),
-  //   //       style: "cancel",
-  //   //     },
-  //   //     {
-  //   //       text: "OK",
-  //   //       // onChange: () => {setComplete(prev => !item["complete"])}}
-  //   //       onPress: () => {
-  //   //         setTip({
-  //   //           complete: tip["complete"],
-  //   //           tip: tip["tip"],
-  //   //           tipID: tip["tipID"],
-  //   //         });
-  //   //         console.log(tip);
-  //   //       },
-  //   //     },
-  //   //   ],
-  //   //   { cancelable: false }
-  //   // );
-  //   console.log(item);
-  // };
   return (
     <View>
       <SafeAreaView>
@@ -228,12 +165,7 @@ function UnreadTab() {
                 <TouchableOpacity
                   key={item["tipID"]}
                   style={styles.textContainer}
-                  // onPress={() =>
-                  //   setStateComplete({ Complete: !item["complete"] }, () => {
-                  //     console.log(Complete);
-                  //   })
-                  // }
-                  onPress={() => readTip(item)}
+                  onPress={() => reading(item)}
                 >
                   <Text style={styles.text}>Type: {item["tipType"]}</Text>
                   <Text style={styles.text}>Title: {item["tipName"]}</Text>
