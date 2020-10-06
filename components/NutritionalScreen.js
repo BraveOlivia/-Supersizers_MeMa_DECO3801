@@ -1,7 +1,7 @@
 //NutritionScreen.js
 
 import Icon from "react-native-vector-icons/Ionicons";
-import React, { Component } from "react";
+import React, { Component, useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,29 +15,51 @@ import {
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
-import tipData from "../assets/data/tip.json";
-import jsonData from "../assets/data/data.json";
+import { fb } from "../src/firebase/APIKeys";
 
 function ReadTab() {
+  const [read, allReads] = useState([]);
+  useEffect(() => {
+    const readRef = fb.database().ref("/response/nutritionalTips");
+    const OnLoadingListener = readRef.on("value", (snapshot) => {
+      allReads([]);
+      snapshot.forEach(function (childSnapshot) {
+        allReads((read) => [...read, childSnapshot.val()]);
+      });
+    });
+    // const childRemovedListener = readRef.on("child_removed", (snapshot) => {
+    //   // Set Your Functioanlity Whatever you want.
+    //   alert("Child Removed");
+    // });
+
+    // const childChangedListener = readRef.on("child_changed", (snapshot) => {
+    //   // Set Your Functioanlity Whatever you want.
+    //   alert("Child Updated/Changed");
+    // });
+
+    return () => {
+      readRef.off("value", OnLoadingListener);
+      // readRef.off("child_removed", childRemovedListener);
+      // readRef.off("child_changed", childChangedListener);
+    };
+  }, []);
   return (
     <View>
       <SafeAreaView>
         <ScrollView>
-          {tipData["Nutritional Tips"].map(function (item) {
-            if (item.hasRead) {
+          {read.map(function (item) {
+            if (item["complete"]) {
               return (
                 <TouchableOpacity
-                  key={item.id}
+                  key={item["tipID"]}
                   style={styles.textContainer}
-                  onPress={() => console.log(item.content)}
+                  onPress={() => reading(item)}
                 >
-                  <Text style={styles.text}>Type: {item.type}</Text>
-                  <Text style={styles.text}>Title: {item.title}</Text>
+                  <Text style={styles.text}>Type: {item["tipType"]}</Text>
+                  <Text style={styles.text}>Title: {item["tipName"]}</Text>
+                  <Text style={styles.text}>Description: {item["tip"]}</Text>
                   <Text style={styles.text}>
-                    Description: {item.description}
-                  </Text>
-                  <Text style={styles.text}>
-                    Rewards: {item.reward.shopCurrency}
+                    Rewards: {item["tipReward"]["shopCurrency"]}
                   </Text>
                 </TouchableOpacity>
               );
@@ -57,47 +79,99 @@ ReadTab.navigationOptions = {
     />
   ),
 };
+
+// Update tip after the tip has been read
+const submitTip = (id, name, tip, type, reward, complete) => {
+  return new Promise(function (resolve, reject) {
+    let key;
+    if (id != null) {
+      key = id;
+    } else {
+      key = fb.database().ref().push().key;
+    }
+    let dataToSave = {
+      tipID: key,
+      tipName: name,
+      complete: complete,
+      tipReward: reward,
+      tip: tip,
+      tipType: type,
+    };
+    console.log(dataToSave);
+    fb.database()
+      .ref("/response/nutritionalTips/" + key)
+      .update(dataToSave)
+      .then((snapshot) => {
+        resolve(snapshot);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+// Reading Alert to verify if the tip is read.
+function reading(item) {
+  Alert.alert(
+    item["tipName"],
+    item["tip"],
+    [
+      {
+        text: "Cancel",
+        onPress: () => console.log("cancel"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          submitTip(
+            item["tipID"],
+            item["tipName"],
+            item["tip"],
+            item["tipType"],
+            item["tipReward"],
+            !item["complete"]
+          );
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+}
 function UnreadTab() {
-  const readData = (item) => {
-    Alert.alert(
-      item.title,
-      item.content,
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("cancel"),
-          style: "cancel",
-        },
-        {
-          text: "OK",
-          onPress: () => {
-            item.hasRead = true;
-          },
-        },
-      ],
-      { cancelable: false }
-    );
-    console.log(item);
-  };
+  const [unread, allUnreads] = useState([]);
+
+  useEffect(() => {
+    const unreadRef = fb.database().ref("/response/nutritionalTips");
+    const OnLoadingListener = unreadRef.on("value", (snapshot) => {
+      allUnreads([]);
+      snapshot.forEach(function (childSnapshot) {
+        // console.log(childSnapshot.val());
+        allUnreads((unread) => [...unread, childSnapshot.val()]);
+      });
+    });
+
+    return () => {
+      unreadRef.off("value", OnLoadingListener);
+    };
+  }, []);
   return (
     <View>
       <SafeAreaView>
         <ScrollView>
-          {tipData["Nutritional Tips"].map(function (item) {
-            if (!item.hasRead) {
+          {unread.map(function (item) {
+            if (!item["complete"]) {
               return (
                 <TouchableOpacity
-                  key={item.id}
+                  key={item["tipID"]}
                   style={styles.textContainer}
-                  onPress={() => readData(item)}
+                  onPress={() => reading(item)}
                 >
-                  <Text style={styles.text}>Type: {item.type}</Text>
-                  <Text style={styles.text}>Title: {item.title}</Text>
+                  <Text style={styles.text}>Type: {item["tipType"]}</Text>
+                  <Text style={styles.text}>Title: {item["tipName"]}</Text>
+                  <Text style={styles.text}>Description: {item["tip"]}</Text>
                   <Text style={styles.text}>
-                    Description: {item.description}
-                  </Text>
-                  <Text style={styles.text}>
-                    Rewards: {item.reward.shopCurrency}
+                    Rewards: {item["tipReward"]["shopCurrency"]}
                   </Text>
                 </TouchableOpacity>
               );
@@ -137,7 +211,36 @@ const Tab = createMaterialTopTabNavigator(
 const AppIndex = createAppContainer(Tab);
 
 function onPressHandler(id) {
-  console.log(id);
+  // console.log(id);
+}
+
+function getData() {
+  const [item, listItem] = useState([]);
+  useEffect(() => {
+    const ref = fb.database().ref("/response/nutritionalTips");
+    const OnLoadingListener = ref.on("value", (snapshot) => {
+      listItem([]);
+      snapshot.forEach(function (childSnapshot) {
+        console.log(childSnapshot.val());
+        listItem((item) => [...item, childSnapshot.val()]);
+      });
+    });
+    const childRemovedListener = ref.on("child_removed", (snapshot) => {
+      // Set Your Functioanlity Whatever you want.
+      alert("Child Removed");
+    });
+
+    const childChangedListener = ref.on("child_changed", (snapshot) => {
+      // Set Your Functioanlity Whatever you want.
+      alert("Child Updated/Changed");
+    });
+
+    return () => {
+      ref.off("value", OnLoadingListener);
+      ref.off("child_removed", childRemovedListener);
+      ref.off("child_changed", childChangedListener);
+    };
+  }, []);
 }
 
 export default class NutritionalScreen extends Component {
@@ -145,17 +248,6 @@ export default class NutritionalScreen extends Component {
     super(props);
     this.state = {};
   }
-
-  // readData = (data) => {
-  //   data.title = "Hello world1";
-  //   data.hasRead = false;
-  //   console.log(data);
-  // };
-  // unreadData = (data) => {
-  //   data.title = "this is unread!!";
-  //   data.hasRead = true;
-  //   console.log(data);
-  // };
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "#5F7EB2" }}>

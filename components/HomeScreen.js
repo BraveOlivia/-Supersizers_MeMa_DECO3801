@@ -126,11 +126,11 @@ export default class HomeScreen extends Component {
       return { avatarHealth: state.avatarHealth - 1 };
     });
     this.writeData();
-    console.log("reducing health");
+    // console.log("reducing health");
   }
 
   render() {
-    console.log(this.state.avatarHealth);
+    // console.log(this.state.avatarHealth);
     // var health = 0;
     // if (!firebase.apps.length) {
     //   firebase.initializeApp(ApiKeys.FirebaseConfig);

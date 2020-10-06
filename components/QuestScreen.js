@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import {
   StyleSheet,
   Button,
@@ -19,7 +19,6 @@ import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 
 import { fb } from "../src/firebase/APIKeys.js";
 import * as firebase from "firebase";
-// import { SaveJson } from "./SaveJson";
 
 var questData = {};
 var baseHealth = 0;
@@ -56,21 +55,75 @@ function completeQuest(rewardHealth) {
     });
 }
 
+// Updating Quest after a quest has been completed.
+const updateQuest = (
+  id,
+  name,
+  progress,
+  type,
+  reward,
+  desc,
+  difficulty,
+  category
+) => {
+  return new Promise(function (resolve, reject) {
+    let key;
+    if (id != null) {
+      key = id;
+    } else {
+      key = fb.database().ref().push().key;
+    }
+    let dataToSave = {
+      questID: key,
+      questName: name,
+      questProgress: progress,
+      questReward: reward,
+      questDescription: desc,
+      questDifficulty: difficulty,
+      questType: type,
+      questCategory: category,
+    };
+    console.log(dataToSave);
+    fb.database()
+      .ref("/response/quests/" + key)
+      .update(dataToSave)
+      .then((snapshot) => {
+        resolve(snapshot);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
 function ReadAllTab() {
+  const [questData, allQuests] = useState([]);
+  useEffect(() => {
+    const questRef = fb.database().ref("/response/quests");
+    const OnLoadingListener = questRef.on("value", (snapshot) => {
+      allQuests([]);
+      snapshot.forEach(function (childSnapshot) {
+        allQuests((questData) => [...questData, childSnapshot.val()]);
+      });
+    });
+    return () => {
+      questRef.off("value", OnLoadingListener);
+    };
+  }, []);
   return (
     <View>
       {questData.map(function (item) {
         return (
           <TouchableOpacity
-            key={item.questName}
+            key={item["questID"]}
             style={styles.textContainer}
             onPress={() =>
               Alert.alert(
                 "Task Complete?",
                 "Confirm and get rewards:  \nHealth: " +
-                  item.questReward.avatarHealth +
+                  item["questReward"]["avatarHealth"] +
                   "\nHappiness: " +
-                  item.questReward.avatarStatus,
+                  item["questReward"]["avatarStatus"],
                 [
                   {
                     text: "Cancel",
@@ -79,7 +132,8 @@ function ReadAllTab() {
                   },
                   {
                     text: "OK",
-                    onPress: () => completeQuest(item.questReward.avatarHealth),
+                    onPress: () =>
+                      completeQuest(item["questReward"]["avatarHealth"]),
                     //onPress: () => console.log("congratulations"),
                   },
                 ],
@@ -88,13 +142,13 @@ function ReadAllTab() {
             }
           >
             <View style={styles.taskDiv}>
-              <Text style={styles.taskTitle}> {item.questName}</Text>
+              <Text style={styles.taskTitle}> {item["questName"]}</Text>
               <Text style={styles.rewardPoint}>
-                + {item.questReward.avatarHealth}
+                + {item["questReward"]["avatarHealth"]}
                 <Icon name={"md-heart"} color={"red"} size={20} />
               </Text>
             </View>
-            <Text> {item.questDescription}</Text>
+            <Text> {item["questDescription"]}</Text>
           </TouchableOpacity>
         );
       })}
@@ -108,24 +162,44 @@ ReadAllTab.navigationOptions = {
 };
 
 function InProgreeTab() {
+  const [inProgress, allInProgressQuests] = useState([]);
+
+  useEffect(() => {
+    const questRef = fb.database().ref("/response/quests");
+    const OnLoadingListener = questRef.on("value", (snapshot) => {
+      allInProgressQuests([]);
+      snapshot.forEach(function (childSnapshot) {
+        if (
+          childSnapshot.val()["questProgress"]["questCompletion"] != 0 &&
+          childSnapshot.val()["questProgress"]["questCompletion"] !=
+            childSnapshot.val()["questProgress"]["questMaxValue"]
+        ) {
+          allInProgressQuests((inProgress) => [
+            ...inProgress,
+            childSnapshot.val(),
+          ]);
+        }
+      });
+    });
+    return () => {
+      questRef.off("value", OnLoadingListener);
+    };
+  }, []);
   return (
     <View>
-      {questData.map(function (item) {
-        if (
-          item.questProgress.questCompletion != 0 &&
-          item.questProgress.questCompletion != item.questProgress.questMaxValue
-        ) {
+      {inProgress.map(function (item) {
+        {
           return (
             <TouchableOpacity
-              key={item.questID}
+              key={item["questID"]}
               style={styles.textContainer}
               onPress={() =>
                 Alert.alert(
                   "Your Progress",
                   "You have finished " +
-                    item.questReward.avatarHealth +
+                    item["questReward"]["avatarHealth"] +
                     "/" +
-                    item.questReward.avatarStatus +
+                    item["questReward"]["avatarStatus"] +
                     " of the task, good job and go on",
                   [
                     {
@@ -136,7 +210,7 @@ function InProgreeTab() {
                     {
                       text: "OK",
                       onPress: () =>
-                        completeQuest(item.questReward.avatarHealth),
+                        completeQuest(item["questReward"]["avatarHealth"]),
                       //onPress: () => console.log("congratulations"),
                     },
                   ],
@@ -145,13 +219,13 @@ function InProgreeTab() {
               }
             >
               <View style={styles.taskDiv}>
-                <Text style={styles.taskTitle}> {item.questName}</Text>
+                <Text style={styles.taskTitle}> {item["questName"]}</Text>
                 <Text style={styles.rewardPoint}>
-                  + {item.questReward.avatarHealth}
+                  + {item["questReward"]["avatarHealth"]}
                   <Icon name={"md-heart"} color={"red"} size={20} />
                 </Text>
               </View>
-              <Text> {item.questDescription}</Text>
+              <Text> {item["questDescription"]}</Text>
             </TouchableOpacity>
           );
         }
@@ -170,22 +244,46 @@ InProgreeTab.navigationOptions = {
 };
 
 function CompletionTab() {
+  const [completedQuest, allCompletedQuests] = useState([]);
+
+  useEffect(() => {
+    const questRef = fb.database().ref("/response/quests");
+    const OnLoadingListener = questRef.on("value", (snapshot) => {
+      allCompletedQuests([]);
+      snapshot.forEach(function (childSnapshot) {
+        // console.log(childSnapshot.val());
+        if (
+          childSnapshot.val()["questProgress"]["questCompletion"] ==
+          childSnapshot.val()["questProgress"]["questMaxValue"]
+        ) {
+          allCompletedQuests((completedQuest) => [
+            ...completedQuest,
+            childSnapshot.val(),
+          ]);
+        }
+      });
+    });
+    return () => {
+      questRef.off("value", OnLoadingListener);
+    };
+  }, []);
   return (
     <View>
-      {questData.map(function (item) {
-        if (
-          item.questProgress.questCompletion == item.questProgress.questMaxValue
-        ) {
+      {completedQuest.map(function (item) {
+        {
           return (
-            <TouchableOpacity key={item.questID} style={styles.textContainer}>
+            <TouchableOpacity
+              key={item["questID"]}
+              style={styles.textContainer}
+            >
               <View style={styles.taskDiv}>
-                <Text style={styles.taskTitle}> {item.questName}</Text>
+                <Text style={styles.taskTitle}> {item["questName"]}</Text>
                 <Text style={styles.rewardPoint}>
-                  + {item.questReward.avatarHealth}
+                  + {item["questReward"]["avatarHealth"]}
                   <Icon name={"md-checkmark"} color={"green"} size={20} />
                 </Text>
               </View>
-              <Text> {item.questDescription}</Text>
+              <Text> {item["questDescription"]}</Text>
             </TouchableOpacity>
           );
         }

@@ -4,52 +4,52 @@ import { GiftedChat } from "react-native-gifted-chat";
 import { NavigationContainer } from "@react-navigation/native";
 import { APIKeys } from "../src/firebase/APIKeys";
 
-export default class ChatScreen extends Component {
-  state = {
-    messages: [],
-  };
+// export default class ChatScreen extends Component {
+//   state = {
+//     messages: [],
+//   };
 
-  get user() {
-    return {
-      _id: Fire.uid,
-      name: this.props.navigation.state.params.name,
-    };
-  }
+//   get user() {
+//     return {
+//       _id: Fire.uid,
+//       name: this.props.navigation.state.params.name,
+//     };
+//   }
 
-  componentDidMount() {
-    Fire.get((message) =>
-      this.setState((previous) => ({
-        messages: GiftedChat.append(previous.messages, message),
-      }))
-    );
-  }
+//   componentDidMount() {
+//     Fire.get((message) =>
+//       this.setState((previous) => ({
+//         messages: GiftedChat.append(previous.messages, message),
+//       }))
+//     );
+//   }
 
-  componentWillMount() {
-    Fire.off();
-  }
+//   componentWillMount() {
+//     Fire.off();
+//   }
 
-  render() {
-    const chat = (
-      <GiftedChat
-        messages={this.state.messages}
-        onSend={Fire.send}
-        user={this.user}
-      />
-    );
+//   render() {
+//     const chat = (
+//       <GiftedChat
+//         messages={this.state.messages}
+//         onSend={Fire.send}
+//         user={this.user}
+//       />
+//     );
 
-    if (Platform.OS == "android") {
-      return (
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior="padding"
-          keyboardVerticalOffset={30}
-          enabled
-        >
-          {chat}
-        </KeyboardAvoidingView>
-      );
-    }
+//     if (Platform.OS == "android") {
+//       return (
+//         <KeyboardAvoidingView
+//           style={{ flex: 1 }}
+//           behavior="padding"
+//           keyboardVerticalOffset={30}
+//           enabled
+//         >
+//           {chat}
+//         </KeyboardAvoidingView>
+//       );
+//     }
 
-    return <SafeAreaView style={{ flex: 1 }}>{chat}</SafeAreaView>;
-  }
-}
+//     return <SafeAreaView style={{ flex: 1 }}>{chat}</SafeAreaView>;
+//   }
+// }
