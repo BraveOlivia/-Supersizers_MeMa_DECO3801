@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { Platform, KeyboardAvoidingView, SafeAreaView } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { Fire } from "../src/firebase/Fire";
+import { APIKeys } from "../src/firebase/APIKeys";
 
 export default class ChatScreen extends Component {
   state = {

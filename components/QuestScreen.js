@@ -10,17 +10,14 @@ import {
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import CardView from "react-native-cardview";
+//import CardView from "react-native-cardview";
 //import questData from "../assets/data/data.json";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import questData from "../assets/data/data.json";
-import Icon from "react-native-vector-icons/Ionicons";
-import { createAppContainer } from "react-navigation";
-import { createMaterialTopTabNavigator } from "react-navigation-tabs";
+//import questData from "../assets/data/data.json";
 
-import ApiKeys from "../src/firebase/APIKeys";
+import { fb } from "../src/firebase/APIKeys.js";
 import * as firebase from "firebase";
 // import { SaveJson } from "./SaveJson";
 
@@ -28,19 +25,17 @@ var questData = {};
 var baseHealth = 0;
 
 if (!firebase.apps.length) {
-  firebase.initializeApp(ApiKeys.FirebaseConfig);
+  firebase.initializeApp(fb.FirebaseConfig);
 }
 readData();
 
 function readData() {
-  firebase
-    .database()
+  fb.database()
     .ref("response/quests")
     .once("value", (dataSnapShot) => {
       questData = dataSnapShot.val();
     });
-  firebase
-    .database()
+  fb.database()
     .ref("response/avatarHealth")
     .once("value", (dataSnapShot) => {
       baseHealth = dataSnapShot.val();
@@ -48,8 +43,7 @@ function readData() {
 }
 
 function completeQuest(rewardHealth) {
-  firebase
-    .database()
+  fb.database()
     .ref("response/")
     .update({
       avatarHealth: baseHealth + rewardHealth,
