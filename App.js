@@ -22,16 +22,16 @@ export default class App extends Component {
       isAuthenticated: false,
     };
 
-    // if (!firebase.apps.length) {
-    //   firebase.initializeApp(ApiKeys.FirebaseConfig);
-    //   // firebase.analytics = firebase.analytics();
-    //   // firebase.analytics.isSupported().then((isSupported) => {
-    //   //   if (isSupported) {
-    //   //     analytics = firebase.analytics();
-    //   //   }
-    //   // });
-    // }
-    fb.auth().onAuthStateChanged(this.onAuthStateChanged);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(fb.FirebaseConfig);
+      // firebase.analytics = firebase.analytics();
+      // firebase.analytics.isSupported().then((isSupported) => {
+      //   if (isSupported) {
+      //     analytics = firebase.analytics();
+      //   }
+      // });
+    }
+    firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
   }
 
   onAuthStateChanged = (user) => {

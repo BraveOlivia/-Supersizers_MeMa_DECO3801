@@ -1,36 +1,106 @@
 // Homescreen.js
 
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { StyleSheet, Text, Image, View, Button, Alert } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+// import CheckBox from "react-native-check-box";
+
+import * as firebase from "firebase";
+
 import {
   faHome,
   faDollarSign,
   faCogs,
 } from "@fortawesome/free-solid-svg-icons";
+import { fb } from "../src/firebase/APIKeys";
 
 export default class HomeScreen extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
+    this.state = {
+      avatarCurrency: 0,
+      items: {},
+    };
   }
+
+  componentDidMount() {
+    fb.database()
+      .ref("response/shop")
+      .on("value", (querySnapShot) => {
+        let data = querySnapShot.val() ? querySnapShot.val() : {};
+        let shopitems = { ...data };
+        console.log(data);
+        this.setState({
+          items: shopitems,
+        });
+      });
+    fb.database()
+      .ref("response/currency")
+      .on("value", (querySnapShot) => {
+        let data = querySnapShot.val() ? querySnapShot.val() : {};
+        console.log(data);
+        this.setState({
+          avatarCurrency: data,
+        });
+      });
+  }
+
   render() {
+    let itemKeys = Object.keys(this.state.items);
+
     return (
       <View style={styles.container}>
-        <View style={styles.navBar}>
-          <FontAwesomeIcon icon={faHome} size={30} color={"grey"} />
-          <FontAwesomeIcon icon={faDollarSign} size={30} color={"grey"} />
-          <FontAwesomeIcon icon={faCogs} size={30} color={"grey"} />
+        <View style={styles.avatarContainer}>
+          <Text>Your currency: {this.state.avatarCurrency}</Text>
         </View>
 
-        <View style={styles.avatarContainer}>
-          <Text style={styles.avatarDialogue}>hello this is shop page.</Text>
+        <View>
+          {itemKeys.length > 0 ? (
+            itemKeys.map((key) => (
+              <ShopItem key={key} id={key} shopItem={this.state.items[key]} />
+            ))
+          ) : (
+            <Text>No character to unlock</Text>
+          )}
         </View>
       </View>
     );
   }
 }
+
+const ShopItem = ({ shopItem: { price: itemprice, done }, id }) => {
+  const [doneState, setDone] = useState(done);
+
+  const onCheck = () => {
+    setDone(!doneState);
+    fb.database()
+      .ref("response/shop")
+      .update({
+        [id]: {
+          price: itemprice,
+          bought: !doneState,
+        },
+      });
+    Alert.alert("Congrats, a new character unlocked!");
+  };
+
+  // style check box after clicking
+  return (
+    <View style={styles.itemContainer}>
+      <Image
+        style={styles.avatar}
+        source={require("../assets/avatar/avatar_2.png")}
+      />
+
+      <Button title="buy" onPress={onCheck} disabled={doneState} />
+      <Text style={[styles.buyText, { opacity: doneState ? 0.2 : 1 }]}>
+        Price: {itemprice}
+      </Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -39,62 +109,27 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
 
-  navBar: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
+  itemContainer: {
+    height: 230,
+    borderWidth: 0.5,
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 3,
   },
 
   avatarContainer: {
-    flex: 1,
+    // flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-
-  footMenu: {
-    flex: 0.1,
-    alignItems: "stretch",
-    justifyContent: "space-evenly",
-    flexDirection: "column",
-    margin: 30,
-    padding: 1,
-    marginBottom: "10%",
-  },
-
-  menurow: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-evenly",
   },
 
   avatar: {
-    width: "50%",
-    height: "50%",
-    margin: 50,
-  },
-
-  avatarDialogue: {
+    width: "18%",
+    height: "26%",
     alignItems: "center",
-    backgroundColor: "#dcdcdc",
-    borderWidth: 0.5,
-    borderRadius: 5,
-    width: 250,
-    padding: 10,
-    marginTop: "20%",
-    justifyContent: "center",
   },
 
-  emotionStatus: {
-    flex: 1.2,
-    width: 250,
-    backgroundColor: "lightgreen",
-    justifyContent: "center",
-  },
-
-  healthStatus: {
-    margin: 5,
-    flex: 1.2,
-    width: 250,
-    backgroundColor: "orange",
-    justifyContent: "center",
+  buyText: {
+    textAlign: "center",
   },
 });

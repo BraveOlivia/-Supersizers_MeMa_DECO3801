@@ -8,6 +8,7 @@ import {
   View,
   StatusBar,
   TouchableOpacity,
+  ImageBackground,
   SafeAreaView,
   ScrollView,
   Alert,

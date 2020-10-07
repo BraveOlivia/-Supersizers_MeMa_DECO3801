@@ -1,7 +1,15 @@
 // Homescreen.js
 
 import React, { Component } from "react";
-import { StyleSheet, Text, Image, View, Button, Alert } from "react-native";
+import {
+  StyleSheet,
+  ImageBackground,
+  Text,
+  Image,
+  View,
+  Button,
+  Alert,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createStackNavigator,
@@ -147,70 +155,73 @@ export default class HomeScreen extends Component {
     // }, 1000);
     return (
       <View style={styles.container}>
-        <View style={styles.navBar}>
-          <FontAwesomeIcon icon={faHome} size={30} color={"grey"} />
-          <FontAwesomeIcon icon={faDollarSign} size={30} color={"grey"} />
-          <FontAwesomeIcon icon={faCogs} size={30} color={"grey"} />
-          <FontAwesomeIcon
-            icon={faSignOutAlt}
-            size={30}
-            color={"grey"}
-            onPress={this.signOutPress}
-          />
-        </View>
+        <ImageBackground
+          source={require("../assets/BackgroundOrange.png")}
+          style={styles.backgroundImage}
+        >
+          <View style={styles.navBar}>
+            <FontAwesomeIcon icon={faHome} size={30} color={"black"} />
+            <FontAwesomeIcon icon={faDollarSign} size={30} color={"black"} />
+            <FontAwesomeIcon icon={faCogs} size={30} color={"black"} />
+            <FontAwesomeIcon
+              icon={faSignOutAlt}
+              size={30}
+              color={"black"}
+              onPress={this.signOutPress}
+            />
+          </View>
 
-        <View style={styles.avatarContainer}>
-          <Text style={styles.avatarDialogue}>
-            [AvatarName]: G'day[UserName], staying healthy?
-          </Text>
-          <this.handleAvatarHealthChange health={this.state.avatarHealth} />
-          {/* <Image
+          <View style={styles.avatarContainer}>
+            <Text style={styles.avatarDialogue}>
+              [AvatarName]: G'day[UserName], staying healthy?
+            </Text>
+            <this.handleAvatarHealthChange health={this.state.avatarHealth} />
+            {/* <Image
             style={styles.avatar}
             source={require("../assets/avatar/avatar_2.png")}
           /> */}
-          <View style={styles.emotionStatus}>
-            <Text>[Happiness Bar]</Text>
-          </View>
-          <View style={styles.healthStatus}>
-            <Text>[Status Bar]</Text>
-          </View>
-          {/* <Button
+            <View style={styles.emotionStatus}>
+              <Text>[Happiness Bar]</Text>
+            </View>
+            <View style={styles.healthStatus}>
+              <Text>[Status Bar]</Text>
+            </View>
+            {/* <Button
           color="fuchsia"
           title="Feed Avatar"
           onPress={() => Alert.alert("Avatar:", "Thank you!")}
         /> */}
-        </View>
-
-        <View style={styles.footMenu}>
-          <View style={styles.menurow}>
-            <FontAwesomeIcon icon={faCheckSquare} size={30} color={"grey"} />
-            <FontAwesomeIcon icon={faLightbulb} size={30} color={"grey"} />
-            <FontAwesomeIcon icon={faShoppingBag} size={30} color={"grey"} />
-            <FontAwesomeIcon icon={faUserFriends} size={30} color={"grey"} />
           </View>
 
-          <View style={styles.menurow}>
-            <Button
-              title="Quests"
-              onPress={() => this.props.navigation.navigate("Quest")}
-            />
+          <View style={styles.footMenu}>
+            <View style={styles.menurow}>
+              <FontAwesomeIcon icon={faCheckSquare} size={30} color={"black"} />
+              <FontAwesomeIcon icon={faLightbulb} size={30} color={"black"} />
+              <FontAwesomeIcon icon={faShoppingBag} size={30} color={"black"} />
+              <FontAwesomeIcon icon={faUserFriends} size={30} color={"black"} />
+            </View>
 
-            <Button
-              title="Nutrition"
-              onPress={() => this.props.navigation.navigate("Nutritional")}
-            />
+            <View style={styles.menurow}>
+              <Button
+                title="Quests"
+                onPress={() => this.props.navigation.navigate("Quest")}
+              />
 
-            <Button
-              title="Shop"
-              onPress={() => this.props.navigation.navigate("Shop")}
-            />
-
-            <Button
-              title="Friends"
-              onPress={() => this.props.navigation.navigate("Chat")}
-            />
+              <Button
+                title="Nutrition"
+                onPress={() => this.props.navigation.navigate("Nutritional")}
+              />
+              <Button
+                title="Friends"
+                onPress={() => this.props.navigation.navigate("Chat")}
+              />
+              <Button
+                title="Shop"
+                onPress={() => this.props.navigation.navigate("Shop")}
+              />
+            </View>
           </View>
-        </View>
+        </ImageBackground>
       </View>
     );
   }
@@ -221,6 +232,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f8ff",
     flex: 1,
     flexDirection: "column",
+  },
+
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
   },
 
   navBar: {
@@ -240,7 +257,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     flexDirection: "column",
     margin: 30,
-    padding: 1,
+    padding: 2,
     marginBottom: "10%",
   },
 
