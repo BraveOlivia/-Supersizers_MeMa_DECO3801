@@ -26,21 +26,25 @@ export default class HomeScreen extends Component {
   }
 
   componentDidMount() {
-    fb.database.ref("response/shop").on("value", (querySnapShot) => {
-      let data = querySnapShot.val() ? querySnapShot.val() : {};
-      let shopitems = { ...data };
-      console.log(data);
-      this.setState({
-        items: shopitems,
+    fb.database()
+      .ref("response/shop")
+      .on("value", (querySnapShot) => {
+        let data = querySnapShot.val() ? querySnapShot.val() : {};
+        let shopitems = { ...data };
+        console.log(data);
+        this.setState({
+          items: shopitems,
+        });
       });
-    });
-    fb.database.ref("response/currency").on("value", (querySnapShot) => {
-      let data = querySnapShot.val() ? querySnapShot.val() : {};
-      console.log(data);
-      this.setState({
-        avatarCurrency: data,
+    fb.database()
+      .ref("response/currency")
+      .on("value", (querySnapShot) => {
+        let data = querySnapShot.val() ? querySnapShot.val() : {};
+        console.log(data);
+        this.setState({
+          avatarCurrency: data,
+        });
       });
-    });
   }
 
   render() {
@@ -71,12 +75,14 @@ const ShopItem = ({ shopItem: { price: itemprice, done }, id }) => {
 
   const onCheck = () => {
     setDone(!doneState);
-    fb.database.ref("response/shop").update({
-      [id]: {
-        price: itemprice,
-        bought: !doneState,
-      },
-    });
+    fb.database()
+      .ref("response/shop")
+      .update({
+        [id]: {
+          price: itemprice,
+          bought: !doneState,
+        },
+      });
     Alert.alert("Congrats, a new character unlocked!");
   };
 
