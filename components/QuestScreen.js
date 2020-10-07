@@ -57,7 +57,8 @@ function completeQuest(rewardHealth) {
 }
 
 // Updating Quest after a quest has been completed.
-const updateQuest = (
+const updating = (
+  index,
   id,
   name,
   progress,
@@ -74,10 +75,14 @@ const updateQuest = (
     } else {
       key = fb.database().ref().push().key;
     }
+    let complete = {
+      questCompletion: progress["questMaxValue"],
+      questMaxValue: progress["questMaxValue"],
+    };
     let dataToSave = {
       questID: key,
       questName: name,
-      questProgress: progress,
+      questProgress: complete,
       questReward: reward,
       questDescription: desc,
       questDifficulty: difficulty,
@@ -86,7 +91,7 @@ const updateQuest = (
     };
     console.log(dataToSave);
     fb.database()
-      .ref("/response/quests/" + key)
+      .ref("/response/quests/" + index)
       .update(dataToSave)
       .then((snapshot) => {
         resolve(snapshot);
@@ -170,16 +175,10 @@ function InProgreeTab() {
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allInProgressQuests([]);
       snapshot.forEach(function (childSnapshot) {
-        if (
-          childSnapshot.val()["questProgress"]["questCompletion"] != 0 &&
-          childSnapshot.val()["questProgress"]["questCompletion"] !=
-            childSnapshot.val()["questProgress"]["questMaxValue"]
-        ) {
-          allInProgressQuests((inProgress) => [
-            ...inProgress,
-            childSnapshot.val(),
-          ]);
-        }
+        allInProgressQuests((inProgress) => [
+          ...inProgress,
+          childSnapshot.val(),
+        ]);
       });
     });
     return () => {
@@ -188,8 +187,12 @@ function InProgreeTab() {
   }, []);
   return (
     <View>
-      {inProgress.map(function (item) {
-        {
+      {inProgress.map(function (item, index) {
+        if (
+          item["questProgress"]["questCompletion"] != 0 &&
+          item["questProgress"]["questCompletion"] !=
+            item["questProgress"]["questMaxValue"]
+        ) {
           return (
             <TouchableOpacity
               key={item["questID"]}
@@ -210,9 +213,21 @@ function InProgreeTab() {
                     },
                     {
                       text: "OK",
-                      onPress: () =>
-                        completeQuest(item["questReward"]["avatarHealth"]),
-                      //onPress: () => console.log("congratulations"),
+                      onPress: () => {
+                        console.log(index);
+                        completeQuest(item["questReward"]["avatarHealth"]);
+                        updating(
+                          index,
+                          item["questID"],
+                          item["questName"],
+                          item["questProgress"],
+                          item["questType"],
+                          item["questReward"],
+                          item["questDescription"],
+                          item["questDifficulty"],
+                          item["questCategory"]
+                        );
+                      },
                     },
                   ],
                   { cancelable: false }
@@ -252,7 +267,6 @@ function CompletionTab() {
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allCompletedQuests([]);
       snapshot.forEach(function (childSnapshot) {
-        // console.log(childSnapshot.val());
         if (
           childSnapshot.val()["questProgress"]["questCompletion"] ==
           childSnapshot.val()["questProgress"]["questMaxValue"]
