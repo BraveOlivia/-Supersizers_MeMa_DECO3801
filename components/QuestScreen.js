@@ -48,18 +48,33 @@ function readData() {
 }
 
 function completeQuest(rewardHealth) {
-  firebase
-    .database()
-    .ref("response/")
-    .update({
-      avatarHealth: baseHealth + rewardHealth,
-    })
-    .then(() => {
-      console.log("Completed a quest");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  if (baseHealth + rewardHealth >= 100) {
+    firebase
+      .database()
+      .ref("response/")
+      .update({
+        avatarHealth: 100,
+      })
+      .then(() => {
+        console.log("Completed a quest");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } else {
+    firebase
+      .database()
+      .ref("response/")
+      .update({
+        avatarHealth: baseHealth + rewardHealth,
+      })
+      .then(() => {
+        console.log("Completed a quest");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 }
 
 function ReadAllTab() {
