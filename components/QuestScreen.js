@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ImageBackground,
 } from "react-native";
 import { fb } from "../src/firebase/APIKeys";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -327,8 +328,12 @@ export default class QuestScreen extends Component {
     readData();
     return (
       <View style={styles.MainContainer}>
-        <AppIndex />
-
+        <ImageBackground
+          style={styles.backgroundImage}
+          source={require("../assets/unknown.png")}
+        >
+          <AppIndex />
+        </ImageBackground>
         {/* <View style={styles.Content}> */}
         {/* <View style={styles.QuestButtons}>
             <Button
@@ -415,6 +420,11 @@ export default class QuestScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
   MainContainer: {
     flex: 1,
     flexDirection: "column",

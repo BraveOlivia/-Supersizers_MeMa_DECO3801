@@ -207,7 +207,7 @@ export default class HomeScreen extends Component {
 
             <Button
               title="Friends"
-              onPress={() => console.log("Socialise Button Pressed")}
+              onPress={() => this.props.navigation.navigate("Chat")}
             />
           </View>
         </View>
