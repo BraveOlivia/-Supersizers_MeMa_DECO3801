@@ -355,11 +355,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
 
-  backgroundImage: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
-  },
   navBar: {
     flexDirection: "row",
     justifyContent: "space-evenly",
