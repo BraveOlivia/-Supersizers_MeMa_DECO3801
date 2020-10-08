@@ -211,15 +211,13 @@ export default class HomeScreen extends Component {
                 title="Nutrition"
                 onPress={() => this.props.navigation.navigate("Nutritional")}
               />
-
               <Button
                 title="Shop"
                 onPress={() => this.props.navigation.navigate("Shop")}
               />
-
               <Button
                 title="Friends"
-                onPress={() => console.log("Socialise Button Pressed")}
+                onPress={() => this.props.navigation.navigate("Chat")}
               />
             </View>
           </View>

@@ -48,13 +48,13 @@ function ReadTab() {
     <View>
       <SafeAreaView>
         <ScrollView>
-          {read.map(function (item) {
+          {read.map(function (item, index) {
             if (item["complete"]) {
               return (
                 <TouchableOpacity
                   key={item["tipID"]}
                   style={styles.textContainer}
-                  onPress={() => reading(item)}
+                  onPress={() => reading(item, index)}
                 >
                   <Text style={styles.text}>Type: {item["tipType"]}</Text>
                   <Text style={styles.text}>Title: {item["tipName"]}</Text>
@@ -82,7 +82,7 @@ ReadTab.navigationOptions = {
 };
 
 // Update tip after the tip has been read
-const submitTip = (id, name, tip, type, reward, complete) => {
+const submitTip = (index, id, name, tip, type, reward, complete) => {
   return new Promise(function (resolve, reject) {
     let key;
     if (id != null) {
@@ -100,7 +100,7 @@ const submitTip = (id, name, tip, type, reward, complete) => {
     };
     console.log(dataToSave);
     fb.database()
-      .ref("/response/nutritionalTips/" + key)
+      .ref("/response/nutritionalTips/" + index)
       .update(dataToSave)
       .then((snapshot) => {
         resolve(snapshot);
@@ -112,7 +112,7 @@ const submitTip = (id, name, tip, type, reward, complete) => {
 };
 
 // Reading Alert to verify if the tip is read.
-function reading(item) {
+function reading(item, index) {
   Alert.alert(
     item["tipName"],
     item["tip"],
@@ -126,6 +126,7 @@ function reading(item) {
         text: "OK",
         onPress: () => {
           submitTip(
+            index,
             item["tipID"],
             item["tipName"],
             item["tip"],
@@ -160,13 +161,13 @@ function UnreadTab() {
     <View>
       <SafeAreaView>
         <ScrollView>
-          {unread.map(function (item) {
+          {unread.map(function (item, index) {
             if (!item["complete"]) {
               return (
                 <TouchableOpacity
                   key={item["tipID"]}
                   style={styles.textContainer}
-                  onPress={() => reading(item)}
+                  onPress={() => reading(item, index)}
                 >
                   <Text style={styles.text}>Type: {item["tipType"]}</Text>
                   <Text style={styles.text}>Title: {item["tipName"]}</Text>
@@ -210,39 +211,6 @@ const Tab = createMaterialTopTabNavigator(
   }
 );
 const AppIndex = createAppContainer(Tab);
-
-function onPressHandler(id) {
-  // console.log(id);
-}
-
-function getData() {
-  const [item, listItem] = useState([]);
-  useEffect(() => {
-    const ref = fb.database().ref("/response/nutritionalTips");
-    const OnLoadingListener = ref.on("value", (snapshot) => {
-      listItem([]);
-      snapshot.forEach(function (childSnapshot) {
-        console.log(childSnapshot.val());
-        listItem((item) => [...item, childSnapshot.val()]);
-      });
-    });
-    const childRemovedListener = ref.on("child_removed", (snapshot) => {
-      // Set Your Functioanlity Whatever you want.
-      alert("Child Removed");
-    });
-
-    const childChangedListener = ref.on("child_changed", (snapshot) => {
-      // Set Your Functioanlity Whatever you want.
-      alert("Child Updated/Changed");
-    });
-
-    return () => {
-      ref.off("value", OnLoadingListener);
-      ref.off("child_removed", childRemovedListener);
-      ref.off("child_changed", childChangedListener);
-    };
-  }, []);
-}
 
 export default class NutritionalScreen extends Component {
   constructor(props) {
