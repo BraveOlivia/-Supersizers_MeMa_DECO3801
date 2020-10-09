@@ -23,6 +23,8 @@ import * as firebase from "firebase";
 
 var questData = {};
 var baseHealth = 0;
+var baseStatus = 0;
+var baseCurrency = 0;
 
 if (!firebase.apps.length) {
   firebase.initializeApp(fb.FirebaseConfig);
@@ -40,13 +42,28 @@ function readData() {
     .once("value", (dataSnapShot) => {
       baseHealth = dataSnapShot.val();
     });
+  fb.database()
+    .ref("response/avatarStatus")
+    .once("value", (dataSnapShot) => {
+      baseStatus = dataSnapShot.val();
+    });
+  fb.database()
+    .ref("response/currency")
+    .once("value", (dataSnapShot) => {
+      baseCurrency = dataSnapShot.val();
+    });
 }
 
 function completeQuest(rewardHealth) {
+  baseHealth += rewardHealth["avatarHealth"];
+  baseStatus += rewardHealth["avatarStatus"];
+  baseCurrency += rewardHealth["shopCurrency"];
   fb.database()
     .ref("response/")
     .update({
-      avatarHealth: baseHealth + rewardHealth,
+      avatarHealth: baseHealth,
+      avatarStatus: baseStatus,
+      currency: baseCurrency,
     })
     .then(() => {
       console.log("Completed a quest");
@@ -138,8 +155,7 @@ function ReadAllTab() {
                   },
                   {
                     text: "OK",
-                    onPress: () =>
-                      completeQuest(item["questReward"]["avatarHealth"]),
+                    onPress: () => completeQuest(item["questReward"]),
                     //onPress: () => console.log("congratulations"),
                   },
                 ],
@@ -189,7 +205,7 @@ function InProgreeTab() {
     <View>
       {inProgress.map(function (item, index) {
         if (
-          item["questProgress"]["questCompletion"] != 0 &&
+          item["questProgress"]["questCompletion"] >= 0 &&
           item["questProgress"]["questCompletion"] !=
             item["questProgress"]["questMaxValue"]
         ) {
@@ -215,7 +231,7 @@ function InProgreeTab() {
                       text: "OK",
                       onPress: () => {
                         console.log(index);
-                        completeQuest(item["questReward"]["avatarHealth"]);
+                        completeQuest(item["questReward"]);
                         updating(
                           index,
                           item["questID"],
@@ -342,6 +358,7 @@ export default class QuestScreen extends Component {
       questCompletion: 0,
       avatarStatus: 0,
       avatarHealth: 0,
+      avatarCurrency: 0,
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
