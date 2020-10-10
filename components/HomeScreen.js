@@ -92,18 +92,6 @@ export default class HomeScreen extends Component {
     }
   };
 
-  // _retrieveData = async () => {
-  //   try {
-  //     const health = await AsyncStorage.getItem("avatarHealth");
-  //     if (health !== null) {
-  //       console.log(health);
-  //       return health;
-  //     }
-  //   } catch (error) {
-  //     // Error retrieving data
-  //   }
-  // };
-
   readData() {
     firebase
       .database()
@@ -111,6 +99,13 @@ export default class HomeScreen extends Component {
       .once("value", (dataSnapShot) => {
         var tempHealth = dataSnapShot.val();
         this.setState({ avatarHealth: tempHealth });
+      });
+    firebase
+      .database()
+      .ref("response/avatarStatus")
+      .once("value", (dataSnapShot) => {
+        var tempStatus = dataSnapShot.val();
+        this.setState({ avatarStatus: tempStatus });
       });
   }
 
@@ -142,21 +137,6 @@ export default class HomeScreen extends Component {
   }
 
   render() {
-    // console.log(this.state.avatarHealth);
-    // var health = 0;
-    // if (!firebase.apps.length) {
-    //   firebase.initializeApp(ApiKeys.FirebaseConfig);
-    // }
-    // firebase
-    //   .database()
-    //   .ref("response/avatarHealth")
-    //   .once("value", (dataSnapShot) => {
-    //     console.log(dataSnapShot.val());
-    //     health = dataSnapShot.val();
-    //   });
-    // var intervalID = setInterval(() => {
-    //   this.health -= 5;
-    // }, 1000);
     return (
       <View style={styles.container}>
         <ImageBackground
@@ -180,21 +160,27 @@ export default class HomeScreen extends Component {
               [AvatarName]: G'day[UserName], staying healthy?
             </Text>
             <this.handleAvatarHealthChange health={this.state.avatarHealth} />
-            {/* <Image
-            style={styles.avatar}
-            source={require("../assets/avatar/avatar_2.png")}
-          /> */}
-            <View style={styles.emotionStatus}>
-              <Text>[Happiness Bar]</Text>
+            {/* <Text>[Happiness Bar]</Text> */}
+            <View style={{
+                marginLeft: 100,
+                flex: 1.2,
+                width: 250 * this.state.avatarStatus * 0.01,
+                backgroundColor: "lightgreen",
+                justifyContent: "center",
+                alignSelf: "flex-start"
+            }}>
             </View>
-            <View style={styles.healthStatus}>
-              <Text>[Status Bar]</Text>
+            {/* <Text>[Health Bar]</Text> */}
+            <View style={{
+              margin: 5,
+              marginLeft: 100,
+              flex: 1.2,
+              width: 250 * this.state.avatarHealth * 0.01,
+              backgroundColor: "orange",
+              justifyContent: "center",
+              alignSelf: "flex-start"
+            }}>
             </View>
-            {/* <Button
-          color="fuchsia"
-          title="Feed Avatar"
-          onPress={() => Alert.alert("Avatar:", "Thank you!")}
-        /> */}
           </View>
 
           <View style={styles.footMenu}>
