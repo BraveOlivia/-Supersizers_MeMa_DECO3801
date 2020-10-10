@@ -1,0 +1,252 @@
+{
+  "messages": {
+    "-MIxFemYtEUctRYDrjOe": {
+      "text": "hey mate",
+      "timestamp": 1601976839558,
+      "user": {
+        "_id": "ksgUeMMHUUXn6vf30xevrd1v2oq2"
+      }
+    },
+    "-MJ1DRwwAAz120iZ3qiN": {
+      "text": "hello world",
+      "timestamp": 1602060144676,
+      "user": {
+        "_id": "ksgUeMMHUUXn6vf30xevrd1v2oq2"
+      }
+    },
+    "-MJ1KFwH2IM53juEL7Eb": {
+      "text": "Hjrif3",
+      "timestamp": 1602061930490,
+      "user": {
+        "_id": "MjdVl8F9tTRe4Dq44406VNcG0o73"
+      }
+    },
+    "-MJ1KOXZeu59NRoRDvFu": {
+      "text": "Test message",
+      "timestamp": 1602061965850,
+      "user": {
+        "_id": "MjdVl8F9tTRe4Dq44406VNcG0o73"
+      }
+    },
+    "-MJ1KOZc4J16hMzS4FGG": {
+      "text": "testing from Dicky",
+      "timestamp": 1602061965845,
+      "user": {
+        "_id": "ksgUeMMHUUXn6vf30xevrd1v2oq2"
+      }
+    }
+  },
+  "userData": {
+    "1": {
+      "avatarHealth": 100,
+      "avatarStatus": 100,
+      "character": 0,
+      "currency": 500,
+      "nutritionalTips": {
+        "100031": {
+          "complete": false
+        },
+        "100032": {
+          "complete": false
+        },
+        "100033": {
+          "complete": false
+        },
+        "100034": {
+          "complete": false
+        },
+        "100035": {
+          "complete": false
+        },
+        "100036": {
+          "complete": false
+        }
+      },
+      "quests": {
+        "1001": {
+          "questProgress": {
+            "questCompletion": 0,
+            "questMaxValue": 30
+          }
+        },
+        "1002": {
+          "questProgress": {
+            "questCompletion": 0,
+            "questMaxValue": 50
+          }
+        },
+        "1003": {
+          "questProgress": {
+            "questCompletion": 0,
+            "questMaxValue": 30
+          }
+        },
+        "1004": {
+          "questProgress": {
+            "questCompletion": 0,
+            "questMaxValue": 30
+          }
+        },
+        "1005": {
+          "questProgress": {
+            "questCompletion": 0,
+            "questMaxValue": 30
+          }
+        }
+      },
+      "shop": {
+        "item1": {
+          "bought": false
+        },
+        "item2": {
+          "bought": false
+        },
+        "item3": {
+          "bought": false
+        }
+      }
+    }
+  },
+  "sharedData": {
+    "nutritionalTips": {
+      "100031": {
+        "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+        "tipName": "Fresh Eating",
+        "tipReward": {
+          "avatarHealth": 0,
+          "avatarStatus": 0,
+          "shopCurrency": 5
+        },
+        "tipType": "0"
+      },
+      "100032": {
+        "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+        "tipName": "Work Harder, Play Harder",
+        "tipReward": {
+          "avatarHealth": 0,
+          "avatarStatus": 0,
+          "shopCurrency": 5
+        },
+        "tipType": "0"
+      },
+      "100033": {
+        "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+        "tipName": "Stop Sittting, Start Moving",
+        "tipReward": {
+          "avatarHealth": 0,
+          "avatarStatus": 0,
+          "shopCurrency": 10
+        },
+        "tipType": "0"
+      },
+      "100034": {
+        "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+        "tipName": "Fresh Eating",
+        "tipReward": {
+          "avatarHealth": 0,
+          "avatarStatus": 0,
+          "shopCurrency": 5
+        },
+        "tipType": "0"
+      },
+      "100035": {
+        "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+        "tipName": "Benefits of Protein",
+        "tipReward": {
+          "avatarHealth": 0,
+          "avatarStatus": 0,
+          "shopCurrency": 10
+        },
+        "tipType": "0"
+      },
+      "100036": {
+        "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+        "tipName": "Stop Sittting, Start Moving",
+        "tipReward": {
+          "avatarHealth": 0,
+          "avatarStatus": 0,
+          "shopCurrency": 10
+        },
+        "tipType": "0"
+      }
+    },
+    "quests": {
+      "1001": {
+        "questCategory": "0",
+        "questDescription": "Running is a great way to improve fitness. Start running today!",
+        "questDifficulty": "0",
+        "questName": "Run Barry Run!",
+        "questMaxValue": 20,
+        "questReward": {
+          "avatarHealth": 40,
+          "avatarStatus": 25,
+          "shopCurrency": 0
+        },
+        "questType": "0"
+      },
+      "1002": {
+        "questCategory": "0",
+        "questDescription": "Lifting is a great way to build your body!",
+        "questDifficulty": "0",
+        "questName": "Do you even lift bro?",
+        "questMaxValue": 50,
+        "questReward": {
+          "avatarHealth": 40,
+          "avatarStatus": 25,
+          "shopCurrency": 0
+        },
+        "questType": "0"
+      },
+      "1003": {
+        "questCategory": "0",
+        "questDescription": "Running is a great way to improve fitness. Start running today!",
+        "questDifficulty": "0",
+        "questName": "Task 3",
+        "questMaxValue": 20,
+        "questReward": {
+          "avatarHealth": 40,
+          "avatarStatus": 25,
+          "shopCurrency": 0
+        },
+        "questType": "0"
+      },
+      "1004": {
+        "questCategory": "0",
+        "questDescription": "Running is a great way to improve fitness. Start running today!",
+        "questDifficulty": "0",
+        "questName": "Task 4",
+        "questMaxValue": 20,
+        "questReward": {
+          "avatarHealth": 40,
+          "avatarStatus": 25,
+          "shopCurrency": 0
+        },
+        "questType": "0"
+      },
+      "1005": {
+        "questCategory": "0",
+        "questDescription": "Running is a great way to improve fitness. Start running today!",
+        "questDifficulty": "0",
+        "questName": "Task 5",
+        "questMaxValue": 30,
+        "questReward": {
+          "avatarHealth": 40,
+          "avatarStatus": 25,
+          "shopCurrency": 0
+        },
+        "questType": "0"
+      }
+    },
+    "shop": {
+      "item1": {
+        "price": 120
+      },
+      "item2": {
+        "price": 150
+      },
+      "item3": {
+        "price": 180
+      }
+    }
+  }
+}

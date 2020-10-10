@@ -1,13 +1,14 @@
 //NutritionScreen.js
 
 import Icon from "react-native-vector-icons/Ionicons";
-import React, { Component } from "react";
+import React, { Component, useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   Text,
   View,
   StatusBar,
   TouchableOpacity,
+  ImageBackground,
   SafeAreaView,
   ScrollView,
   Alert,
@@ -15,29 +16,55 @@ import {
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
-import tipData from "../assets/data/tip.json";
-import jsonData from "../assets/data/data.json";
+import { fb, Fire } from "../src/firebase/APIKeys";
+
+var baseHealth = 0;
+var baseStatus = 0;
+var baseCurrency = 0;
 
 function ReadTab() {
+  const [read, allReads] = useState([]);
+  useEffect(() => {
+    const readRef = fb.database().ref("/response/nutritionalTips");
+    const OnLoadingListener = readRef.on("value", (snapshot) => {
+      allReads([]);
+      snapshot.forEach(function (childSnapshot) {
+        allReads((read) => [...read, childSnapshot.val()]);
+      });
+    });
+    // const childRemovedListener = readRef.on("child_removed", (snapshot) => {
+    //   // Set Your Functioanlity Whatever you want.
+    //   alert("Child Removed");
+    // });
+
+    // const childChangedListener = readRef.on("child_changed", (snapshot) => {
+    //   // Set Your Functioanlity Whatever you want.
+    //   alert("Child Updated/Changed");
+    // });
+
+    return () => {
+      readRef.off("value", OnLoadingListener);
+      // readRef.off("child_removed", childRemovedListener);
+      // readRef.off("child_changed", childChangedListener);
+    };
+  }, []);
   return (
     <View>
       <SafeAreaView>
         <ScrollView>
-          {tipData["Nutritional Tips"].map(function (item) {
-            if (item.hasRead) {
+          {read.map(function (item, index) {
+            if (item["complete"]) {
               return (
                 <TouchableOpacity
-                  key={item.id}
+                  key={item["tipID"]}
                   style={styles.textContainer}
-                  onPress={() => console.log(item.content)}
+                  // onPress={() => reading(item, index)}
                 >
-                  <Text style={styles.text}>Type: {item.type}</Text>
-                  <Text style={styles.text}>Title: {item.title}</Text>
+                  <Text style={styles.text}>Type: {item["tipType"]}</Text>
+                  <Text style={styles.text}>Title: {item["tipName"]}</Text>
+                  <Text style={styles.text}>Description: {item["tip"]}</Text>
                   <Text style={styles.text}>
-                    Description: {item.description}
-                  </Text>
-                  <Text style={styles.text}>
-                    Rewards: {item.reward.shopCurrency}
+                    Rewards: {item["tipReward"]["shopCurrency"]}
                   </Text>
                 </TouchableOpacity>
               );
@@ -57,47 +84,125 @@ ReadTab.navigationOptions = {
     />
   ),
 };
+
+// Update tip after the tip has been read
+const submitTip = (index, id, name, tip, type, reward, complete) => {
+  return new Promise(function (resolve, reject) {
+    let key;
+    if (id != null) {
+      key = id;
+    } else {
+      key = fb.database().ref().push().key;
+    }
+    let dataToSave = {
+      tipID: key,
+      tipName: name,
+      complete: complete,
+      tipReward: reward,
+      tip: tip,
+      tipType: type,
+    };
+    console.log(dataToSave);
+    fb.database()
+      .ref("/response/nutritionalTips/" + index)
+      .update(dataToSave)
+      .then((snapshot) => {
+        resolve(snapshot);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+function completeTips(rewardHealth) {
+  baseHealth += rewardHealth["avatarHealth"];
+  baseStatus += rewardHealth["avatarStatus"];
+  baseCurrency += rewardHealth["shopCurrency"];
+  // this.setState((state, props) => ({
+  //   baseHealth: state.baseHealth + rewardHealth["avatarHealth"],
+  //   baseCurrency: state.baseCurrency + rewardHealth["shopCurrency"],
+  //   baseStatus: state.baseStatus + rewardHealth["avatarStatus"],
+  // }));
+  fb.database()
+    .ref("response/")
+    .update({
+      avatarHealth: baseHealth,
+      avatarStatus: baseStatus,
+      currency: baseCurrency,
+    })
+    .then(() => {
+      console.log("Completed a quest");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+// Reading Alert to verify if the tip is read.
+function reading(item, index) {
+  Alert.alert(
+    item["tipName"],
+    item["tip"],
+    [
+      {
+        text: "Cancel",
+        onPress: () => console.log("cancel"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          completeTips(item["tipReward"]);
+          submitTip(
+            index,
+            item["tipID"],
+            item["tipName"],
+            item["tip"],
+            item["tipType"],
+            item["tipReward"],
+            !item["complete"]
+          );
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+}
 function UnreadTab() {
-  const readData = (item) => {
-    Alert.alert(
-      item.title,
-      item.content,
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("cancel"),
-          style: "cancel",
-        },
-        {
-          text: "OK",
-          onPress: () => {
-            item.hasRead = true;
-          },
-        },
-      ],
-      { cancelable: false }
-    );
-    console.log(item);
-  };
+  const [unread, allUnreads] = useState([]);
+
+  useEffect(() => {
+    const unreadRef = fb.database().ref("/response/nutritionalTips");
+    const OnLoadingListener = unreadRef.on("value", (snapshot) => {
+      allUnreads([]);
+      snapshot.forEach(function (childSnapshot) {
+        // console.log(childSnapshot.val());
+        allUnreads((unread) => [...unread, childSnapshot.val()]);
+      });
+    });
+
+    return () => {
+      unreadRef.off("value", OnLoadingListener);
+    };
+  }, []);
   return (
     <View>
       <SafeAreaView>
         <ScrollView>
-          {tipData["Nutritional Tips"].map(function (item) {
-            if (!item.hasRead) {
+          {unread.map(function (item, index) {
+            if (!item["complete"]) {
               return (
                 <TouchableOpacity
-                  key={item.id}
+                  key={item["tipID"]}
                   style={styles.textContainer}
-                  onPress={() => readData(item)}
+                  onPress={() => reading(item, index)}
                 >
-                  <Text style={styles.text}>Type: {item.type}</Text>
-                  <Text style={styles.text}>Title: {item.title}</Text>
+                  <Text style={styles.text}>Type: {item["tipType"]}</Text>
+                  <Text style={styles.text}>Title: {item["tipName"]}</Text>
+                  <Text style={styles.text}>Description: {item["tip"]}</Text>
                   <Text style={styles.text}>
-                    Description: {item.description}
-                  </Text>
-                  <Text style={styles.text}>
-                    Rewards: {item.reward.shopCurrency}
+                    Rewards: {item["tipReward"]["shopCurrency"]}
                   </Text>
                 </TouchableOpacity>
               );
@@ -136,26 +241,57 @@ const Tab = createMaterialTopTabNavigator(
 );
 const AppIndex = createAppContainer(Tab);
 
-function onPressHandler(id) {
-  console.log(id);
-}
-
 export default class NutritionalScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      baseHealth: 0,
+      baseStatus: 0,
+      baseCurrency: 0,
+    };
+    if (!fb.apps.length) {
+      fb.initializeApp(ApiKeys.FirebaseConfig);
+    }
+    () => this.readData();
   }
 
-  // readData = (data) => {
-  //   data.title = "Hello world1";
-  //   data.hasRead = false;
-  //   console.log(data);
-  // };
-  // unreadData = (data) => {
-  //   data.title = "this is unread!!";
-  //   data.hasRead = true;
-  //   console.log(data);
-  // };
+  readData() {
+    fb.database()
+      .ref("response/avatarHealth")
+      .once("value", (dataSnapShot) => {
+        var temp = dataSnapShot.val();
+        this.setState({ baseHealth: temp });
+      });
+    fb.database()
+      .ref("response/avatarStatus")
+      .once("value", (dataSnapShot) => {
+        var temp = dataSnapShot.val();
+        this.setState({ baseStatus: temp });
+      });
+    fb.database()
+      .ref("response/currency")
+      .once("value", (dataSnapShot) => {
+        var tempCurrency = dataSnapShot.val();
+        this.setState({ baseCurrency: tempCurrency });
+      });
+  }
+
+  writeData() {
+    fb.database().ref("response/").update({
+      avatarHealth: this.state.baseHealth,
+      currency: this.state.baseCurrency,
+      avatarStatus: this.state.baseStatus,
+    });
+  }
+
+  updateData = (data) => {
+    this.setState((state, props) => ({
+      baseHealth: state.baseHealth + data["avatarHealth"],
+      baseCurrency: state.baseCurrency + data["shopCurrency"],
+      baseStatus: state.baseStatus + data["avatarStatus"],
+    }));
+  };
+
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "#5F7EB2" }}>
@@ -193,7 +329,7 @@ export default class NutritionalScreen extends Component {
             size={30}
             color="white"
           />
-          <Text style={{ fontSize: 25, color: "white" }}>102</Text>
+          <Text style={{ fontSize: 25, color: "white" }}>{baseCurrency}</Text>
         </View>
         <AppIndex />
       </View>

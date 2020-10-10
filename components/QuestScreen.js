@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import {
   StyleSheet,
   Button,
@@ -7,53 +7,65 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ImageBackground,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import CardView from "react-native-cardview";
+//import CardView from "react-native-cardview";
 //import questData from "../assets/data/data.json";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import questData from "../assets/data/data.json";
-import Icon from "react-native-vector-icons/Ionicons";
-import { createAppContainer } from "react-navigation";
-import { createMaterialTopTabNavigator } from "react-navigation-tabs";
+//import questData from "../assets/data/data.json";
 
-import ApiKeys from "../src/firebase/APIKeys";
+import { fb } from "../src/firebase/APIKeys.js";
 import * as firebase from "firebase";
-// import { SaveJson } from "./SaveJson";
 
 var questData = {};
 var baseHealth = 0;
+var baseStatus = 0;
+var baseCurrency = 0;
 
 if (!firebase.apps.length) {
-  firebase.initializeApp(ApiKeys.FirebaseConfig);
+  firebase.initializeApp(fb.FirebaseConfig);
 }
 readData();
 
 function readData() {
-  firebase
-    .database()
+  fb.database()
     .ref("response/quests")
     .once("value", (dataSnapShot) => {
       questData = dataSnapShot.val();
     });
-  firebase
-    .database()
+  fb.database()
     .ref("response/avatarHealth")
     .once("value", (dataSnapShot) => {
       baseHealth = dataSnapShot.val();
     });
+  fb.database()
+    .ref("response/avatarStatus")
+    .once("value", (dataSnapShot) => {
+      baseStatus = dataSnapShot.val();
+    });
+  fb.database()
+    .ref("response/currency")
+    .once("value", (dataSnapShot) => {
+      baseCurrency = dataSnapShot.val();
+    });
 }
 
 function completeQuest(rewardHealth) {
-  if (baseHealth + rewardHealth >= 100) {
+  baseHealth += rewardHealth["avatarHealth"];
+  baseStatus += rewardHealth["avatarStatus"];
+  baseCurrency += rewardHealth["shopCurrency"];
+  if (baseHealth >= 100) {
     firebase
       .database()
       .ref("response/")
       .update({
         avatarHealth: 100,
+        avatarStatus: baseStatus,
+        currency: baseCurrency,
       })
       .then(() => {
         console.log("Completed a quest");
@@ -66,7 +78,9 @@ function completeQuest(rewardHealth) {
       .database()
       .ref("response/")
       .update({
-        avatarHealth: baseHealth + rewardHealth,
+        avatarHealth: baseHealth,
+        avatarStatus: baseStatus,
+        currency: baseCurrency,
       })
       .then(() => {
         console.log("Completed a quest");
@@ -77,21 +91,80 @@ function completeQuest(rewardHealth) {
   }
 }
 
+// Updating Quest after a quest has been completed.
+const updating = (
+  index,
+  id,
+  name,
+  progress,
+  type,
+  reward,
+  desc,
+  difficulty,
+  category
+) => {
+  return new Promise(function (resolve, reject) {
+    let key;
+    if (id != null) {
+      key = id;
+    } else {
+      key = fb.database().ref().push().key;
+    }
+    let complete = {
+      questCompletion: progress["questMaxValue"],
+      questMaxValue: progress["questMaxValue"],
+    };
+    let dataToSave = {
+      questID: key,
+      questName: name,
+      questProgress: complete,
+      questReward: reward,
+      questDescription: desc,
+      questDifficulty: difficulty,
+      questType: type,
+      questCategory: category,
+    };
+    console.log(dataToSave);
+    fb.database()
+      .ref("/response/quests/" + index)
+      .update(dataToSave)
+      .then((snapshot) => {
+        resolve(snapshot);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
 function ReadAllTab() {
+  const [questData, allQuests] = useState([]);
+  useEffect(() => {
+    const questRef = fb.database().ref("/response/quests");
+    const OnLoadingListener = questRef.on("value", (snapshot) => {
+      allQuests([]);
+      snapshot.forEach(function (childSnapshot) {
+        allQuests((questData) => [...questData, childSnapshot.val()]);
+      });
+    });
+    return () => {
+      questRef.off("value", OnLoadingListener);
+    };
+  }, []);
   return (
     <View>
       {questData.map(function (item) {
         return (
           <TouchableOpacity
-            key={item.questName}
+            key={item["questID"]}
             style={styles.textContainer}
             onPress={() =>
               Alert.alert(
                 "Task Complete?",
                 "Confirm and get rewards:  \nHealth: " +
-                  item.questReward.avatarHealth +
+                  item["questReward"]["avatarHealth"] +
                   "\nHappiness: " +
-                  item.questReward.avatarStatus,
+                  item["questReward"]["avatarStatus"],
                 [
                   {
                     text: "Cancel",
@@ -100,7 +173,7 @@ function ReadAllTab() {
                   },
                   {
                     text: "OK",
-                    onPress: () => completeQuest(item.questReward.avatarHealth),
+                    onPress: () => completeQuest(item["questReward"]),
                     //onPress: () => console.log("congratulations"),
                   },
                 ],
@@ -109,13 +182,13 @@ function ReadAllTab() {
             }
           >
             <View style={styles.taskDiv}>
-              <Text style={styles.taskTitle}> {item.questName}</Text>
+              <Text style={styles.taskTitle}> {item["questName"]}</Text>
               <Text style={styles.rewardPoint}>
-                + {item.questReward.avatarHealth}
+                + {item["questReward"]["avatarHealth"]}
                 <Icon name={"md-heart"} color={"red"} size={20} />
               </Text>
             </View>
-            <Text> {item.questDescription}</Text>
+            <Text> {item["questDescription"]}</Text>
           </TouchableOpacity>
         );
       })}
@@ -129,24 +202,42 @@ ReadAllTab.navigationOptions = {
 };
 
 function InProgreeTab() {
+  const [inProgress, allInProgressQuests] = useState([]);
+
+  useEffect(() => {
+    const questRef = fb.database().ref("/response/quests");
+    const OnLoadingListener = questRef.on("value", (snapshot) => {
+      allInProgressQuests([]);
+      snapshot.forEach(function (childSnapshot) {
+        allInProgressQuests((inProgress) => [
+          ...inProgress,
+          childSnapshot.val(),
+        ]);
+      });
+    });
+    return () => {
+      questRef.off("value", OnLoadingListener);
+    };
+  }, []);
   return (
     <View>
-      {questData.map(function (item) {
+      {inProgress.map(function (item, index) {
         if (
-          item.questProgress.questCompletion != 0 &&
-          item.questProgress.questCompletion != item.questProgress.questMaxValue
+          item["questProgress"]["questCompletion"] >= 0 &&
+          item["questProgress"]["questCompletion"] !=
+            item["questProgress"]["questMaxValue"]
         ) {
           return (
             <TouchableOpacity
-              key={item.questID}
+              key={item["questID"]}
               style={styles.textContainer}
               onPress={() =>
                 Alert.alert(
                   "Your Progress",
                   "You have finished " +
-                    item.questReward.avatarHealth +
+                    item["questReward"]["avatarHealth"] +
                     "/" +
-                    item.questReward.avatarStatus +
+                    item["questReward"]["avatarStatus"] +
                     " of the task, good job and go on",
                   [
                     {
@@ -156,9 +247,21 @@ function InProgreeTab() {
                     },
                     {
                       text: "OK",
-                      onPress: () =>
-                        completeQuest(item.questReward.avatarHealth),
-                      //onPress: () => console.log("congratulations"),
+                      onPress: () => {
+                        console.log(index);
+                        completeQuest(item["questReward"]);
+                        updating(
+                          index,
+                          item["questID"],
+                          item["questName"],
+                          item["questProgress"],
+                          item["questType"],
+                          item["questReward"],
+                          item["questDescription"],
+                          item["questDifficulty"],
+                          item["questCategory"]
+                        );
+                      },
                     },
                   ],
                   { cancelable: false }
@@ -166,13 +269,13 @@ function InProgreeTab() {
               }
             >
               <View style={styles.taskDiv}>
-                <Text style={styles.taskTitle}> {item.questName}</Text>
+                <Text style={styles.taskTitle}> {item["questName"]}</Text>
                 <Text style={styles.rewardPoint}>
-                  + {item.questReward.avatarHealth}
+                  + {item["questReward"]["avatarHealth"]}
                   <Icon name={"md-heart"} color={"red"} size={20} />
                 </Text>
               </View>
-              <Text> {item.questDescription}</Text>
+              <Text> {item["questDescription"]}</Text>
             </TouchableOpacity>
           );
         }
@@ -191,22 +294,45 @@ InProgreeTab.navigationOptions = {
 };
 
 function CompletionTab() {
+  const [completedQuest, allCompletedQuests] = useState([]);
+
+  useEffect(() => {
+    const questRef = fb.database().ref("/response/quests");
+    const OnLoadingListener = questRef.on("value", (snapshot) => {
+      allCompletedQuests([]);
+      snapshot.forEach(function (childSnapshot) {
+        if (
+          childSnapshot.val()["questProgress"]["questCompletion"] ==
+          childSnapshot.val()["questProgress"]["questMaxValue"]
+        ) {
+          allCompletedQuests((completedQuest) => [
+            ...completedQuest,
+            childSnapshot.val(),
+          ]);
+        }
+      });
+    });
+    return () => {
+      questRef.off("value", OnLoadingListener);
+    };
+  }, []);
   return (
     <View>
-      {questData.map(function (item) {
-        if (
-          item.questProgress.questCompletion == item.questProgress.questMaxValue
-        ) {
+      {completedQuest.map(function (item) {
+        {
           return (
-            <TouchableOpacity key={item.questID} style={styles.textContainer}>
+            <TouchableOpacity
+              key={item["questID"]}
+              style={styles.textContainer}
+            >
               <View style={styles.taskDiv}>
-                <Text style={styles.taskTitle}> {item.questName}</Text>
+                <Text style={styles.taskTitle}> {item["questName"]}</Text>
                 <Text style={styles.rewardPoint}>
-                  + {item.questReward.avatarHealth}
+                  + {item["questReward"]["avatarHealth"]}
                   <Icon name={"md-checkmark"} color={"green"} size={20} />
                 </Text>
               </View>
-              <Text> {item.questDescription}</Text>
+              <Text> {item["questDescription"]}</Text>
             </TouchableOpacity>
           );
         }
@@ -250,6 +376,7 @@ export default class QuestScreen extends Component {
       questCompletion: 0,
       avatarStatus: 0,
       avatarHealth: 0,
+      avatarCurrency: 0,
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
@@ -260,94 +387,23 @@ export default class QuestScreen extends Component {
     readData();
     return (
       <View style={styles.MainContainer}>
-        <AppIndex />
-
-        {/* <View style={styles.Content}> */}
-        {/* <View style={styles.QuestButtons}>
-            <Button
-              title="Daily Quest"
-              onPress={() => console.log("hello Daily Quest")}
-            />
-            <Button
-              title="Weekly Quest"
-              onPress={() => console.log("Weekly Quest")}
-            />
-            <Button
-              title="Group Quest"
-              onPress={() => console.log("Group Quest")}
-            />
-          </View> */}
-
-        {/* <CardView style={styles.taskCard} cornerRadius={5}>
-            <View style={styles.taskDiv}>
-              <Text style={styles.taskTitle}>Get up at 8 am</Text>
-              <Text style={styles.rewardPoint}>
-                + 5
-                <FontAwesomeIcon icon={faSmile} size={21} color={"orange"} />
-              </Text>
-            </View>
-            <Text style={styles.taskbody}>Quest 1 to do</Text>
-            <Button
-              style={styles.taskToDo}
-              title="Complete"
-              onPress={() => console.log("Complete 1st request")}
-            />
-          </CardView>
-
-          <CardView style={styles.taskCard} cornerRadius={5}>
-            <View style={styles.taskDiv}>
-              <Text style={styles.taskTitle}>Walk 1000 meters</Text>
-              <Text style={styles.rewardPoint}>
-                + 5
-                <FontAwesomeIcon icon={faLeaf} size={21} color={"green"} />
-              </Text>
-            </View>
-            <Text style={styles.taskbody}>Quest 2 to do</Text>
-            <Button
-              style={styles.taskToDo}
-              title="Complete"
-              onPress={() =>
-                Alert.alert(
-                  "Task complete?",
-                  "Confirm and get rewards",
-                  [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("click cancel"),
-                      // onPress: () => SaveJson.testJson("hello world"),
-                      style: "cancel",
-                    },
-                    {
-                      text: "OK",
-                      onPress: () => this.addCompletion(),
-                    },
-                  ],
-                  { cancelable: false }
-                )
-              }
-
-              // console.log("Complete 2nd request")}
-            />
-          </CardView> */}
-
-        {/* <CardView style={styles.taskCard} cornerRadius={5}>
-            <View style={styles.taskDiv}>
-              <Text style={styles.taskTitle}>Eat an apple a day</Text>
-              <Text style={styles.rewardPoint}>
-                + 3
-                <FontAwesomeIcon icon={faLeaf} size={21} color={"green"} />
-              </Text>
-            </View>
-            <Text style={styles.taskbody}>Quest completed</Text>
-            <Button style={styles.taskDone} title="Done" />
-          </CardView> */}
-        {/* </View> */}
+        <ImageBackground
+          source={require("../assets/BackgroundOrange.png")}
+          style={styles.backgroundImage}
+        >
+          <AppIndex />
+        </ImageBackground>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
   MainContainer: {
     flex: 1,
     flexDirection: "column",

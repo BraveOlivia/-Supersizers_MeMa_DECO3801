@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-// import Design from "../src/firebase/Design";
 import {
   HomeScreen,
   QuestScreen,
   NutritionalScreen,
   ShopScreen,
+  ChatScreen,
 } from "../components/ScreenComponents";
-import ChatScreen from "../components/ChatScreen";
+import { ImageBackground, StyleSheet } from "react-native";
+import Chat from "../components/ChatScreen";
 
 const Stack = createStackNavigator();
 
@@ -27,6 +28,14 @@ export default class MainNavigator extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+});
 
 // export default TabNavigator(
 //   {
