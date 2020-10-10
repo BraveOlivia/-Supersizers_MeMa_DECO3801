@@ -16,7 +16,11 @@ import {
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
-import { fb } from "../src/firebase/APIKeys";
+import { fb, Fire } from "../src/firebase/APIKeys";
+
+var baseHealth = 0;
+var baseStatus = 0;
+var baseCurrency = 0;
 
 function ReadTab() {
   const [read, allReads] = useState([]);
@@ -54,7 +58,7 @@ function ReadTab() {
                 <TouchableOpacity
                   key={item["tipID"]}
                   style={styles.textContainer}
-                  onPress={() => reading(item, index)}
+                  // onPress={() => reading(item, index)}
                 >
                   <Text style={styles.text}>Type: {item["tipType"]}</Text>
                   <Text style={styles.text}>Title: {item["tipName"]}</Text>
@@ -111,6 +115,30 @@ const submitTip = (index, id, name, tip, type, reward, complete) => {
   });
 };
 
+function completeTips(rewardHealth) {
+  baseHealth += rewardHealth["avatarHealth"];
+  baseStatus += rewardHealth["avatarStatus"];
+  baseCurrency += rewardHealth["shopCurrency"];
+  // this.setState((state, props) => ({
+  //   baseHealth: state.baseHealth + rewardHealth["avatarHealth"],
+  //   baseCurrency: state.baseCurrency + rewardHealth["shopCurrency"],
+  //   baseStatus: state.baseStatus + rewardHealth["avatarStatus"],
+  // }));
+  fb.database()
+    .ref("response/")
+    .update({
+      avatarHealth: baseHealth,
+      avatarStatus: baseStatus,
+      currency: baseCurrency,
+    })
+    .then(() => {
+      console.log("Completed a quest");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 // Reading Alert to verify if the tip is read.
 function reading(item, index) {
   Alert.alert(
@@ -125,6 +153,7 @@ function reading(item, index) {
       {
         text: "OK",
         onPress: () => {
+          completeTips(item["tipReward"]);
           submitTip(
             index,
             item["tipID"],
@@ -215,8 +244,54 @@ const AppIndex = createAppContainer(Tab);
 export default class NutritionalScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      baseHealth: 0,
+      baseStatus: 0,
+      baseCurrency: 0,
+    };
+    if (!fb.apps.length) {
+      fb.initializeApp(ApiKeys.FirebaseConfig);
+    }
+    () => this.readData();
   }
+
+  readData() {
+    fb.database()
+      .ref("response/avatarHealth")
+      .once("value", (dataSnapShot) => {
+        var temp = dataSnapShot.val();
+        this.setState({ baseHealth: temp });
+      });
+    fb.database()
+      .ref("response/avatarStatus")
+      .once("value", (dataSnapShot) => {
+        var temp = dataSnapShot.val();
+        this.setState({ baseStatus: temp });
+      });
+    fb.database()
+      .ref("response/currency")
+      .once("value", (dataSnapShot) => {
+        var tempCurrency = dataSnapShot.val();
+        this.setState({ baseCurrency: tempCurrency });
+      });
+  }
+
+  writeData() {
+    fb.database().ref("response/").update({
+      avatarHealth: this.state.baseHealth,
+      currency: this.state.baseCurrency,
+      avatarStatus: this.state.baseStatus,
+    });
+  }
+
+  updateData = (data) => {
+    this.setState((state, props) => ({
+      baseHealth: state.baseHealth + data["avatarHealth"],
+      baseCurrency: state.baseCurrency + data["shopCurrency"],
+      baseStatus: state.baseStatus + data["avatarStatus"],
+    }));
+  };
+
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -342,6 +417,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
 });
+
 //         {/*  TABS  */}
 //         <View className="NutritionPage">
 //           <Tabs

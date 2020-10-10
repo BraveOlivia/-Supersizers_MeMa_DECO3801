@@ -8,9 +8,6 @@ import { StyleSheet } from "react-native";
 // };
 
 export default class ChatScreen extends React.Component {
-  //   static navigationOptions = ({ navigation }) => ({
-  //     title: (navigation.state.params || {}).name || "Chat!",
-  //   });
   state = {
     messages: [],
   };
@@ -18,7 +15,7 @@ export default class ChatScreen extends React.Component {
   get user() {
     return {
       //   name: this.props.navigation.state.params.name,
-      _id: Fire.uid,
+      _id: Fire.shared.uid,
     };
   }
 
@@ -26,21 +23,21 @@ export default class ChatScreen extends React.Component {
     return (
       <GiftedChat
         messages={this.state.messages}
-        onSend={Fire.send}
+        onSend={Fire.shared.send}
         user={this.user}
       />
     );
   }
 
   componentDidMount() {
-    Fire.on((message) =>
+    Fire.shared.on((message) =>
       this.setState((previousState) => ({
         messages: GiftedChat.append(previousState.messages, message),
       }))
     );
   }
   componentWillUnmount() {
-    Fire.off();
+    Fire.shared.off();
   }
 }
 
