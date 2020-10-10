@@ -1,7 +1,15 @@
 // Homescreen.js
 
 import React, { Component, useState } from "react";
-import { StyleSheet, Text, Image, View, Button, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Image,
+  View,
+  Button,
+  Alert,
+  ImageBackground,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -52,19 +60,24 @@ export default class HomeScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.avatarContainer}>
-          <Text>Your currency: {this.state.avatarCurrency}</Text>
-        </View>
+        <ImageBackground
+          source={require("../assets/BackgroundOrange.png")}
+          style={styles.backgroundImage}
+        >
+          <View style={styles.avatarContainer}>
+            <Text>Your currency: {this.state.avatarCurrency}</Text>
+          </View>
 
-        <View>
-          {itemKeys.length > 0 ? (
-            itemKeys.map((key) => (
-              <ShopItem key={key} id={key} shopItem={this.state.items[key]} />
-            ))
-          ) : (
-            <Text>No character to unlock</Text>
-          )}
-        </View>
+          <View>
+            {itemKeys.length > 0 ? (
+              itemKeys.map((key) => (
+                <ShopItem key={key} id={key} shopItem={this.state.items[key]} />
+              ))
+            ) : (
+              <Text>No character to unlock</Text>
+            )}
+          </View>
+        </ImageBackground>
       </View>
     );
   }
@@ -107,6 +120,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f8ff",
     flex: 1,
     flexDirection: "column",
+  },
+
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
   },
 
   itemContainer: {

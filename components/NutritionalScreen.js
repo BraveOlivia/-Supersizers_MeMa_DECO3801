@@ -219,44 +219,49 @@ export default class NutritionalScreen extends Component {
   }
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: "#5F7EB2" }}>
-        <StatusBar backgroundColor="white" barStyle="light-content" />
-        <View style={styles.header}>
-          {/*  PAGE TITLE  */}
-          <FontAwesome
-            style={{ marginLeft: 15 }}
-            name="home"
-            size={30}
-            color="white"
-          />
-          <FontAwesome
-            style={{ marginLeft: 25 }}
-            name="question-circle"
-            size={30}
-            color="white"
-          />
-          <Text
-            style={{
-              marginLeft: 20,
-              textDecorationLine: "underline",
-              fontSize: 25,
-              textAlign: "center",
-              color: "white",
-              fontWeight: "bold",
-            }}
-          >
-            {" "}
-            Nutritional Tips{" "}
-          </Text>
-          <MaterialCommunityIcons
-            style={{ marginLeft: 30 }}
-            name="circle-expand"
-            size={30}
-            color="white"
-          />
-          <Text style={{ fontSize: 25, color: "white" }}>102</Text>
-        </View>
-        <AppIndex />
+      <View style={{ flex: 1 }}>
+        <ImageBackground
+          source={require("../assets/BackgroundOrange.png")}
+          style={styles.backgroundImage}
+        >
+          <StatusBar backgroundColor="black" barStyle="light-content" />
+          <View style={styles.header}>
+            {/*  PAGE TITLE  */}
+            <FontAwesome
+              style={{ marginLeft: 15 }}
+              name="home"
+              size={30}
+              color="white"
+            />
+            <FontAwesome
+              style={{ marginLeft: 25 }}
+              name="question-circle"
+              size={30}
+              color="white"
+            />
+            <Text
+              style={{
+                marginLeft: 20,
+                textDecorationLine: "underline",
+                fontSize: 25,
+                textAlign: "center",
+                color: "white",
+                fontWeight: "bold",
+              }}
+            >
+              {" "}
+              Nutritional Tips{" "}
+            </Text>
+            <MaterialCommunityIcons
+              style={{ marginLeft: 30 }}
+              name="circle-expand"
+              size={30}
+              color="white"
+            />
+            <Text style={{ fontSize: 25, color: "white" }}>102</Text>
+          </View>
+          <AppIndex />
+        </ImageBackground>
       </View>
     );
   }
@@ -272,16 +277,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+
   textContainer: {
     padding: 10,
     marginTop: 3,
     backgroundColor: "#d9f9b1",
     alignItems: "center",
   },
+
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+
   text: {
     color: "#4f603c",
     fontSize: 20,
   },
+
   taskCard: {
     flex: 5,
     backgroundColor: "#fff",
@@ -290,29 +304,36 @@ const styles = StyleSheet.create({
     margin: 10,
     justifyContent: "center",
   },
+
   taskDiv: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
   },
+
   taskTitle: {
     fontSize: 20,
   },
+
   rewardPoint: {
     fontSize: 20,
     color: "darkblue",
   },
+
   taskbody: {
     flex: 1,
     fontSize: 14,
   },
+
   taskDone: {
     borderColor: "#737373",
     backgroundColor: "darkgrey",
   },
+
   header: {
     flexDirection: "row",
   },
+
   tabs: {
     flex: 1,
     backgroundColor: "#D3E3F6",

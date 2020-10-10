@@ -2,7 +2,6 @@
 import React from "react";
 import { GiftedChat } from "react-native-gifted-chat"; // 0.3.0
 import { StyleSheet } from "react-native";
-import { Fire } from "../src/firebase/APIKeys";
 
 // type Props = {
 //   name?: string,
