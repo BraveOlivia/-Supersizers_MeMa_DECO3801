@@ -37,12 +37,6 @@ export default class HomeScreen extends Component {
       avatarStatus: 0,
       avatarHealth: 0,
     };
-    // firebase
-    //   .database()
-    //   .ref("response/avatarHealth")
-    //   .once("value", (dataSnapShot) => {
-    //     this.setState({ avatarHealth: dataSnapShot.val() });
-    //   });
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
     }
@@ -94,18 +88,6 @@ export default class HomeScreen extends Component {
     }
   };
 
-  // _retrieveData = async () => {
-  //   try {
-  //     const health = await AsyncStorage.getItem("avatarHealth");
-  //     if (health !== null) {
-  //       console.log(health);
-  //       return health;
-  //     }
-  //   } catch (error) {
-  //     // Error retrieving data
-  //   }
-  // };
-
   readData() {
     firebase
       .database()
@@ -113,6 +95,13 @@ export default class HomeScreen extends Component {
       .once("value", (dataSnapShot) => {
         var tempHealth = dataSnapShot.val();
         this.setState({ avatarHealth: tempHealth });
+      });
+    firebase
+      .database()
+      .ref("response/avatarStatus")
+      .once("value", (dataSnapShot) => {
+        var tempStatus = dataSnapShot.val();
+        this.setState({ avatarStatus: tempStatus });
       });
   }
 
@@ -124,7 +113,7 @@ export default class HomeScreen extends Component {
 
   componentDidMount() {
     this.timerID1 = setInterval(() => this.readData(), 1000);
-    this.timerID1 = setInterval(() => this.reduceHealth(), 10000);
+    this.timerID1 = setInterval(() => this.reduceHealth(), 50000);
   }
 
   componentWillUnmount() {
@@ -140,21 +129,6 @@ export default class HomeScreen extends Component {
   }
 
   render() {
-    // console.log(this.state.avatarHealth);
-    // var health = 0;
-    // if (!firebase.apps.length) {
-    //   firebase.initializeApp(ApiKeys.FirebaseConfig);
-    // }
-    // firebase
-    //   .database()
-    //   .ref("response/avatarHealth")
-    //   .once("value", (dataSnapShot) => {
-    //     console.log(dataSnapShot.val());
-    //     health = dataSnapShot.val();
-    //   });
-    // var intervalID = setInterval(() => {
-    //   this.health -= 5;
-    // }, 1000);
     return (
       <View style={styles.container}>
         <ImageBackground
@@ -178,32 +152,29 @@ export default class HomeScreen extends Component {
               [AvatarName]: G'day[UserName], staying healthy?
             </Text>
             <this.handleAvatarHealthChange health={this.state.avatarHealth} />
-            {/* <Image
-            style={styles.avatar}
-            source={require("../assets/avatar/avatar_2.png")}
-          /> */}
             <View>
               <Text style={styles.textStyle}> Happiness Status </Text>
               <ProgressBar
-                progress={0.5}
+                progress={1 * this.state.avatarStatus * 0.01}
                 color={Colors.lightBlue300}
-                style={{ width: 200, height: 13 }}
+                style={{
+                  width: 200,
+                  height: 13,
+                }}
               />
             </View>
             <Text> </Text>
             <View>
               <Text style={styles.textStyle}> Emotion Status </Text>
               <ProgressBar
-                progress={0.8}
+                progress={1 * this.state.avatarHealth * 0.01}
                 color={Colors.white}
-                style={{ width: 200, height: 13 }}
+                style={{
+                  width: 200,
+                  height: 13,
+                }}
               />
             </View>
-            {/* <Button
-          color="fuchsia"
-          title="Feed Avatar"
-          onPress={() => Alert.alert("Avatar:", "Thank you!")}
-        /> */}
           </View>
 
           <View style={styles.footMenu}>
