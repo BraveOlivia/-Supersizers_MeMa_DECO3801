@@ -9,6 +9,7 @@ import {
   View,
   Button,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -182,16 +183,16 @@ export default class HomeScreen extends Component {
             source={require("../assets/avatar/avatar_2.png")}
           /> */}
             <View>
-              <Text> Happiness Status </Text>
+              <Text style={styles.textStyle}> Happiness Status </Text>
               <ProgressBar
                 progress={0.5}
-                color={Colors.lightBlue200}
+                color={Colors.lightBlue300}
                 style={{ width: 200, height: 13 }}
               />
             </View>
             <Text> </Text>
             <View>
-              <Text> Emotion Status </Text>
+              <Text style={styles.textStyle}> Emotion Status </Text>
               <ProgressBar
                 progress={0.8}
                 color={Colors.white}
@@ -214,32 +215,33 @@ export default class HomeScreen extends Component {
             </View> */}
 
             <View style={styles.MainButtons}>
-              <Button
-                title="Quests"
-                color="#000000"
-                type="button"
-                style={{ paddingHorizontal: 50 }}
+              <TouchableOpacity
+                style={styles.customBtnBG}
                 onPress={() => this.props.navigation.navigate("Quest")}
-              />
-              <Text> </Text>
-              <Button
-                title="Nutrition"
-                color="#000000"
-                onPress={() => this.props.navigation.navigate("Nutritional")}
-              />
-              <Text> </Text>
+              >
+                <Text style={styles.customBtnText}>Quest</Text>
+              </TouchableOpacity>
 
-              <Button
-                title="Shop"
-                color="#000000"
+              <TouchableOpacity
+                style={styles.customBtnBG}
+                onPress={() => this.props.navigation.navigate("Nutritional")}
+              >
+                <Text style={styles.customBtnText}>Nutrition</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.customBtnBG}
                 onPress={() => this.props.navigation.navigate("Shop")}
-              />
-              <Text> </Text>
-              <Button
-                title="Friends"
-                color="#000000"
+              >
+                <Text style={styles.customBtnText}>Shop</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.customBtnBG}
                 onPress={() => this.props.navigation.navigate("Chat")}
-              />
+              >
+                <Text style={styles.customBtnText}>Socialize</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </ImageBackground>
@@ -267,10 +269,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
 
-  buttonStyle: {
-    backgroundColor: "#190204",
-  },
-
   avatarContainer: {
     flex: 1,
     alignItems: "center",
@@ -288,36 +286,68 @@ const styles = StyleSheet.create({
   },
 
   menurow: {
-    //flex: "wrap",
     marginBottom: 30,
     borderRadius: 100,
     borderColor: "white",
-    //flexDirection: "row",
-    //size: "25",
-    //justifyContent: "space-evenly",
   },
 
   avatar: {
-    width: "250px",
-    height: "250px",
-    margin: 50,
+    width: "220px",
+    height: "220px",
+    margin: 40,
   },
 
   avatarDialogue: {
     alignItems: "center",
-    backgroundColor: "#dcdcdc",
+    backgroundColor: "#E0E0E0",
+    color: "#000000",
     borderWidth: 0.5,
-    borderRadius: 5,
+    borderRadius: 10,
     width: 250,
     padding: 10,
     marginTop: "10%",
     justifyContent: "center",
+    fontSize: 14,
+    fontWeight: "400",
   },
 
   MainButtons: {
-    alignItems: "left",
-    flexDirection: "row",
-    justifyContent: screenLeft,
-    width: 50,
+    alignItems: "center",
+    alignContent: "center",
+  },
+
+  customBtnText: {
+    fontSize: 24,
+    fontWeight: "300",
+    color: "#990000",
+    textAlign: "center",
+  },
+  customBtnBG: {
+    backgroundColor: "#FFE5CC",
+    borderRadius: 5,
+    marginLeft: 15,
+    marginBottom: 10,
+    marginTop: 5,
+    width: 150,
+    height: 30,
+    flexDirection: "column",
+  },
+
+  customBtnBG: {
+    backgroundColor: "#FFE5CC",
+    borderRadius: 5,
+    marginLeft: 15,
+    marginBottom: 10,
+    marginTop: 5,
+    width: 150,
+    height: 30,
+    flexDirection: "column",
+  },
+
+  textStyle: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#990000",
+    textAlign: "left",
   },
 });
