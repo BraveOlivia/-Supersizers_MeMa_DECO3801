@@ -10,6 +10,7 @@ import {
   Button,
   Alert,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -156,95 +157,104 @@ export default class HomeScreen extends Component {
     //   this.health -= 5;
     // }, 1000);
     return (
-      <View style={styles.container}>
-        <ImageBackground
-          source={require("../assets/BackgroundOrange.png")}
-          style={styles.backgroundImage}
-        >
-          <View style={styles.navBar}>
-            <FontAwesomeIcon icon={faHome} size={40} color={"black"} />
-            <FontAwesomeIcon icon={faDollarSign} size={40} color={"black"} />
-            <FontAwesomeIcon icon={faCogs} size={40} color={"black"} />
-            <FontAwesomeIcon
-              icon={faSignOutAlt}
-              size={40}
-              color={"black"}
-              onPress={this.signOutPress}
-            />
-          </View>
+      <View>
+        <StatusBar
+          barStyle="dark-content"
+          hidden={false}
+          backgroundColor="#00BCD4"
+          translucent={true}
+        />
 
-          <View style={styles.avatarContainer}>
-            <Text style={styles.avatarDialogue}>
-              [AvatarName]: G'day[UserName], staying healthy?
-            </Text>
-            <this.handleAvatarHealthChange health={this.state.avatarHealth} />
-            {/* <Image
+        <View style={styles.container}>
+          <ImageBackground
+            source={require("../assets/BackgroundOrange.png")}
+            style={styles.backgroundImage}
+          >
+            <View style={styles.navBar}>
+              <FontAwesomeIcon icon={faHome} size={30} color={"black"} />
+              <FontAwesomeIcon icon={faDollarSign} size={30} color={"black"} />
+              <FontAwesomeIcon icon={faCogs} size={30} color={"black"} />
+              <FontAwesomeIcon
+                icon={faSignOutAlt}
+                size={30}
+                color={"black"}
+                onPress={this.signOutPress}
+              />
+            </View>
+
+            <View style={styles.avatarContainer}>
+              <Text style={styles.avatarDialogue}>
+                [AvatarName]: G'day[UserName], staying healthy?
+              </Text>
+              <this.handleAvatarHealthChange health={this.state.avatarHealth} />
+              {/* <Image
             style={styles.avatar}
             source={require("../assets/avatar/avatar_2.png")}
           /> */}
-            <View>
-              <Text style={styles.textStyle}> Happiness Status </Text>
-              <ProgressBar
-                progress={0.5}
-                color={Colors.lightBlue300}
-                style={{ width: 200, height: 13 }}
-              />
-            </View>
-            <Text> </Text>
-            <View>
-              <Text style={styles.textStyle}> Emotion Status </Text>
-              <ProgressBar
-                progress={0.8}
-                color={Colors.white}
-                style={{ width: 200, height: 13 }}
-              />
-            </View>
-            {/* <Button
+              <View>
+                <Text style={styles.textStyle}> Happiness Status </Text>
+                <ProgressBar
+                  progress={0.5}
+                  color={Colors.blue500}
+                  style={{ width: 200, height: 13 }}
+                />
+              </View>
+              <Text> </Text>
+              <View>
+                <Text style={styles.textStyle}> Emotion Status </Text>
+                <ProgressBar
+                  progress={0.8}
+                  color={Colors.white}
+                  style={{ width: 200, height: 13 }}
+                />
+              </View>
+              {/* <Button
           color="fuchsia"
           title="Feed Avatar"
           onPress={() => Alert.alert("Avatar:", "Thank you!")}
         /> */}
-          </View>
+            </View>
 
-          <View style={styles.footMenu}>
-            {/* <View style={styles.menurow}>
+            <View style={styles.footMenu}>
+              {/* <View style={styles.menurow}>
               <FontAwesomeIcon icon={faCheckSquare} size={30} color={"black"} />
               <FontAwesomeIcon icon={faLightbulb} size={30} color={"black"} />
               <FontAwesomeIcon icon={faShoppingBag} size={30} color={"black"} />
               <FontAwesomeIcon icon={faUserFriends} size={30} color={"black"} />
             </View> */}
 
-            <View style={styles.MainButtons}>
-              <TouchableOpacity
-                style={styles.customBtnBG}
-                onPress={() => this.props.navigation.navigate("Quest")}
-              >
-                <Text style={styles.customBtnText}>Quest</Text>
-              </TouchableOpacity>
+              <View style={styles.MainButtons}>
+                <TouchableOpacity
+                  style={styles.customBtnBG}
+                  onPress={() => this.props.navigation.navigate("Quest")}
+                >
+                  <Text style={styles.customBtnText}>Quest</Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.customBtnBG}
-                onPress={() => this.props.navigation.navigate("Nutritional")}
-              >
-                <Text style={styles.customBtnText}>Nutrition</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.customBtnBG}
+                  onPress={() => this.props.navigation.navigate("Nutritional")}
+                >
+                  <Text style={styles.customBtnText}>Nutrition</Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.customBtnBG}
-                onPress={() => this.props.navigation.navigate("Shop")}
-              >
-                <Text style={styles.customBtnText}>Shop</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.customBtnBG}
+                  onPress={() => this.props.navigation.navigate("Shop")}
+                >
+                  <Text style={styles.customBtnText}>Shop</Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.customBtnBG}
-                onPress={() => this.props.navigation.navigate("Chat")}
-              >
-                <Text style={styles.customBtnText}>Socialize</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.customBtnBG}
+                  onPress={() => this.props.navigation.navigate("Chat")}
+                >
+                  <Text style={styles.customBtnText}>Socialize</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </ImageBackground>
+          </ImageBackground>
+        </View>
       </View>
     );
   }
@@ -264,9 +274,11 @@ const styles = StyleSheet.create({
   },
 
   navBar: {
-    marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-evenly",
+    width: 400,
+    height: 35,
+    backgroundColor: "#FFE5CC",
   },
 
   avatarContainer: {
@@ -333,20 +345,9 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
 
-  customBtnBG: {
-    backgroundColor: "#FFE5CC",
-    borderRadius: 5,
-    marginLeft: 15,
-    marginBottom: 10,
-    marginTop: 5,
-    width: 150,
-    height: 30,
-    flexDirection: "column",
-  },
-
   textStyle: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: "bold",
     color: "#990000",
     textAlign: "left",
   },

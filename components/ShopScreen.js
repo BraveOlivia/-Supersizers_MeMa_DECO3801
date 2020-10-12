@@ -65,7 +65,9 @@ export default class HomeScreen extends Component {
           style={styles.backgroundImage}
         >
           <View style={styles.avatarContainer}>
-            <Text>Your currency: {this.state.avatarCurrency}</Text>
+            <Text style={styles.textStyle}>
+              Your currency: {this.state.avatarCurrency}
+            </Text>
           </View>
 
           <View>
@@ -145,10 +147,23 @@ const styles = StyleSheet.create({
   avatar: {
     width: "18%",
     height: "26%",
-    alignItems: "center",
+    alignItems: "left",
   },
 
   buyText: {
     textAlign: "center",
+  },
+
+  textStyle: {
+    fontSize: 24,
+    fontWeight: "400",
+    color: "#990000",
+    textAlign: "center",
+    backgroundColor: "#FFE5CC",
+    width: 250,
+    height: 40,
+    marginLeft: 30,
+    marginRight: 30,
+    borderRadius: 5,
   },
 });
