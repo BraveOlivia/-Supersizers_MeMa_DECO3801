@@ -336,7 +336,9 @@ export default class NutritionalScreen extends Component {
               size={25}
               color="black"
             />
-            <Text style={{ fontSize: 20, color: "black" }}>102</Text>
+            <Text style={{ fontSize: 25, color: "white" }}>
+              {this.state.baseCurrency}
+            </Text>
           </View>
           <AppIndex />
         </ImageBackground>
