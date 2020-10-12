@@ -123,7 +123,11 @@ export default class HomeScreen extends Component {
 
   reduceHealth() {
     this.setState((state) => {
-      return { avatarHealth: state.avatarHealth - 1 };
+      if (state.avatarHealth > 0) {
+        return { avatarHealth: state.avatarHealth - 1 };
+      } else {
+        return { avatarHealth: 0 };
+      }
     });
     this.writeData();
     // console.log("reducing health");
