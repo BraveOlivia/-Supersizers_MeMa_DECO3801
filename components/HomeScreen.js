@@ -30,11 +30,13 @@ import {
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import * as firebase from "firebase";
+import images from "../components/images";
 
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      avatarCharacter: 0,
       avatarStatus: 0,
       avatarHealth: 0,
     };
@@ -51,41 +53,50 @@ export default class HomeScreen extends Component {
 
   handleAvatarHealthChange = (props) => {
     const avatarHealth = props.health;
-    if (avatarHealth > 80) {
-      return (
-        <Image
-          style={styles.avatar}
-          source={require("../assets/avatar/avatar_1.png")}
-        />
-      );
-    } else if (avatarHealth > 60 && avatarHealth <= 80) {
-      return (
-        <Image
-          style={styles.avatar}
-          source={require("../assets/avatar/avatar_2.png")}
-        />
-      );
-    } else if (avatarHealth > 40 && avatarHealth <= 60) {
-      return (
-        <Image
-          style={styles.avatar}
-          source={require("../assets/avatar/avatar_3.png")}
-        />
-      );
-    } else if (avatarHealth > 20 && avatarHealth <= 40) {
-      return (
-        <Image
-          style={styles.avatar}
-          source={require("../assets/avatar/avatar_4.png")}
-        />
-      );
-    } else {
-      return (
-        <Image
-          style={styles.avatar}
-          source={require("../assets/avatar/avatar_5.png")}
-        />
-      );
+    const avatarCharacter = this.state.avatarCharacter;
+    if (avatarCharacter === 0) {
+      if (avatarHealth > 80) {
+        return (
+          <Image
+            style={styles.avatar}
+            source={require("../assets/avatar/avatar_1.png")}
+          />
+        );
+      } else if (avatarHealth > 60 && avatarHealth <= 80) {
+        return (
+          <Image
+            style={styles.avatar}
+            source={require("../assets/avatar/avatar_2.png")}
+          />
+        );
+      } else if (avatarHealth > 40 && avatarHealth <= 60) {
+        return (
+          <Image
+            style={styles.avatar}
+            source={require("../assets/avatar/avatar_3.png")}
+          />
+        );
+      } else if (avatarHealth > 20 && avatarHealth <= 40) {
+        return (
+          <Image
+            style={styles.avatar}
+            source={require("../assets/avatar/avatar_4.png")}
+          />
+        );
+      } else {
+        return (
+          <Image
+            style={styles.avatar}
+            source={require("../assets/avatar/avatar_5.png")}
+          />
+        );
+      }
+    } else if (avatarCharacter === 1) {
+      return <Image style={styles.avatar} source={images.character1} />;
+    } else if (avatarCharacter === 2) {
+      return <Image style={styles.avatar} source={images.character2} />;
+    } else if (avatarCharacter === 3) {
+      return <Image style={styles.avatar} source={images.character3} />;
     }
   };
 
@@ -104,6 +115,17 @@ export default class HomeScreen extends Component {
         var tempStatus = dataSnapShot.val();
         this.setState({ avatarStatus: tempStatus });
       });
+    firebase
+      .database()
+      .ref("response/character")
+      .once("value", (querySnapShot) => {
+        let data = querySnapShot.val() ? querySnapShot.val() : {};
+        this.setState({
+          avatarCharacter: data,
+        });
+      });
+    // console.log("1 .state of character is: " + this.state.avatarCharacter);
+    // console.log("2 .state of health is: " + this.state.avatarHealth);
   }
 
   writeData() {
@@ -162,7 +184,7 @@ export default class HomeScreen extends Component {
 
             <View style={styles.avatarContainer}>
               <Text style={styles.avatarDialogue}>
-                [AvatarName]: G'day[UserName], staying healthy?
+                G'day[UserName], staying healthy?
               </Text>
               <this.handleAvatarHealthChange health={this.state.avatarHealth} />
               <View>
@@ -191,13 +213,6 @@ export default class HomeScreen extends Component {
             </View>
 
             <View style={styles.footMenu}>
-              {/* <View style={styles.menurow}>
-              <FontAwesomeIcon icon={faCheckSquare} size={30} color={"black"} />
-              <FontAwesomeIcon icon={faLightbulb} size={30} color={"black"} />
-              <FontAwesomeIcon icon={faShoppingBag} size={30} color={"black"} />
-              <FontAwesomeIcon icon={faUserFriends} size={30} color={"black"} />
-            </View> */}
-
               <View style={styles.MainButtons}>
                 <TouchableOpacity
                   style={styles.customBtnBG}
