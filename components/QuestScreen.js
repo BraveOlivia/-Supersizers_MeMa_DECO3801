@@ -248,7 +248,6 @@ function InProgreeTab() {
                     {
                       text: "OK",
                       onPress: () => {
-                        console.log(index);
                         completeQuest(item["questReward"]);
                         updating(
                           index,

@@ -21,6 +21,25 @@ import { fb, Fire } from "../src/firebase/APIKeys";
 var baseHealth = 0;
 var baseStatus = 0;
 var baseCurrency = 0;
+readData();
+
+function readData() {
+  fb.database()
+    .ref("response/avatarHealth")
+    .once("value", (dataSnapShot) => {
+      baseHealth = dataSnapShot.val();
+    });
+  fb.database()
+    .ref("response/avatarStatus")
+    .once("value", (dataSnapShot) => {
+      baseStatus = dataSnapShot.val();
+    });
+  fb.database()
+    .ref("response/currency")
+    .once("value", (dataSnapShot) => {
+      baseCurrency = dataSnapShot.val();
+    });
+}
 
 function ReadTab() {
   const [read, allReads] = useState([]);
@@ -119,11 +138,11 @@ function completeTips(rewardHealth) {
   baseHealth += rewardHealth["avatarHealth"];
   baseStatus += rewardHealth["avatarStatus"];
   baseCurrency += rewardHealth["shopCurrency"];
-  // this.setState((state, props) => ({
-  //   baseHealth: state.baseHealth + rewardHealth["avatarHealth"],
-  //   baseCurrency: state.baseCurrency + rewardHealth["shopCurrency"],
-  //   baseStatus: state.baseStatus + rewardHealth["avatarStatus"],
-  // }));
+  this.setState((state, props) => ({
+    baseHealth: state.baseHealth + rewardHealth["avatarHealth"],
+    baseCurr: state.baseCurr + rewardHealth["shopCurrency"],
+    baseStatus: state.baseStatus + rewardHealth["avatarStatus"],
+  }));
   fb.database()
     .ref("response/")
     .update({
@@ -153,7 +172,12 @@ function reading(item, index) {
       {
         text: "OK",
         onPress: () => {
+          console.log("hey!!!");
+          console.log(this.state.baseCurr);
           completeTips(item["tipReward"]);
+          
+          console.log("sup!!!");
+          console.log(this.state.baseCurr);
           submitTip(
             index,
             item["tipID"],
@@ -247,12 +271,13 @@ export default class NutritionalScreen extends Component {
     this.state = {
       baseHealth: 0,
       baseStatus: 0,
-      baseCurrency: 0,
+      baseCurr: 0,
     };
     if (!fb.apps.length) {
       fb.initializeApp(ApiKeys.FirebaseConfig);
     }
-    () => this.readData();
+    completeTips = completeTips.bind(this);
+    reading = reading.bind(this);
   }
 
   readData() {
@@ -271,35 +296,29 @@ export default class NutritionalScreen extends Component {
     fb.database()
       .ref("response/currency")
       .once("value", (dataSnapShot) => {
-        var tempCurrency = dataSnapShot.val();
-        this.setState({ baseCurrency: tempCurrency });
+        var temp = dataSnapShot.val();
+        this.setState({ baseCurr: temp });
       });
   }
 
-  writeData() {
-    fb.database().ref("response/").update({
-      avatarHealth: this.state.baseHealth,
-      currency: this.state.baseCurrency,
-      avatarStatus: this.state.baseStatus,
-    });
-  }
-
-  updateData = (data) => {
-    this.setState((state, props) => ({
-      baseHealth: state.baseHealth + data["avatarHealth"],
-      baseCurrency: state.baseCurrency + data["shopCurrency"],
-      baseStatus: state.baseStatus + data["avatarStatus"],
-    }));
+  handleCurrency = () => {
+    // this.readData();
+    return (
+      <Text style={{ fontSize: 25, color: "white" }}>
+        {baseCurrency}
+      </Text>
+    );
   };
 
   render() {
+    // this.readData();
     return (
       <View style={{ flex: 1 }}>
         <ImageBackground
           source={require("../assets/BackgroundOrange.png")}
           style={styles.backgroundImage}
         >
-          <StatusBar backgroundColor="black" barStyle="light-content" />
+          <StatusBar backgroundColor="white" barStyle="light-content" />
           <View style={styles.header}>
             {/*  PAGE TITLE  */}
             <FontAwesome
@@ -333,9 +352,8 @@ export default class NutritionalScreen extends Component {
               size={30}
               color="white"
             />
-            <Text style={{ fontSize: 25, color: "white" }}>
-              {this.state.baseCurrency}
-            </Text>
+
+            <this.handleCurrency />
           </View>
           <AppIndex />
         </ImageBackground>
