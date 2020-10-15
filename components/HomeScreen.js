@@ -173,7 +173,12 @@ export default class HomeScreen extends Component {
             <View style={styles.navBar}>
               <FontAwesomeIcon icon={faHome} size={30} color={"black"} />
               <FontAwesomeIcon icon={faDollarSign} size={30} color={"black"} />
-              <FontAwesomeIcon icon={faCogs} size={30} color={"black"} />
+              <FontAwesomeIcon 
+                icon={faCogs} 
+                size={30} 
+                color={"black"} 
+                onPress={() => this.props.navigation.navigate("Setting")}
+              />
               <FontAwesomeIcon
                 icon={faSignOutAlt}
                 size={30}
