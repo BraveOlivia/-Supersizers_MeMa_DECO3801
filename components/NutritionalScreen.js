@@ -254,11 +254,11 @@ const Tab = createMaterialTopTabNavigator(
   },
   {
     tabBarOptions: {
-      activeTintColor: "white",
+      activeTintColor: "black",
       showIcon: true,
       showLabel: true,
       style: {
-        backgroundColor: "#5F7EB2",
+        backgroundColor: "#FF9933",
       },
     },
   }
@@ -324,23 +324,26 @@ export default class NutritionalScreen extends Component {
             <FontAwesome
               style={{ marginLeft: 15 }}
               name="home"
-              size={30}
+              size={25}
               color="white"
             />
             <FontAwesome
               style={{ marginLeft: 25 }}
               name="question-circle"
-              size={30}
+              size={25}
               color="white"
             />
             <Text
               style={{
-                marginLeft: 20,
-                textDecorationLine: "underline",
-                fontSize: 25,
+                marginLeft: 24,
+                alignItems: "center",
+                fontSize: 27,
                 textAlign: "center",
                 color: "white",
-                fontWeight: "bold",
+                backgroundColor: "#a9a9a8",
+                //fontWeight: "bold",
+                borderColor: "FF9933",
+                borderRadius: 1,
               }}
             >
               {" "}
@@ -349,8 +352,8 @@ export default class NutritionalScreen extends Component {
             <MaterialCommunityIcons
               style={{ marginLeft: 30 }}
               name="circle-expand"
-              size={30}
-              color="white"
+              size={25}
+              color="black"
             />
 
             <this.handleCurrency />
@@ -393,7 +396,7 @@ const styles = StyleSheet.create({
 
   taskCard: {
     flex: 5,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFE5CC",
     borderColor: "black",
     borderWidth: 1,
     margin: 10,

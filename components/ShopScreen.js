@@ -1,32 +1,356 @@
 // Homescreen.js
 
-import React, { Component, useState } from "react";
+import Icon from "react-native-vector-icons/Ionicons";
+import React, { Component, useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
-  Image,
   View,
-  Button,
-  Alert,
+  TouchableOpacity,
   ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  Alert,
+  Image,
+  Button,
 } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-// import CheckBox from "react-native-check-box";
-
-import * as firebase from "firebase";
-
-import {
-  faHome,
-  faDollarSign,
-  faCogs,
-} from "@fortawesome/free-solid-svg-icons";
+import { createAppContainer } from "react-navigation";
+import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { fb } from "../src/firebase/APIKeys";
+import images from "../components/images";
+
+var baseCurrency = 500;
+
+// function displayChracter(data) {
+//   if (data === 0) {
+//     console.log("000000 test reach here");
+//     return images.character0;
+//     // <View key={0} style={styles.itemContainer}>
+//     //   <Text>Text msg - 000 </Text>
+//     //   <Image style={styles.avatar} source={images.character0} />
+//     //   {/* <Text style={styles.text}>Price: {item["price"]}</Text> */}
+//     //   <Button title="buy" disabled={true} />
+//     // </View>
+//   } else if (data === 1) {
+//     console.log("********test reach here");
+//     return (
+//       <View key={1} style={styles.itemContainer}>
+//         <Text>Text msg - 111</Text>
+//         <Image style={styles.avatar} source={images.character1} />
+//         <Text style={styles.text}>Price: {item["price"]}</Text>
+//         <Button title="buy" disabled={true} />
+//       </View>
+//     );
+//   } else if (data === 2) {
+//     return (
+//       <View key={2} style={styles.itemContainer}>
+//         <Image style={styles.avatar} source={images.character2} />
+//         <Text style={styles.text}>Price: {item["price"]}</Text>
+//         <Button title="buy" disabled={true} />
+//       </View>
+//     );
+//   } else if (data === 3) {
+//     return (
+//       <View key={3} style={styles.itemContainer}>
+//         <Image style={styles.avatar} source={images.character3} />
+//         <Text style={styles.text}>Price: {item["price"]}</Text>
+//         <Button title="buy" disabled={true} />
+//       </View>
+//     );
+//   }
+// }
+
+function OwnedTab() {
+  const [read, allReads] = useState([]);
+  useEffect(() => {
+    const readRef = fb.database().ref("/response/shop");
+    const OnLoadingListener = readRef.on("value", (snapshot) => {
+      allReads([]);
+      snapshot.forEach(function (childSnapshot) {
+        allReads((read) => [...read, childSnapshot.val()]);
+      });
+    });
+
+    return () => {
+      readRef.off("value", OnLoadingListener);
+    };
+  }, []);
+  return (
+    <View>
+      <SafeAreaView>
+        <ScrollView>
+          {read.map(function (item, index) {
+            if (item["bought"]) {
+              if (item["img"] === 0) {
+                return (
+                  <View key={item["img"]} style={styles.itemContainer}>
+                    <Image style={styles.avatar} source={images.character0} />
+                    <Text style={styles.text}>Price: {item["price"]}</Text>
+                    <Button
+                      title="Set"
+                      disabled={false}
+                      onPress={() => setAvatar(item, index)}
+                    />
+                  </View>
+                );
+              } else if (item["img"] === 1) {
+                return (
+                  <View key={item["img"]} style={styles.itemContainer}>
+                    <Image style={styles.avatar} source={images.character1} />
+                    <Text style={styles.text}>Price: {item["price"]}</Text>
+                    <Button
+                      title="Set"
+                      disabled={false}
+                      onPress={() => setAvatar(item, index)}
+                    />
+                  </View>
+                );
+              } else if (item["img"] === 2) {
+                return (
+                  <View key={item["img"]} style={styles.itemContainer}>
+                    <Image style={styles.avatar} source={images.character2} />
+                    <Text style={styles.text}>Price: {item["price"]}</Text>
+                    <Button
+                      title="Set"
+                      disabled={false}
+                      onPress={() => setAvatar(item, index)}
+                    />
+                  </View>
+                );
+              } else if (item["img"] === 3) {
+                return (
+                  <View key={item["img"]} style={styles.itemContainer}>
+                    <Image style={styles.avatar} source={images.character3} />
+                    <Text style={styles.text}>Price: {item["price"]}</Text>
+                    <Button
+                      title="Set"
+                      disabled={false}
+                      onPress={() => setAvatar(item, index)}
+                    />
+                  </View>
+                );
+              }
+            }
+          })}
+        </ScrollView>
+      </SafeAreaView>
+    </View>
+  );
+}
+OwnedTab.navigationOptions = {
+  tabBarIcon: ({ tintColor, focused }) => (
+    <Icon
+      name={focused ? "ios-mail-open" : "md-mail-open"}
+      color={tintColor}
+      size={25}
+    />
+  ),
+};
+
+const recordBuying = (index, buy, imgUrl, itemPrice) => {
+  return new Promise(function (resolve, reject) {
+    let data = {
+      bought: buy,
+      img: imgUrl,
+      price: itemPrice,
+    };
+    fb.database()
+      .ref("/response/shop/" + index)
+      .update(data)
+      .then((snapshot) => {
+        resolve(snapshot);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+function completeBuying(price) {
+  baseCurrency = baseCurrency - price;
+  fb.database()
+    .ref("response/")
+    .update({
+      currency: baseCurrency,
+    })
+    .then(() => {
+      console.log("Success buying");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+function confirmShopping(item, index) {
+  Alert.alert(
+    "Are you sure?",
+    "Unlock this avatar with $" + item["price"],
+    [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          completeBuying(item["price"]);
+          recordBuying(index, !item["bought"], item["img"], item["price"]);
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+}
+
+function setAvatar(item, index) {
+  Alert.alert(
+    "Are you sure?",
+    "Raise this avatar on home page",
+    [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          console.log("hello olivia, you reached here");
+          updataAvatar(index);
+          // completeBuying(index);
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+}
+
+function updataAvatar(data) {
+  console.log("print out the avatar index: " + data);
+  fb.database()
+    .ref("response/")
+    .update({
+      character: data,
+    })
+    .then(() => {
+      console.log("Success buying");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+function ShopTab() {
+  const [unbought, allUnbought] = useState([]);
+
+  useEffect(() => {
+    const unboughtRef = fb.database().ref("/response/shop");
+    const OnLoadingListener = unboughtRef.on("value", (snapshot) => {
+      allUnbought([]);
+      snapshot.forEach(function (childSnapshot) {
+        // console.log(childSnapshot.val());
+        allUnbought((unbought) => [...unbought, childSnapshot.val()]);
+      });
+    });
+
+    return () => {
+      unboughtRef.off("value", OnLoadingListener);
+    };
+  }, []);
+  return (
+    <View>
+      <SafeAreaView>
+        <ScrollView>
+          {unbought.map(function (item, index) {
+            if (!item["bought"]) {
+              if (item["img"] === 0) {
+                return (
+                  <View key={item["img"]} style={styles.itemContainer}>
+                    <Image style={styles.avatar} source={images.character0} />
+                    <Text style={styles.text}>Price: {item["price"]}</Text>
+                    <Button
+                      title="buy"
+                      disabled={false}
+                      onPress={() => confirmShopping(item, index)}
+                    />
+                  </View>
+                );
+              } else if (item["img"] === 1) {
+                return (
+                  <View key={item["img"]} style={styles.itemContainer}>
+                    <Image style={styles.avatar} source={images.character1} />
+                    <Text style={styles.text}>Price: {item["price"]}</Text>
+                    <Button
+                      title="buy"
+                      disabled={false}
+                      onPress={() => confirmShopping(item, index)}
+                    />
+                  </View>
+                );
+              } else if (item["img"] === 2) {
+                return (
+                  <View key={item["img"]} style={styles.itemContainer}>
+                    <Image style={styles.avatar} source={images.character2} />
+                    <Text style={styles.text}>Price: {item["price"]}</Text>
+                    <Button
+                      title="buy"
+                      disabled={false}
+                      onPress={() => confirmShopping(item, index)}
+                    />
+                  </View>
+                );
+              } else if (item["img"] === 3) {
+                return (
+                  <View key={item["img"]} style={styles.itemContainer}>
+                    <Image style={styles.avatar} source={images.character3} />
+                    <Text style={styles.text}>Price: {item["price"]}</Text>
+                    <Button
+                      title="buy"
+                      disabled={false}
+                      onPress={() => confirmShopping(item, index)}
+                    />
+                  </View>
+                );
+              }
+            }
+          })}
+        </ScrollView>
+      </SafeAreaView>
+    </View>
+  );
+}
+ShopTab.navigationOptions = {
+  tabBarIcon: ({ tintColor, focused }) => (
+    <Icon
+      name={focused ? "ios-mail-unread" : "md-mail-unread"}
+      color={tintColor}
+      size={25}
+    />
+  ),
+};
+
+const Tab = createMaterialTopTabNavigator(
+  {
+    Shop: ShopTab,
+    Owned: OwnedTab,
+  },
+  {
+    tabBarOptions: {
+      activeTintColor: "black",
+      showIcon: true,
+      showLabel: true,
+      style: {
+        backgroundColor: "#FF9933",
+      },
+    },
+  }
+);
+const AppIndex = createAppContainer(Tab);
 
 export default class HomeScreen extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       avatarCurrency: 0,
       items: {},
@@ -67,16 +391,7 @@ export default class HomeScreen extends Component {
           <View style={styles.avatarContainer}>
             <Text>Your currency: {this.state.avatarCurrency}</Text>
           </View>
-
-          <View>
-            {itemKeys.length > 0 ? (
-              itemKeys.map((key) => (
-                <ShopItem key={key} id={key} shopItem={this.state.items[key]} />
-              ))
-            ) : (
-              <Text>No character to unlock</Text>
-            )}
-          </View>
+          <AppIndex />
         </ImageBackground>
       </View>
     );
@@ -104,7 +419,7 @@ const ShopItem = ({ shopItem: { price: itemprice, done }, id }) => {
     <View style={styles.itemContainer}>
       <Image
         style={styles.avatar}
-        source={require("../assets/avatar/avatar_2.png")}
+        source={require("../assets/avatar/character3.png")}
       />
 
       <Button title="buy" onPress={onCheck} disabled={doneState} />
@@ -137,14 +452,13 @@ const styles = StyleSheet.create({
   },
 
   avatarContainer: {
-    // flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
 
   avatar: {
-    width: "18%",
-    height: "26%",
+    width: "30%",
+    height: "50%",
     alignItems: "center",
   },
 

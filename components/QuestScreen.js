@@ -357,11 +357,12 @@ const Tab = createMaterialTopTabNavigator(
   },
   {
     tabBarOptions: {
-      activeTintColor: "white",
+      activeTintColor: "black",
       showIcon: true,
       showLabel: true,
       style: {
-        backgroundColor: "#5F7EB2",
+        borderColor: "black",
+        backgroundColor: "#FF6600",
       },
     },
   }
