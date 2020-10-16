@@ -302,7 +302,6 @@ export default class NutritionalScreen extends Component {
   }
 
   handleCurrency = () => {
-    // this.readData();
     return (
       <Text style={{ fontSize: 25, color: "white" }}>
         {baseCurrency}
@@ -311,7 +310,6 @@ export default class NutritionalScreen extends Component {
   };
 
   render() {
-    // this.readData();
     return (
       <View style={{ flex: 1 }}>
         <ImageBackground

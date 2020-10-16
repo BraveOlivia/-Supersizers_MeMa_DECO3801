@@ -7,7 +7,7 @@ import {
   Button,
 } from "react-native";
 
-export default class HomeScreen extends Component {
+export default class SettingScreen extends Component {
   constructor() {
     super();
     this.state = {
