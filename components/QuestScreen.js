@@ -14,17 +14,15 @@ import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { fb, Fire } from "../src/firebase/APIKeys.js";
 
-var questData = {};
 var baseHealth = 0;
 var baseStatus = 0;
 var baseCurrency = 0;
 var userid = Fire.shared.user._id;
 console.log("questScreen userID " + userid);
 
-readData();
+()=> readData();
 
 function readData() {
-  // fetchQuests();
   fb.database()
     .ref("response/"+ userid +"/avatarHealth")
     .once("value", (dataSnapShot) => {
@@ -78,15 +76,6 @@ function completeQuest(rewardHealth) {
       });
   }
 }
-
-// function fetchQuests() {
-//   fb.database()
-//   .ref("response/"+ userid +"/quests")
-//   .once("value", (dataSnapShot) => {
-//     questData = dataSnapShot.val();
-//     return questData;
-//   });
-// }
 
 // Updating Quest after a quest has been completed.
 const updating = (id, progress) => {
@@ -349,6 +338,14 @@ export default class QuestScreen extends Component {
       fb.initializeApp(ApiKeys.FirebaseConfig);
     }
     () => readData();
+  }
+
+  componentDidMount() {
+    this.timerID1 = setInterval(() => readData(), 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID1);
   }
 
   render() {

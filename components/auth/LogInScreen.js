@@ -15,6 +15,7 @@ export default class LogInScreen extends Component {
   onLoginPress = () => {
     if (this.state.email.length === '' && this.state.password.length === '') {
       Alert.alert('Enter details to signin!');
+      return;
     }
     else {
       this.setState({
@@ -30,17 +31,17 @@ export default class LogInScreen extends Component {
             email: '',
             password: '',
           })
-          // this.props.navigation.navigate('Home')
         },
         (error) => {
           Alert.alert(error.message);
+          return;
         }
       );
     }
   };
 
   onCreateAccountPress = () => {
-    // NavigationActions.navigate("SignUp");
+      // NavigationActions.navigate("SignUp");
     var navActions = StackActions.reset({
       index: 0,
       actions: [NavigationActions.navigate({ routeName: "SignUp" })],

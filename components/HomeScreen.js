@@ -98,15 +98,13 @@ export default class HomeScreen extends Component {
   };
 
   readData() {
-    firebase
-      .database()
+    fb.database()
       .ref("response/" + this.user._id + "/avatarHealth")
       .once("value", (dataSnapShot) => {
         var tempHealth = dataSnapShot.val();
         this.setState({ avatarHealth: tempHealth });
       });
-    firebase
-      .database()
+    fb.database()
       .ref("response/" + this.user._id + "/avatarStatus")
       .once("value", (dataSnapShot) => {
         var tempStatus = dataSnapShot.val();

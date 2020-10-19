@@ -1,19 +1,17 @@
-import React, { Component, useState, useEffect, useCallback } from "react";
+import React, { Component } from "react";
 import { StyleSheet, View, Text, TextInput, Button, Alert } from "react-native";
 import * as firebase from "firebase";
-import {fb, Fire} from '../../src/firebase/APIKeys';
 
 function readUserTemplate(uid) {
-  let key;
   firebase.database()
-    .ref("/response/origin")
+    .ref("response/1/")
     .once("value", (dataSnapShot) => {
-      key = dataSnapShot.val();
+      var key = dataSnapShot.val();
       createNewUser(uid, key);
     });
 }
 
-// Update tip after the tip has been read
+// Create a new response user data storing from the existing template
 function createNewUser(index, content) {
   return new Promise(function (resolve, reject) {
     let key;
@@ -24,7 +22,7 @@ function createNewUser(index, content) {
     }
     let dataToSave = content;
     // console.log(dataToSave);
-    fb.database()
+    firebase.database()
       .ref("/response/" + key)
       .update(dataToSave)
       .then((snapshot) => {
@@ -44,14 +42,7 @@ export default class SignUpScreen extends Component {
       password: "",
       passwordConfirm: "",
     };
-    readUserTemplate = readUserTemplate.bind(this);
-  }
-
-  get user() {
-    return {
-      //   name: this.props.navigation.state.params.name,
-      _id: Fire.shared.uid,
-    };
+    // readUserTemplate = readUserTemplate.bind(this);
   }
 
   onSignupPress = () => {
@@ -59,7 +50,7 @@ export default class SignUpScreen extends Component {
       Alert.alert("Passwords do not match");
       return;
     }
-
+    
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)

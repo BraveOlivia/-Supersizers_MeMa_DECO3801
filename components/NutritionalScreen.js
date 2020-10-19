@@ -22,6 +22,7 @@ var baseHealth = 0;
 var baseStatus = 0;
 var baseCurrency = 0;
 var userid = Fire.shared.user._id;
+console.log(userid);
 () => readData();
 
 function readData() {
@@ -44,7 +45,6 @@ function readData() {
 
 function ReadTab() {
   const [read, allReads] = useState([]);
-  readData();
   useEffect(() => {
     const readRef = fb.database().ref("response/"+ userid +"/nutritionalTips");
     const OnLoadingListener = readRef.on("value", (snapshot) => {
@@ -178,9 +178,8 @@ function reading(item) {
 }
 function UnreadTab() {
   const [unread, allUnreads] = useState([]);
-  readData();
   useEffect(() => {
-    const unreadRef = fb.database().ref("response/"+ userid +"/nutritionalTips");
+    const unreadRef = fb.database().ref("/response/"+ userid +"/nutritionalTips/");
     const OnLoadingListener = unreadRef.on("value", (snapshot) => {
       allUnreads([]);
       snapshot.forEach(function (childSnapshot) {
@@ -257,7 +256,7 @@ export default class NutritionalScreen extends Component {
     if (!fb.apps.length) {
       fb.initializeApp(ApiKeys.FirebaseConfig);
     }
-    () => this.readData();
+    this.readData();
     completeTips = completeTips.bind(this);
     reading = reading.bind(this);
   }
@@ -267,20 +266,31 @@ export default class NutritionalScreen extends Component {
       .ref("response/" + userid + "/avatarHealth")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
+        baseHealth = temp;
         this.setState({ baseHealth: temp });
       });
     fb.database()
       .ref("response/" + userid + "/avatarStatus")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
+        baseStatus = temp;
         this.setState({ baseStatus: temp });
       });
     fb.database()
       .ref("response/" + userid + "/currency")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
+        baseCurrency = temp;
         this.setState({ baseCurr: temp });
       });
+  }
+
+  componentDidMount() {
+    this.timerID1 = setInterval(() => this.readData(), 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID1);
   }
 
   handleCurrency = () => {
