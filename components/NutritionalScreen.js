@@ -21,28 +21,22 @@ import { fb, Fire } from "../src/firebase/APIKeys";
 var baseHealth = 0;
 var baseStatus = 0;
 var baseCurrency = 0;
-var tipData = {};
 var userid = Fire.shared.user._id;
-readData();
+() => readData();
 
 function readData() {
   fb.database()
-    .ref("userData/"+ userid +"/nutritionalTips")
-    .once("value", (dataSnapShot) => {
-      tipData = dataSnapShot.val();
-    });
-  fb.database()
-    .ref("userData/"+ userid +"/avatarHealth")
+    .ref("response/"+ userid +"/avatarHealth")
     .once("value", (dataSnapShot) => {
       baseHealth = dataSnapShot.val();
     });
   fb.database()
-    .ref("userData/" + userid + "/avatarStatus")
+    .ref("response/" + userid + "/avatarStatus")
     .once("value", (dataSnapShot) => {
       baseStatus = dataSnapShot.val();
     });
   fb.database()
-    .ref("userData/" + userid + "/currency")
+    .ref("response/" + userid + "/currency")
     .once("value", (dataSnapShot) => {
       baseCurrency = dataSnapShot.val();
     });
@@ -52,7 +46,7 @@ function ReadTab() {
   const [read, allReads] = useState([]);
   readData();
   useEffect(() => {
-    const readRef = fb.database().ref("/sharedData/nutritionalTips");
+    const readRef = fb.database().ref("response/"+ userid +"/nutritionalTips");
     const OnLoadingListener = readRef.on("value", (snapshot) => {
       allReads([]);
       snapshot.forEach(function (childSnapshot) {
@@ -68,8 +62,7 @@ function ReadTab() {
       <SafeAreaView>
         <ScrollView>
           {read.map(function (item) {
-            var tipItem = tipData[item["tipID"]];
-              if (tipItem["complete"]) {
+              if (item["complete"]) {
                 return (
                   <TouchableOpacity
                     key={item["tipID"]}
@@ -101,7 +94,7 @@ ReadTab.navigationOptions = {
 };
 
 // Update tip after the tip has been read
-const submitTip = (id, completed) => {
+const submitTip = (id, name, tip, type, reward, complete) => {
   return new Promise(function (resolve, reject) {
     let key;
     if (id != null) {
@@ -111,11 +104,15 @@ const submitTip = (id, completed) => {
     }
     let dataToSave = {
       tipID: key,
-      complete: completed
+      tipName: name,
+      complete: complete,
+      tipReward: reward,
+      tip: tip,
+      tipType: type,
     };
     console.log(dataToSave);
     fb.database()
-      .ref("userData/" + userid + "/nutritionalTips/" + key)
+      .ref("response/" + userid + "/nutritionalTips/" + key)
       .update(dataToSave)
       .then((snapshot) => {
         resolve(snapshot);
@@ -131,19 +128,19 @@ function completeTips(rewardHealth) {
   baseStatus += rewardHealth["avatarStatus"];
   baseCurrency += rewardHealth["shopCurrency"];
   this.setState((state, props) => ({
-    baseHealth: state.baseHealth + rewardHealth["avatarHealth"],
-    baseCurr: state.baseCurr + rewardHealth["shopCurrency"],
-    baseStatus: state.baseStatus + rewardHealth["avatarStatus"],
+    baseHealth: this.state.baseHealth + rewardHealth["avatarHealth"],
+    baseCurr: this.state.baseCurr + rewardHealth["shopCurrency"],
+    baseStatus: this.state.baseStatus + rewardHealth["avatarStatus"],
   }));
   fb.database()
-    .ref("userData/" + userid + "/")
+    .ref("response/" + userid + "/")
     .update({
       avatarHealth: baseHealth,
       avatarStatus: baseStatus,
       currency: baseCurrency,
     })
     .then(() => {
-      console.log("Completed a quest");
+      console.log("Read a nutritional tip. Congrats!");
     })
     .catch((error) => {
       console.log(error);
@@ -151,7 +148,7 @@ function completeTips(rewardHealth) {
 }
 
 // Reading Alert to verify if the tip is read.
-function reading(item, tipItem) {
+function reading(item) {
   Alert.alert(
     item["tipName"],
     item["tip"],
@@ -165,7 +162,14 @@ function reading(item, tipItem) {
         text: "OK",
         onPress: () => {
           completeTips(item["tipReward"]);
-          submitTip(item["tipID"], !tipItem["complete"]);
+          submitTip(
+            item["tipID"],
+            item["tipName"],
+            item["tip"],
+            item["tipType"],
+            item["tipReward"],
+            !item["complete"]
+          );
         },
       },
     ],
@@ -176,7 +180,7 @@ function UnreadTab() {
   const [unread, allUnreads] = useState([]);
   readData();
   useEffect(() => {
-    const unreadRef = fb.database().ref("/sharedData/nutritionalTips/");
+    const unreadRef = fb.database().ref("response/"+ userid +"/nutritionalTips");
     const OnLoadingListener = unreadRef.on("value", (snapshot) => {
       allUnreads([]);
       snapshot.forEach(function (childSnapshot) {
@@ -192,13 +196,12 @@ function UnreadTab() {
       <SafeAreaView>
         <ScrollView>
           {unread.map(function (item) {
-            var tipItem = tipData[item["tipID"]];
-            if (!tipItem["complete"]) {
+            if (!item["complete"]) {
                 return (
                   <TouchableOpacity
                     key={item["tipID"]}
                     style={styles.textContainer}
-                    onPress={() => reading(item, tipItem)}
+                    onPress={() => reading(item)}
                   >
                     <Text style={styles.text}>Type: {item["tipType"]}</Text>
                     <Text style={styles.text}>Title: {item["tipName"]}</Text>
@@ -261,19 +264,19 @@ export default class NutritionalScreen extends Component {
 
   readData() {
     fb.database()
-      .ref("userData/" + userid + "/avatarHealth")
+      .ref("response/" + userid + "/avatarHealth")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
         this.setState({ baseHealth: temp });
       });
     fb.database()
-      .ref("userData/" + userid + "/avatarStatus")
+      .ref("response/" + userid + "/avatarStatus")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
         this.setState({ baseStatus: temp });
       });
     fb.database()
-      .ref("userData/" + userid + "/currency")
+      .ref("response/" + userid + "/currency")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
         this.setState({ baseCurr: temp });
@@ -289,7 +292,6 @@ export default class NutritionalScreen extends Component {
   };
 
   render() {
-    console.log("EXPORT RENDER HERE!")
     readData();
     return (
       <View style={{ flex: 1 }}>

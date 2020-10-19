@@ -6,10 +6,9 @@ import {fb, Fire} from '../../src/firebase/APIKeys';
 function readUserTemplate(uid) {
   let key;
   firebase.database()
-    .ref("/userData/1")
+    .ref("/response/origin")
     .once("value", (dataSnapShot) => {
       key = dataSnapShot.val();
-      console.log(key);
       createNewUser(uid, key);
     });
 }
@@ -24,9 +23,9 @@ function createNewUser(index, content) {
       key = firebase.database().ref().push().key;
     }
     let dataToSave = content;
-    console.log(dataToSave);
+    // console.log(dataToSave);
     fb.database()
-      .ref("/userData/" + key)
+      .ref("/response/" + key)
       .update(dataToSave)
       .then((snapshot) => {
         resolve(snapshot);

@@ -100,40 +100,40 @@ export default class HomeScreen extends Component {
   readData() {
     firebase
       .database()
-      .ref("userData/" + this.user._id + "/avatarHealth")
+      .ref("response/" + this.user._id + "/avatarHealth")
       .once("value", (dataSnapShot) => {
         var tempHealth = dataSnapShot.val();
         this.setState({ avatarHealth: tempHealth });
       });
     firebase
       .database()
-      .ref("userData/" + this.user._id + "/avatarStatus")
+      .ref("response/" + this.user._id + "/avatarStatus")
       .once("value", (dataSnapShot) => {
         var tempStatus = dataSnapShot.val();
         this.setState({ avatarStatus: tempStatus });
       });
-    firebase
-      .database()
-      .ref("response/character")
-      .once("value", (querySnapShot) => {
-        var data = querySnapShot.val();
-        this.setState({
-          avatarCharacter: data,
-        });
-      });
+    // firebase
+    //   .database()
+    //   .ref("response/character")
+    //   .once("value", (querySnapShot) => {
+    //     var data = querySnapShot.val();
+    //     this.setState({
+    //       avatarCharacter: data,
+    //     });
+    //   });
     // console.log("1 .state of character is: " + this.state.avatarCharacter);
     // console.log("2 .state of health is: " + this.state.avatarHealth);
-    firebase
-      .database()
-      .ref("response/backgroundColor")
-      .once("value", (dataSnapShot) => {
-        var tempColor = dataSnapShot.val();
-        this.setState({ backgroundColor: tempColor });
-      });
+    // firebase
+    //   .database()
+    //   .ref("response/backgroundColor")
+    //   .once("value", (dataSnapShot) => {
+    //     var tempColor = dataSnapShot.val();
+    //     this.setState({ backgroundColor: tempColor });
+    //   });
   }
 
   writeData() {
-    firebase.database().ref("userData/" + this.user._uid + "/").update({
+    firebase.database().ref("response/" + this.user._uid + "/").update({
       avatarHealth: this.state.avatarHealth,
     });
   }

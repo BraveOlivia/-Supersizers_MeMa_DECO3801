@@ -1,4 +1,41 @@
 {
+  "messages" : {
+    "-MIxFemYtEUctRYDrjOe" : {
+      "text" : "hey mate",
+      "timestamp" : 1601976839558,
+      "user" : {
+        "_id" : "ksgUeMMHUUXn6vf30xevrd1v2oq2"
+      }
+    },
+    "-MJ1DRwwAAz120iZ3qiN" : {
+      "text" : "hello world",
+      "timestamp" : 1602060144676,
+      "user" : {
+        "_id" : "ksgUeMMHUUXn6vf30xevrd1v2oq2"
+      }
+    },
+    "-MJ1KFwH2IM53juEL7Eb" : {
+      "text" : "Hjrif3",
+      "timestamp" : 1602061930490,
+      "user" : {
+        "_id" : "MjdVl8F9tTRe4Dq44406VNcG0o73"
+      }
+    },
+    "-MJ1KOXZeu59NRoRDvFu" : {
+      "text" : "Test message",
+      "timestamp" : 1602061965850,
+      "user" : {
+        "_id" : "MjdVl8F9tTRe4Dq44406VNcG0o73"
+      }
+    },
+    "-MJ1KOZc4J16hMzS4FGG" : {
+      "text" : "testing from Dicky",
+      "timestamp" : 1602061965845,
+      "user" : {
+        "_id" : "ksgUeMMHUUXn6vf30xevrd1v2oq2"
+      }
+    }
+  },
   "response": {
     "1": {
       "avatarHealth": 100,
@@ -7,6 +44,7 @@
       "currency": 500,
       "nutritionalTips": {
         "100031": {
+          "tipID": 100031,
           "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
           "tipName": "Fresh Eating",
           "tipReward": {
@@ -18,6 +56,7 @@
           "complete": false
         },
         "100032": {
+          "tipID": 100032,
           "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
           "tipName": "Work Harder, Play Harder",
           "tipReward": {
@@ -29,6 +68,7 @@
           "complete": false
         },
         "100033": {
+          "tipID": 100033,
           "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
           "tipName": "Stop Sittting, Start Moving",
           "tipReward": {
@@ -40,6 +80,7 @@
           "complete": false
         },
         "100034": {
+          "tipID": 100034,
           "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
           "tipName": "Fresh Eating",
           "tipReward": {
@@ -51,6 +92,7 @@
           "complete": false
         },
         "100035": {
+          "tipID": 100035,
           "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
           "tipName": "Benefits of Protein",
           "tipReward": {
@@ -62,6 +104,7 @@
           "complete": false
         },
         "100036": {
+          "tipID": 100036,
           "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
           "tipName": "Stop Sittting, Start Moving",
           "tipReward": {
@@ -75,6 +118,7 @@
       },
       "quests": {
         "1001": {
+          "questID": 1001,
           "questCategory": "0",
           "questDescription": "Running is a great way to improve fitness. Start running today!",
           "questDifficulty": "0",
@@ -91,6 +135,7 @@
           "questType": "0"
         },
         "1002": {
+          "questID": 1002,
           "questCategory": "0",
           "questDescription": "Lifting is a great way to build your body!",
           "questDifficulty": "0",
@@ -107,6 +152,7 @@
           "questType": "0"
         },
         "1003": {
+          "questID": 1003,
           "questCategory": "0",
           "questDescription": "Running is a great way to improve fitness. Start running today!",
           "questDifficulty": "0",
@@ -123,6 +169,7 @@
           "questType": "0"
         },
         "1004": {
+          "questID": 1004,
           "questCategory": "0",
           "questDescription": "Running is a great way to improve fitness. Start running today!",
           "questDifficulty": "0",
@@ -139,6 +186,7 @@
           "questType": "0"
         },
         "1005": {
+          "questID": 1005,
           "questCategory": "0",
           "questDescription": "Running is a great way to improve fitness. Start running today!",
           "questDifficulty": "0",
@@ -177,6 +225,7 @@
       "currency": 500,
       "nutritionalTips": {
         "100031": {
+          "tipID":100031,
           "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
           "tipName": "Fresh Eating",
           "tipReward": {
@@ -188,6 +237,7 @@
           "complete": false
         },
         "100032": {
+          "tipID":100032,
           "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
           "tipName": "Work Harder, Play Harder",
           "tipReward": {
@@ -199,6 +249,7 @@
           "complete": false
         },
         "100033": {
+          "tipID":100033,
           "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
           "tipName": "Stop Sittting, Start Moving",
           "tipReward": {
@@ -210,6 +261,7 @@
           "complete": false
         },
         "100034": {
+          "tipID":100034,
           "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
           "tipName": "Fresh Eating",
           "tipReward": {
@@ -221,6 +273,7 @@
           "complete": false
         },
         "100035": {
+          "tipID":100035,
           "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
           "tipName": "Benefits of Protein",
           "tipReward": {
@@ -232,6 +285,7 @@
           "complete": false
         },
         "100036": {
+          "tipID":100036,
           "tip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
           "tipName": "Stop Sittting, Start Moving",
           "tipReward": {
@@ -245,6 +299,7 @@
       },
       "quests": {
         "1001": {
+          "questID": 1001,
           "questCategory": "0",
           "questDescription": "Running is a great way to improve fitness. Start running today!",
           "questDifficulty": "0",
@@ -261,6 +316,7 @@
           "questType": "0"
         },
         "1002": {
+          "questID": 1002,
           "questCategory": "0",
           "questDescription": "Lifting is a great way to build your body!",
           "questDifficulty": "0",
@@ -277,6 +333,7 @@
           "questType": "0"
         },
         "1003": {
+          "questID": 1003,
           "questCategory": "0",
           "questDescription": "Running is a great way to improve fitness. Start running today!",
           "questDifficulty": "0",
@@ -293,6 +350,7 @@
           "questType": "0"
         },
         "1004": {
+          "questID": 1004,
           "questCategory": "0",
           "questDescription": "Running is a great way to improve fitness. Start running today!",
           "questDifficulty": "0",
@@ -309,6 +367,7 @@
           "questType": "0"
         },
         "1005": {
+          "questID": 1005,
           "questCategory": "0",
           "questDescription": "Running is a great way to improve fitness. Start running today!",
           "questDifficulty": "0",

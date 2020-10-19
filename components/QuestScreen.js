@@ -13,7 +13,6 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { fb, Fire } from "../src/firebase/APIKeys.js";
-import * as firebase from "firebase";
 
 var questData = {};
 var baseHealth = 0;
@@ -22,26 +21,22 @@ var baseCurrency = 0;
 var userid = Fire.shared.user._id;
 console.log("questScreen userID " + userid);
 
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(fb.FirebaseConfig);
-}
 readData();
 
 function readData() {
-  fetchQuests();
+  // fetchQuests();
   fb.database()
-    .ref("userData/"+ userid +"/avatarHealth")
+    .ref("response/"+ userid +"/avatarHealth")
     .once("value", (dataSnapShot) => {
       baseHealth = dataSnapShot.val();
     });
   fb.database()
-    .ref("userData/" + userid + "/avatarStatus")
+    .ref("response/" + userid + "/avatarStatus")
     .once("value", (dataSnapShot) => {
       baseStatus = dataSnapShot.val();
     });
   fb.database()
-    .ref("userData/" + userid + "/currency")
+    .ref("response/" + userid + "/currency")
     .once("value", (dataSnapShot) => {
       baseCurrency = dataSnapShot.val();
     });
@@ -52,9 +47,9 @@ function completeQuest(rewardHealth) {
   baseStatus += rewardHealth["avatarStatus"];
   baseCurrency += rewardHealth["shopCurrency"];
   if (baseHealth >= 100) {
-    firebase
+    fb
       .database()
-      .ref("userData/" + userid + "/")
+      .ref("response/" + userid + "/")
       .update({
         avatarHealth: 100,
         avatarStatus: baseStatus,
@@ -67,9 +62,9 @@ function completeQuest(rewardHealth) {
         console.log(error);
       });
   } else {
-    firebase
+    fb
       .database()
-      .ref("userData/" + userid + "/")
+      .ref("response/" + userid + "/")
       .update({
         avatarHealth: baseHealth,
         avatarStatus: baseStatus,
@@ -84,14 +79,14 @@ function completeQuest(rewardHealth) {
   }
 }
 
-function fetchQuests() {
-  fb.database()
-  .ref("userData/"+ userid +"/quests")
-  .once("value", (dataSnapShot) => {
-    questData = dataSnapShot.val();
-    return questData;
-  });
-}
+// function fetchQuests() {
+//   fb.database()
+//   .ref("response/"+ userid +"/quests")
+//   .once("value", (dataSnapShot) => {
+//     questData = dataSnapShot.val();
+//     return questData;
+//   });
+// }
 
 // Updating Quest after a quest has been completed.
 const updating = (id, progress) => {
@@ -112,7 +107,7 @@ const updating = (id, progress) => {
     };
     console.log(dataToSave);
     fb.database()
-      .ref("/userData/" + userid + "/quests/" + key)
+      .ref("/response/" + userid + "/quests/" + key)
       .update(dataToSave)
       .then((snapshot) => {
         resolve(snapshot);
@@ -126,7 +121,7 @@ const updating = (id, progress) => {
 function ReadAllTab() {
   const [quests, allQuests] = useState([]);
   useEffect(() => {
-    const questRef = fb.database().ref("/sharedData/quests/");
+    const questRef = fb.database().ref("/response/"+ userid +"/quests/");
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allQuests([]);
       snapshot.forEach(function (childSnapshot) {
@@ -189,8 +184,7 @@ ReadAllTab.navigationOptions = {
 function InProgreeTab() {
   const [inProgress, allInProgressQuests] = useState([]);
   useEffect(() => {
-    const questRef = fb.database().ref("/sharedData/quests/");
-    fetchQuests();
+    const questRef = fb.database().ref("/response/"+ userid +"/quests/");
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allInProgressQuests([]);
       snapshot.forEach(function (childSnapshot) {
@@ -204,16 +198,13 @@ function InProgreeTab() {
     });
     return () => {
       questRef.off("value", OnLoadingListener);
-      fetchQuests();
     };
   }, []);
-  fetchQuests();
   return (
     <View>
       {inProgress.map(function (item) {
-          var questItem = questData[item["questID"]];
-          if (questItem["questProgress"]["questCompletion"] >= 0 &&
-            questItem["questProgress"]["questCompletion"] != questItem["questProgress"]["questMaxValue"]) 
+          if (item["questProgress"]["questCompletion"] >= 0 &&
+            item["questProgress"]["questCompletion"] != item["questProgress"]["questMaxValue"]) 
             {
               return (
                 <TouchableOpacity
@@ -237,7 +228,7 @@ function InProgreeTab() {
                           text: "OK",
                           onPress: () => {
                             completeQuest(item["questReward"]);
-                            updating(item["questID"], questItem["questProgress"]);
+                            updating(item["questID"], item["questProgress"]);
                           },
                         },
                       ],
@@ -273,14 +264,10 @@ InProgreeTab.navigationOptions = {
 function CompletionTab() {
   const [completedQuest, allCompletedQuests] = useState([]);
   useEffect(() => {
-    const questRef = fb.database().ref("/sharedData/quests/");
-    fetchQuests();
+    const questRef = fb.database().ref("/response/" + userid + "/quests/");
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allCompletedQuests([]);
       snapshot.forEach(function (childSnapshot) {
-        // var item = questData[childSnapshot.val()["questID"]];
-        // if (item["questProgress"]["questCompletion"] == item["questProgress"]["questMaxValue"]) 
-        // {
           allCompletedQuests((completedQuest) => [
             ...completedQuest,
             childSnapshot.val(),
@@ -292,12 +279,10 @@ function CompletionTab() {
       questRef.off("value", OnLoadingListener);
     };
   }, []);
-  fetchQuests();
   return (
     <View>
       {completedQuest.map(function (item) {
-        var questItem = questData[item["questID"]];
-        if (questItem["questProgress"]["questCompletion"] == questItem["questProgress"]["questMaxValue"])
+        if (item["questProgress"]["questCompletion"] == item["questProgress"]["questMaxValue"])
           {
             {
               return (
@@ -360,14 +345,13 @@ export default class QuestScreen extends Component {
       avatarHealth: 0,
       avatarCurrency: 0,
     };
-    if (!firebase.apps.length) {
-      firebase.initializeApp(ApiKeys.FirebaseConfig);
+    if (!fb.apps.length) {
+      fb.initializeApp(ApiKeys.FirebaseConfig);
     }
     () => readData();
   }
 
   render() {
-    console.log("Export render!");
     readData();
     return (
       <View style={styles.MainContainer}>
