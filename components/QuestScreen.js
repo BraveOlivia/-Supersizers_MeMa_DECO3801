@@ -337,7 +337,7 @@ export default class QuestScreen extends Component {
     if (!fb.apps.length) {
       fb.initializeApp(ApiKeys.FirebaseConfig);
     }
-    () => readData();
+    readData();
   }
 
   componentDidMount() {
