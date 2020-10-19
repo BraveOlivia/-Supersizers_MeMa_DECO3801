@@ -6,6 +6,7 @@ import {
   View,
   Button,
 } from "react-native";
+import { fb } from "../src/firebase/APIKeys";
 
 export default class SettingScreen extends Component {
   constructor() {
@@ -17,10 +18,26 @@ export default class SettingScreen extends Component {
   }
 
   backgroundColorOnPress = () => {
+    var color = Math.floor(Math.random() * 10) + 1;
+    this.updateBackgroundColor(color);
     this.setState({
-      backgroundColor: Math.floor(Math.random() * 10) + 1
+      backgroundColor: color
     })
   }
+
+  updateBackgroundColor(color) {
+    fb.database()
+    .ref("response/")
+    .update({
+      backgroundColor: color,
+    })
+    .then(() => {
+      console.log("Background Color Changed");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  } 
 
   suppressNotificationOnPress = () => {
     if (this.state.supperssNotification == "OFF") {

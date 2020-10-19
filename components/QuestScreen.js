@@ -21,18 +21,14 @@ var baseStatus = 0;
 var baseCurrency = 0;
 var userid = Fire.shared.user._id;
 console.log("questScreen userID " + userid);
-console.log("global variable userid")
 
 
 if (!firebase.apps.length) {
   firebase.initializeApp(fb.FirebaseConfig);
-  console.log("global variable apps.length")
 }
-()=> readData();
-console.log("global variable initializeApp")
+readData();
 
 function readData() {
-  console.log("function component readDAta here!")
   fetchQuests();
   fb.database()
     .ref("userData/"+ userid +"/avatarHealth")

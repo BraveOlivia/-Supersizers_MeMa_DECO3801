@@ -37,6 +37,7 @@ export default class HomeScreen extends Component {
     this.state = {
       avatarStatus: 0,
       avatarHealth: 0,
+      backgroundColor: 0,
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
@@ -110,6 +111,24 @@ export default class HomeScreen extends Component {
       .once("value", (dataSnapShot) => {
         var tempStatus = dataSnapShot.val();
         this.setState({ avatarStatus: tempStatus });
+      });
+    firebase
+      .database()
+      .ref("response/character")
+      .once("value", (querySnapShot) => {
+        var data = querySnapShot.val();
+        this.setState({
+          avatarCharacter: data,
+        });
+      });
+    // console.log("1 .state of character is: " + this.state.avatarCharacter);
+    // console.log("2 .state of health is: " + this.state.avatarHealth);
+    firebase
+      .database()
+      .ref("response/backgroundColor")
+      .once("value", (dataSnapShot) => {
+        var tempColor = dataSnapShot.val();
+        this.setState({ backgroundColor: tempColor });
       });
   }
 

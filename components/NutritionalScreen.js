@@ -23,6 +23,7 @@ var baseStatus = 0;
 var baseCurrency = 0;
 var tipData = {};
 var userid = Fire.shared.user._id;
+readData();
 
 function readData() {
   fb.database()
