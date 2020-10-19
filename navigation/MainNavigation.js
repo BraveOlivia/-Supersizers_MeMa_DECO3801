@@ -10,7 +10,6 @@ import {
   SettingScreen,
 } from "../components/ScreenComponents";
 import { ImageBackground, StyleSheet } from "react-native";
-import Chat from "../components/ChatScreen";
 
 const Stack = createStackNavigator();
 

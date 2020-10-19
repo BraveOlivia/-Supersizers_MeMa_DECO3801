@@ -24,12 +24,6 @@ export default class App extends Component {
 
     if (!firebase.apps.length) {
       firebase.initializeApp(fb.FirebaseConfig);
-      // firebase.analytics = firebase.analytics();
-      // firebase.analytics.isSupported().then((isSupported) => {
-      //   if (isSupported) {
-      //     analytics = firebase.analytics();
-      //   }
-      // });
     }
     firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
   }

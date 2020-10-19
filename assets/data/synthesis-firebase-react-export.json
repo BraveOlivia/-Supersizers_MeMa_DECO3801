@@ -1,0 +1,210 @@
+{
+  "messages" : {
+    "-MIxFemYtEUctRYDrjOe" : {
+      "text" : "hey mate",
+      "timestamp" : 1601976839558,
+      "user" : {
+        "_id" : "ksgUeMMHUUXn6vf30xevrd1v2oq2"
+      }
+    },
+    "-MJ1DRwwAAz120iZ3qiN" : {
+      "text" : "hello world",
+      "timestamp" : 1602060144676,
+      "user" : {
+        "_id" : "ksgUeMMHUUXn6vf30xevrd1v2oq2"
+      }
+    },
+    "-MJ1KFwH2IM53juEL7Eb" : {
+      "text" : "Hjrif3",
+      "timestamp" : 1602061930490,
+      "user" : {
+        "_id" : "MjdVl8F9tTRe4Dq44406VNcG0o73"
+      }
+    },
+    "-MJ1KOXZeu59NRoRDvFu" : {
+      "text" : "Test message",
+      "timestamp" : 1602061965850,
+      "user" : {
+        "_id" : "MjdVl8F9tTRe4Dq44406VNcG0o73"
+      }
+    },
+    "-MJ1KOZc4J16hMzS4FGG" : {
+      "text" : "testing from Dicky",
+      "timestamp" : 1602061965845,
+      "user" : {
+        "_id" : "ksgUeMMHUUXn6vf30xevrd1v2oq2"
+      }
+    }
+  },
+  "response" : {
+    "avatarHealth" : -132,
+    "avatarStatus" : 0,
+    "character" : 2,
+    "currency" : 55,
+    "nutritionalTips" : [ {
+      "complete" : true,
+      "tip" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "tipID" : "100034",
+      "tipName" : "Fresh Eating",
+      "tipReward" : {
+        "avatarHealth" : 0,
+        "avatarStatus" : 0,
+        "shopCurrency" : 5
+      },
+      "tipType" : "0"
+    }, {
+      "complete" : false,
+      "tip" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "tipID" : "100035",
+      "tipName" : "Work Harder, Play Harder",
+      "tipReward" : {
+        "avatarHealth" : 0,
+        "avatarStatus" : 0,
+        "shopCurrency" : 5
+      },
+      "tipType" : "0"
+    }, {
+      "complete" : false,
+      "tip" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "tipID" : "100036",
+      "tipName" : "Stop Sittting, Start Moving",
+      "tipReward" : {
+        "avatarHealth" : 0,
+        "avatarStatus" : 0,
+        "shopCurrency" : 10
+      },
+      "tipType" : "0"
+    }, {
+      "complete" : false,
+      "tip" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "tipID" : "100037",
+      "tipName" : "Benefits of Protein",
+      "tipReward" : {
+        "avatarHealth" : 0,
+        "avatarStatus" : 0,
+        "shopCurrency" : 10
+      },
+      "tipType" : "0"
+    }, {
+      "complete" : false,
+      "tip" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "tipID" : "100038",
+      "tipName" : "Fresh Eating",
+      "tipReward" : {
+        "avatarHealth" : 0,
+        "avatarStatus" : 0,
+        "shopCurrency" : 5
+      },
+      "tipType" : "0"
+    }, {
+      "complete" : false,
+      "tip" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "tipID" : "100039",
+      "tipName" : "Fresh Eating",
+      "tipReward" : {
+        "avatarHealth" : 0,
+        "avatarStatus" : 0,
+        "shopCurrency" : 5
+      },
+      "tipType" : "0"
+    } ],
+    "quests" : [ {
+      "questCategory" : "0",
+      "questDescription" : "Running is a great way to improve fitness. Start running today!",
+      "questDifficulty" : "0",
+      "questID" : "1001",
+      "questName" : "Task 3",
+      "questProgress" : {
+        "questCompletion" : 0,
+        "questMaxValue" : 20
+      },
+      "questReward" : {
+        "avatarHealth" : 10,
+        "avatarStatus" : 30,
+        "shopCurrency" : 0
+      },
+      "questType" : "0"
+    }, {
+      "questCategory" : "0",
+      "questDescription" : "Lifting is a great way to build your body!",
+      "questDifficulty" : "0",
+      "questID" : "1002",
+      "questName" : "Do you even lift bro?",
+      "questProgress" : {
+        "questCompletion" : 50,
+        "questMaxValue" : 50
+      },
+      "questReward" : {
+        "avatarHealth" : 15,
+        "avatarStatus" : 60,
+        "shopCurrency" : 0
+      },
+      "questType" : "0"
+    }, {
+      "questCategory" : "0",
+      "questDescription" : "Running is a great way to improve fitness. Start running today!",
+      "questDifficulty" : "0",
+      "questID" : "1003",
+      "questName" : "Task 3",
+      "questProgress" : {
+        "questCompletion" : 0,
+        "questMaxValue" : 20
+      },
+      "questReward" : {
+        "avatarHealth" : 10,
+        "avatarStatus" : 30,
+        "shopCurrency" : 0
+      },
+      "questType" : "0"
+    }, {
+      "questCategory" : "0",
+      "questDescription" : "Running is a great way to improve fitness. Start running today!",
+      "questDifficulty" : "0",
+      "questID" : "1004",
+      "questName" : "Task 4",
+      "questProgress" : {
+        "questCompletion" : 0,
+        "questMaxValue" : 20
+      },
+      "questReward" : {
+        "avatarHealth" : 30,
+        "avatarStatus" : 30,
+        "shopCurrency" : 0
+      },
+      "questType" : "0"
+    }, {
+      "questCategory" : "0",
+      "questDescription" : "Running is a great way to improve fitness. Start running today!",
+      "questDifficulty" : "0",
+      "questID" : "1005",
+      "questName" : "Task 5",
+      "questProgress" : {
+        "questCompletion" : 0,
+        "questMaxValue" : 30
+      },
+      "questReward" : {
+        "avatarHealth" : 40,
+        "avatarStatus" : 25,
+        "shopCurrency" : 0
+      },
+      "questType" : "0"
+    } ],
+    "shop" : [ {
+      "bought" : true,
+      "img" : 0,
+      "price" : 0
+    }, {
+      "bought" : false,
+      "img" : 1,
+      "price" : 120
+    }, {
+      "bought" : false,
+      "img" : 2,
+      "price" : 120
+    }, {
+      "bought" : true,
+      "img" : 3,
+      "price" : 50
+    } ]
+  }
+}

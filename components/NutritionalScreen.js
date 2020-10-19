@@ -21,21 +21,27 @@ import { fb, Fire } from "../src/firebase/APIKeys";
 var baseHealth = 0;
 var baseStatus = 0;
 var baseCurrency = 0;
-readData();
+var tipData = {};
+var userid = Fire.shared.user._id;
 
 function readData() {
   fb.database()
-    .ref("response/avatarHealth")
+    .ref("userData/"+ userid +"/nutritionalTips")
+    .once("value", (dataSnapShot) => {
+      tipData = dataSnapShot.val();
+    });
+  fb.database()
+    .ref("userData/"+ userid +"/avatarHealth")
     .once("value", (dataSnapShot) => {
       baseHealth = dataSnapShot.val();
     });
   fb.database()
-    .ref("response/avatarStatus")
+    .ref("userData/" + userid + "/avatarStatus")
     .once("value", (dataSnapShot) => {
       baseStatus = dataSnapShot.val();
     });
   fb.database()
-    .ref("response/currency")
+    .ref("userData/" + userid + "/currency")
     .once("value", (dataSnapShot) => {
       baseCurrency = dataSnapShot.val();
     });
@@ -43,51 +49,40 @@ function readData() {
 
 function ReadTab() {
   const [read, allReads] = useState([]);
+  readData();
   useEffect(() => {
-    const readRef = fb.database().ref("/response/nutritionalTips");
+    const readRef = fb.database().ref("/sharedData/nutritionalTips");
     const OnLoadingListener = readRef.on("value", (snapshot) => {
       allReads([]);
       snapshot.forEach(function (childSnapshot) {
         allReads((read) => [...read, childSnapshot.val()]);
       });
     });
-    // const childRemovedListener = readRef.on("child_removed", (snapshot) => {
-    //   // Set Your Functioanlity Whatever you want.
-    //   alert("Child Removed");
-    // });
-
-    // const childChangedListener = readRef.on("child_changed", (snapshot) => {
-    //   // Set Your Functioanlity Whatever you want.
-    //   alert("Child Updated/Changed");
-    // });
-
     return () => {
       readRef.off("value", OnLoadingListener);
-      // readRef.off("child_removed", childRemovedListener);
-      // readRef.off("child_changed", childChangedListener);
     };
   }, []);
   return (
     <View>
       <SafeAreaView>
         <ScrollView>
-          {read.map(function (item, index) {
-            if (item["complete"]) {
-              return (
-                <TouchableOpacity
-                  key={item["tipID"]}
-                  style={styles.textContainer}
-                  // onPress={() => reading(item, index)}
-                >
-                  <Text style={styles.text}>Type: {item["tipType"]}</Text>
-                  <Text style={styles.text}>Title: {item["tipName"]}</Text>
-                  <Text style={styles.text}>Description: {item["tip"]}</Text>
-                  <Text style={styles.text}>
-                    Rewards: {item["tipReward"]["shopCurrency"]}
-                  </Text>
-                </TouchableOpacity>
-              );
-            }
+          {read.map(function (item) {
+            var tipItem = tipData[item["tipID"]];
+              if (tipItem["complete"]) {
+                return (
+                  <TouchableOpacity
+                    key={item["tipID"]}
+                    style={styles.textContainer}
+                  >
+                    <Text style={styles.text}>Type: {item["tipType"]}</Text>
+                    <Text style={styles.text}>Title: {item["tipName"]}</Text>
+                    <Text style={styles.text}>Description: {item["tip"]}</Text>
+                    <Text style={styles.text}>
+                      Rewards: {item["tipReward"]["shopCurrency"]}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              }
           })}
         </ScrollView>
       </SafeAreaView>
@@ -105,7 +100,7 @@ ReadTab.navigationOptions = {
 };
 
 // Update tip after the tip has been read
-const submitTip = (index, id, name, tip, type, reward, complete) => {
+const submitTip = (id, completed) => {
   return new Promise(function (resolve, reject) {
     let key;
     if (id != null) {
@@ -115,15 +110,11 @@ const submitTip = (index, id, name, tip, type, reward, complete) => {
     }
     let dataToSave = {
       tipID: key,
-      tipName: name,
-      complete: complete,
-      tipReward: reward,
-      tip: tip,
-      tipType: type,
+      complete: completed
     };
     console.log(dataToSave);
     fb.database()
-      .ref("/response/nutritionalTips/" + index)
+      .ref("userData/" + userid + "/nutritionalTips/" + key)
       .update(dataToSave)
       .then((snapshot) => {
         resolve(snapshot);
@@ -144,7 +135,7 @@ function completeTips(rewardHealth) {
     baseStatus: state.baseStatus + rewardHealth["avatarStatus"],
   }));
   fb.database()
-    .ref("response/")
+    .ref("userData/" + userid + "/")
     .update({
       avatarHealth: baseHealth,
       avatarStatus: baseStatus,
@@ -159,7 +150,7 @@ function completeTips(rewardHealth) {
 }
 
 // Reading Alert to verify if the tip is read.
-function reading(item, index) {
+function reading(item, tipItem) {
   Alert.alert(
     item["tipName"],
     item["tip"],
@@ -172,21 +163,8 @@ function reading(item, index) {
       {
         text: "OK",
         onPress: () => {
-          console.log("hey!!!");
-          console.log(this.state.baseCurr);
           completeTips(item["tipReward"]);
-          
-          console.log("sup!!!");
-          console.log(this.state.baseCurr);
-          submitTip(
-            index,
-            item["tipID"],
-            item["tipName"],
-            item["tip"],
-            item["tipType"],
-            item["tipReward"],
-            !item["complete"]
-          );
+          submitTip(item["tipID"], !tipItem["complete"]);
         },
       },
     ],
@@ -195,17 +173,15 @@ function reading(item, index) {
 }
 function UnreadTab() {
   const [unread, allUnreads] = useState([]);
-
+  readData();
   useEffect(() => {
-    const unreadRef = fb.database().ref("/response/nutritionalTips");
+    const unreadRef = fb.database().ref("/sharedData/nutritionalTips/");
     const OnLoadingListener = unreadRef.on("value", (snapshot) => {
       allUnreads([]);
       snapshot.forEach(function (childSnapshot) {
-        // console.log(childSnapshot.val());
         allUnreads((unread) => [...unread, childSnapshot.val()]);
       });
     });
-
     return () => {
       unreadRef.off("value", OnLoadingListener);
     };
@@ -214,23 +190,24 @@ function UnreadTab() {
     <View>
       <SafeAreaView>
         <ScrollView>
-          {unread.map(function (item, index) {
-            if (!item["complete"]) {
-              return (
-                <TouchableOpacity
-                  key={item["tipID"]}
-                  style={styles.textContainer}
-                  onPress={() => reading(item, index)}
-                >
-                  <Text style={styles.text}>Type: {item["tipType"]}</Text>
-                  <Text style={styles.text}>Title: {item["tipName"]}</Text>
-                  <Text style={styles.text}>Description: {item["tip"]}</Text>
-                  <Text style={styles.text}>
-                    Rewards: {item["tipReward"]["shopCurrency"]}
-                  </Text>
-                </TouchableOpacity>
-              );
-            }
+          {unread.map(function (item) {
+            var tipItem = tipData[item["tipID"]];
+            if (!tipItem["complete"]) {
+                return (
+                  <TouchableOpacity
+                    key={item["tipID"]}
+                    style={styles.textContainer}
+                    onPress={() => reading(item, tipItem)}
+                  >
+                    <Text style={styles.text}>Type: {item["tipType"]}</Text>
+                    <Text style={styles.text}>Title: {item["tipName"]}</Text>
+                    <Text style={styles.text}>Description: {item["tip"]}</Text>
+                    <Text style={styles.text}>
+                      Rewards: {item["tipReward"]["shopCurrency"]}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              }
           })}
         </ScrollView>
       </SafeAreaView>
@@ -276,25 +253,26 @@ export default class NutritionalScreen extends Component {
     if (!fb.apps.length) {
       fb.initializeApp(ApiKeys.FirebaseConfig);
     }
+    () => this.readData();
     completeTips = completeTips.bind(this);
     reading = reading.bind(this);
   }
 
   readData() {
     fb.database()
-      .ref("response/avatarHealth")
+      .ref("userData/" + userid + "/avatarHealth")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
         this.setState({ baseHealth: temp });
       });
     fb.database()
-      .ref("response/avatarStatus")
+      .ref("userData/" + userid + "/avatarStatus")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
         this.setState({ baseStatus: temp });
       });
     fb.database()
-      .ref("response/currency")
+      .ref("userData/" + userid + "/currency")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
         this.setState({ baseCurr: temp });
@@ -310,6 +288,8 @@ export default class NutritionalScreen extends Component {
   };
 
   render() {
+    console.log("EXPORT RENDER HERE!")
+    readData();
     return (
       <View style={{ flex: 1 }}>
         <ImageBackground
@@ -340,7 +320,7 @@ export default class NutritionalScreen extends Component {
                 color: "white",
                 backgroundColor: "#a9a9a8",
                 //fontWeight: "bold",
-                borderColor: "FF9933",
+                borderColor: "#FF9933",
                 borderRadius: 1,
               }}
             >
@@ -438,6 +418,18 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
 });
+
+    // const childRemovedListener = readRef.on("child_removed", (snapshot) => {
+    //   // Set Your Functioanlity Whatever you want.
+    //   alert("Child Removed");
+    // });
+
+    // const childChangedListener = readRef.on("child_changed", (snapshot) => {
+    //   // Set Your Functioanlity Whatever you want.
+    //   alert("Child Updated/Changed");
+    // });
+      // readRef.off("child_removed", childRemovedListener);
+      // readRef.off("child_changed", childChangedListener);
 
 //         {/*  TABS  */}
 //         <View className="NutritionPage">

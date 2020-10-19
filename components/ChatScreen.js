@@ -4,11 +4,6 @@ import { GiftedChat } from "react-native-gifted-chat"; // 0.3.0
 import { StyleSheet } from "react-native";
 import { fb, Fire } from "../src/firebase/APIKeys";
 
-
-// type Props = {
-//   name?: string,
-// };
-
 export default class ChatScreen extends React.Component {
   state = {
     messages: [],
@@ -42,6 +37,23 @@ export default class ChatScreen extends React.Component {
     Fire.shared.off();
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 3,
+    flexDirection: "column",
+  },
+  backrgoundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+  text: {
+    color: "grey",
+    fontSize: 30,
+    fontWeight: "bold",
+  },
+});
+
 
 // // import React, { Component } from "react";
 // // import { Platform, KeyboardAvoidingView, SafeAreaView } from "react-native";
@@ -142,20 +154,3 @@ export default class ChatScreen extends React.Component {
 //     return <SafeAreaView style={{ flex: 1 }}>{chat}</SafeAreaView>;
 //   }
 // }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 3,
-    flexDirection: "column",
-  },
-  backrgoundImage: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
-  },
-  text: {
-    color: "grey",
-    fontSize: 30,
-    fontWeight: "bold",
-  },
-});
