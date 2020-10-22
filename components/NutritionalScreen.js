@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { fb, Fire } from "../src/firebase/APIKeys";
 
 var baseHealth = 0;
@@ -27,7 +27,7 @@ console.log(userid);
 
 function readData() {
   fb.database()
-    .ref("response/"+ userid +"/avatarHealth")
+    .ref("response/" + userid + "/avatarHealth")
     .once("value", (dataSnapShot) => {
       baseHealth = dataSnapShot.val();
     });
@@ -46,7 +46,9 @@ function readData() {
 function ReadTab() {
   const [read, allReads] = useState([]);
   useEffect(() => {
-    const readRef = fb.database().ref("response/"+ userid +"/nutritionalTips");
+    const readRef = fb
+      .database()
+      .ref("response/" + userid + "/nutritionalTips");
     const OnLoadingListener = readRef.on("value", (snapshot) => {
       allReads([]);
       snapshot.forEach(function (childSnapshot) {
@@ -62,21 +64,21 @@ function ReadTab() {
       <SafeAreaView>
         <ScrollView>
           {read.map(function (item) {
-              if (item["complete"]) {
-                return (
-                  <TouchableOpacity
-                    key={item["tipID"]}
-                    style={styles.textContainer}
-                  >
-                    <Text style={styles.text}>Type: {item["tipType"]}</Text>
-                    <Text style={styles.text}>Title: {item["tipName"]}</Text>
-                    <Text style={styles.text}>Description: {item["tip"]}</Text>
-                    <Text style={styles.text}>
-                      Rewards: {item["tipReward"]["shopCurrency"]}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              }
+            if (item["complete"]) {
+              return (
+                <TouchableOpacity
+                  key={item["tipID"]}
+                  style={styles.textContainer}
+                >
+                  <Text style={styles.text}>Type: {item["tipType"]}</Text>
+                  <Text style={styles.text}>Title: {item["tipName"]}</Text>
+                  <Text style={styles.text}>Description: {item["tip"]}</Text>
+                  <Text style={styles.text}>
+                    Rewards: {item["tipReward"]["shopCurrency"]}
+                  </Text>
+                </TouchableOpacity>
+              );
+            }
           })}
         </ScrollView>
       </SafeAreaView>
@@ -179,7 +181,9 @@ function reading(item) {
 function UnreadTab() {
   const [unread, allUnreads] = useState([]);
   useEffect(() => {
-    const unreadRef = fb.database().ref("/response/"+ userid +"/nutritionalTips/");
+    const unreadRef = fb
+      .database()
+      .ref("/response/" + userid + "/nutritionalTips/");
     const OnLoadingListener = unreadRef.on("value", (snapshot) => {
       allUnreads([]);
       snapshot.forEach(function (childSnapshot) {
@@ -196,21 +200,21 @@ function UnreadTab() {
         <ScrollView>
           {unread.map(function (item) {
             if (!item["complete"]) {
-                return (
-                  <TouchableOpacity
-                    key={item["tipID"]}
-                    style={styles.textContainer}
-                    onPress={() => reading(item)}
-                  >
-                    <Text style={styles.text}>Type: {item["tipType"]}</Text>
-                    <Text style={styles.text}>Title: {item["tipName"]}</Text>
-                    <Text style={styles.text}>Description: {item["tip"]}</Text>
-                    <Text style={styles.text}>
-                      Rewards: {item["tipReward"]["shopCurrency"]}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              }
+              return (
+                <TouchableOpacity
+                  key={item["tipID"]}
+                  style={styles.textContainer}
+                  onPress={() => reading(item)}
+                >
+                  <Text style={styles.text}>Type: {item["tipType"]}</Text>
+                  <Text style={styles.text}>Title: {item["tipName"]}</Text>
+                  <Text style={styles.text}>Description: {item["tip"]}</Text>
+                  <Text style={styles.text}>
+                    Rewards: {item["tipReward"]["shopCurrency"]}
+                  </Text>
+                </TouchableOpacity>
+              );
+            }
           })}
         </ScrollView>
       </SafeAreaView>
@@ -294,11 +298,7 @@ export default class NutritionalScreen extends Component {
   }
 
   handleCurrency = () => {
-    return (
-      <Text style={{ fontSize: 25, color: "white" }}>
-        {baseCurrency}
-      </Text>
-    );
+    return <Text style={{ fontSize: 25, color: "white" }}>{baseCurrency}</Text>;
   };
 
   render() {
@@ -318,9 +318,9 @@ export default class NutritionalScreen extends Component {
               size={25}
               color="white"
             />
-            <FontAwesome
+            <MaterialIcons
               style={{ marginLeft: 25 }}
-              name="question-circle"
+              name="settings"
               size={25}
               color="white"
             />
@@ -331,8 +331,6 @@ export default class NutritionalScreen extends Component {
                 fontSize: 27,
                 textAlign: "center",
                 color: "white",
-                backgroundColor: "#a9a9a8",
-                //fontWeight: "bold",
                 borderColor: "#FF9933",
                 borderRadius: 1,
               }}
@@ -340,13 +338,12 @@ export default class NutritionalScreen extends Component {
               {" "}
               Nutritional Tips{" "}
             </Text>
-            <MaterialCommunityIcons
+            <MaterialIcons
               style={{ marginLeft: 30 }}
-              name="circle-expand"
-              size={25}
-              color="black"
+              name="attach-money"
+              size={30}
+              color="white"
             />
-
             <this.handleCurrency />
           </View>
           <AppIndex />
@@ -432,17 +429,17 @@ const styles = StyleSheet.create({
   },
 });
 
-    // const childRemovedListener = readRef.on("child_removed", (snapshot) => {
-    //   // Set Your Functioanlity Whatever you want.
-    //   alert("Child Removed");
-    // });
+// const childRemovedListener = readRef.on("child_removed", (snapshot) => {
+//   // Set Your Functioanlity Whatever you want.
+//   alert("Child Removed");
+// });
 
-    // const childChangedListener = readRef.on("child_changed", (snapshot) => {
-    //   // Set Your Functioanlity Whatever you want.
-    //   alert("Child Updated/Changed");
-    // });
-      // readRef.off("child_removed", childRemovedListener);
-      // readRef.off("child_changed", childChangedListener);
+// const childChangedListener = readRef.on("child_changed", (snapshot) => {
+//   // Set Your Functioanlity Whatever you want.
+//   alert("Child Updated/Changed");
+// });
+// readRef.off("child_removed", childRemovedListener);
+// readRef.off("child_changed", childChangedListener);
 
 //         {/*  TABS  */}
 //         <View className="NutritionPage">

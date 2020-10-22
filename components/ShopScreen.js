@@ -16,10 +16,12 @@ import {
 } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import { fb } from "../src/firebase/APIKeys";
+import { fb, Fire } from "../src/firebase/APIKeys";
 import images from "../components/images";
+import topNaviBar from "../components/topNaviBar";
 
-var baseCurrency = 500;
+var baseCurrency = 100;
+var userid = Fire.shared.user._id;
 
 // function displayChracter(data) {
 //   if (data === 0) {
@@ -60,10 +62,11 @@ var baseCurrency = 500;
 //   }
 // }
 
+//Owned items tab
 function OwnedTab() {
   const [read, allReads] = useState([]);
   useEffect(() => {
-    const readRef = fb.database().ref("/response/shop");
+    const readRef = fb.database().ref("response/" + userid + "/shop");
     const OnLoadingListener = readRef.on("value", (snapshot) => {
       allReads([]);
       snapshot.forEach(function (childSnapshot) {
@@ -147,6 +150,7 @@ OwnedTab.navigationOptions = {
   ),
 };
 
+//Change the status of bought in firebase
 const recordBuying = (index, buy, imgUrl, itemPrice) => {
   return new Promise(function (resolve, reject) {
     let data = {
@@ -155,7 +159,7 @@ const recordBuying = (index, buy, imgUrl, itemPrice) => {
       price: itemPrice,
     };
     fb.database()
-      .ref("/response/shop/" + index)
+      .ref("response/" + userid + "/shop/" + index)
       .update(data)
       .then((snapshot) => {
         resolve(snapshot);
@@ -166,10 +170,11 @@ const recordBuying = (index, buy, imgUrl, itemPrice) => {
   });
 };
 
+//reduce currency in firebase
 function completeBuying(price) {
   baseCurrency = baseCurrency - price;
   fb.database()
-    .ref("response/")
+    .ref("response/" + userid + "/")
     .update({
       currency: baseCurrency,
     })
@@ -181,7 +186,8 @@ function completeBuying(price) {
     });
 }
 
-function confirmShopping(item, index) {
+// Pop up window to check with buying or not
+function confirmBuying(item, index) {
   Alert.alert(
     "Are you sure?",
     "Unlock this avatar with $" + item["price"],
@@ -194,8 +200,12 @@ function confirmShopping(item, index) {
       {
         text: "OK",
         onPress: () => {
-          completeBuying(item["price"]);
-          recordBuying(index, !item["bought"], item["img"], item["price"]);
+          if (baseCurrency >= item["price"]) {
+            completeBuying(item["price"]);
+            recordBuying(index, !item["bought"], item["img"], item["price"]);
+          } else {
+            Alert.alert("Sorry, you can't afford this item.");
+          }
         },
       },
     ],
@@ -203,6 +213,7 @@ function confirmShopping(item, index) {
   );
 }
 
+// Pop up window to confirm set the avatar on home page
 function setAvatar(item, index) {
   Alert.alert(
     "Are you sure?",
@@ -226,10 +237,11 @@ function setAvatar(item, index) {
   );
 }
 
+//Upload the chosen avatar data in firebase
 function updataAvatar(data) {
   console.log("print out the avatar index: " + data);
   fb.database()
-    .ref("response/")
+    .ref("response/" + userid + "/")
     .update({
       character: data,
     })
@@ -241,11 +253,12 @@ function updataAvatar(data) {
     });
 }
 
+// Tab of shop to choose items to buy
 function ShopTab() {
   const [unbought, allUnbought] = useState([]);
 
   useEffect(() => {
-    const unboughtRef = fb.database().ref("/response/shop");
+    const unboughtRef = fb.database().ref("/response/" + userid + "/shop");
     const OnLoadingListener = unboughtRef.on("value", (snapshot) => {
       allUnbought([]);
       snapshot.forEach(function (childSnapshot) {
@@ -272,7 +285,7 @@ function ShopTab() {
                     <Button
                       title="buy"
                       disabled={false}
-                      onPress={() => confirmShopping(item, index)}
+                      onPress={() => confirmBuying(item, index)}
                     />
                   </View>
                 );
@@ -284,7 +297,7 @@ function ShopTab() {
                     <Button
                       title="buy"
                       disabled={false}
-                      onPress={() => confirmShopping(item, index)}
+                      onPress={() => confirmBuying(item, index)}
                     />
                   </View>
                 );
@@ -296,7 +309,7 @@ function ShopTab() {
                     <Button
                       title="buy"
                       disabled={false}
-                      onPress={() => confirmShopping(item, index)}
+                      onPress={() => confirmBuying(item, index)}
                     />
                   </View>
                 );
@@ -308,7 +321,7 @@ function ShopTab() {
                     <Button
                       title="buy"
                       disabled={false}
-                      onPress={() => confirmShopping(item, index)}
+                      onPress={() => confirmBuying(item, index)}
                     />
                   </View>
                 );
@@ -355,24 +368,34 @@ export default class HomeScreen extends Component {
       avatarCurrency: 0,
       items: {},
     };
+    if (!fb.apps.length) {
+      fb.initializeApp(ApiKeys.FirebaseConfig);
+    }
+    this.readData();
+  }
+
+  readData() {
+    fb.database()
+      .ref("response/" + userid + "/currency")
+      .once("value", (dataSnapShot) => {
+        baseCurrency = dataSnapShot.val();
+      });
   }
 
   componentDidMount() {
     fb.database()
-      .ref("response/shop")
+      .ref("response/" + userid + "/shop")
       .on("value", (querySnapShot) => {
         let data = querySnapShot.val() ? querySnapShot.val() : {};
         let shopitems = { ...data };
-        console.log(data);
         this.setState({
           items: shopitems,
         });
       });
     fb.database()
-      .ref("response/currency")
+      .ref("response/" + userid + "/currency")
       .on("value", (querySnapShot) => {
         let data = querySnapShot.val() ? querySnapShot.val() : {};
-        console.log(data);
         this.setState({
           avatarCurrency: data,
         });
@@ -380,10 +403,9 @@ export default class HomeScreen extends Component {
   }
 
   render() {
-    let itemKeys = Object.keys(this.state.items);
-
     return (
       <View style={styles.container}>
+        {/* <topNaviBar /> */}
         <ImageBackground
           source={require("../assets/BackgroundOrange.png")}
           style={styles.backgroundImage}
@@ -397,38 +419,6 @@ export default class HomeScreen extends Component {
     );
   }
 }
-
-const ShopItem = ({ shopItem: { price: itemprice, done }, id }) => {
-  const [doneState, setDone] = useState(done);
-
-  const onCheck = () => {
-    setDone(!doneState);
-    fb.database()
-      .ref("response/shop")
-      .update({
-        [id]: {
-          price: itemprice,
-          bought: !doneState,
-        },
-      });
-    Alert.alert("Congrats, a new character unlocked!");
-  };
-
-  // style check box after clicking
-  return (
-    <View style={styles.itemContainer}>
-      <Image
-        style={styles.avatar}
-        source={require("../assets/avatar/character3.png")}
-      />
-
-      <Button title="buy" onPress={onCheck} disabled={doneState} />
-      <Text style={[styles.buyText, { opacity: doneState ? 0.2 : 1 }]}>
-        Price: {itemprice}
-      </Text>
-    </View>
-  );
-};
 
 const styles = StyleSheet.create({
   container: {
