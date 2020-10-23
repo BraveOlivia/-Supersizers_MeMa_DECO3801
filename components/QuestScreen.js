@@ -13,6 +13,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { fb, Fire } from "../src/firebase/APIKeys.js";
+import * as firebase from "firebase";
 
 var baseHealth = 0;
 var baseStatus = 0;
@@ -23,17 +24,17 @@ console.log("questScreen userID " + userid);
 ()=> readData();
 
 function readData() {
-  fb.database()
+  firebase.database()
     .ref("response/"+ userid +"/avatarHealth")
     .once("value", (dataSnapShot) => {
       baseHealth = dataSnapShot.val();
     });
-  fb.database()
+  firebase.database()
     .ref("response/" + userid + "/avatarStatus")
     .once("value", (dataSnapShot) => {
       baseStatus = dataSnapShot.val();
     });
-  fb.database()
+  firebase.database()
     .ref("response/" + userid + "/currency")
     .once("value", (dataSnapShot) => {
       baseCurrency = dataSnapShot.val();

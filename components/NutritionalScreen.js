@@ -17,6 +17,7 @@ import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { fb, Fire } from "../src/firebase/APIKeys";
+import * as firebase from "firebase";
 
 var baseHealth = 0;
 var baseStatus = 0;
@@ -26,17 +27,17 @@ console.log(userid);
 () => readData();
 
 function readData() {
-  fb.database()
+  firebase.database()
     .ref("response/" + userid + "/avatarHealth")
     .once("value", (dataSnapShot) => {
       baseHealth = dataSnapShot.val();
     });
-  fb.database()
+  firebase.database()
     .ref("response/" + userid + "/avatarStatus")
     .once("value", (dataSnapShot) => {
       baseStatus = dataSnapShot.val();
     });
-  fb.database()
+  firebase.database()
     .ref("response/" + userid + "/currency")
     .once("value", (dataSnapShot) => {
       baseCurrency = dataSnapShot.val();

@@ -18,7 +18,7 @@ import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { fb, Fire } from "../src/firebase/APIKeys";
 import images from "../components/images";
-import topNaviBar from "../components/topNaviBar";
+//import topNaviBar from "../components/topNaviBar";
 
 var baseCurrency = 100;
 var userid = Fire.shared.user._id;
