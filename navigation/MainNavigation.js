@@ -9,7 +9,7 @@ import {
   ChatScreen,
   SettingScreen,
 } from "../components/ScreenComponents";
-import { ImageBackground, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 const Stack = createStackNavigator();
 
@@ -23,7 +23,7 @@ export default class MainNavigator extends Component {
           <Stack.Screen name="Nutritional" component={NutritionalScreen} />
           <Stack.Screen name="Shop" component={ShopScreen} />
           <Stack.Screen name="Chat" component={ChatScreen} />
-          <Stack.Screen name="Setting" component={SettingScreen} />
+          <Stack.Screen name="Settings" component={SettingScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );

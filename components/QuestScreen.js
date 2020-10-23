@@ -14,6 +14,7 @@ import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { fb, Fire } from "../src/firebase/APIKeys.js";
 import * as firebase from "firebase";
+import Header from "../components/Header";
 
 var baseHealth = 0;
 var baseStatus = 0;
@@ -21,7 +22,7 @@ var baseCurrency = 0;
 var userid = Fire.shared.user._id;
 console.log("questScreen userID " + userid);
 
-()=> readData();
+() => readData();
 
 function readData() {
   firebase.database()
@@ -46,8 +47,7 @@ function completeQuest(rewardHealth) {
   baseStatus += rewardHealth["avatarStatus"];
   baseCurrency += rewardHealth["shopCurrency"];
   if (baseHealth >= 100) {
-    fb
-      .database()
+    fb.database()
       .ref("response/" + userid + "/")
       .update({
         avatarHealth: 100,
@@ -61,8 +61,7 @@ function completeQuest(rewardHealth) {
         console.log(error);
       });
   } else {
-    fb
-      .database()
+    fb.database()
       .ref("response/" + userid + "/")
       .update({
         avatarHealth: baseHealth,
@@ -111,7 +110,7 @@ const updating = (id, progress) => {
 function ReadAllTab() {
   const [quests, allQuests] = useState([]);
   useEffect(() => {
-    const questRef = fb.database().ref("/response/"+ userid +"/quests/");
+    const questRef = fb.database().ref("/response/" + userid + "/quests/");
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allQuests([]);
       snapshot.forEach(function (childSnapshot) {
@@ -174,16 +173,15 @@ ReadAllTab.navigationOptions = {
 function InProgreeTab() {
   const [inProgress, allInProgressQuests] = useState([]);
   useEffect(() => {
-    const questRef = fb.database().ref("/response/"+ userid +"/quests/");
+    const questRef = fb.database().ref("/response/" + userid + "/quests/");
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allInProgressQuests([]);
       snapshot.forEach(function (childSnapshot) {
-        
-            allInProgressQuests((inProgress) => [
-              ...inProgress,
-              childSnapshot.val(),
-            ]);
-          // }
+        allInProgressQuests((inProgress) => [
+          ...inProgress,
+          childSnapshot.val(),
+        ]);
+        // }
       });
     });
     return () => {
@@ -193,50 +191,52 @@ function InProgreeTab() {
   return (
     <View>
       {inProgress.map(function (item) {
-          if (item["questProgress"]["questCompletion"] >= 0 &&
-            item["questProgress"]["questCompletion"] != item["questProgress"]["questMaxValue"]) 
-            {
-              return (
-                <TouchableOpacity
-                  key={item["questID"]}
-                  style={styles.textContainer}
-                  onPress={() =>
-                    Alert.alert(
-                      "Your Progress",
-                      "You have finished " +
-                        item["questReward"]["avatarHealth"] +
-                        "/" +
-                        item["questReward"]["avatarStatus"] +
-                        " of the task, good job and go on",
-                      [
-                        {
-                          text: "Cancel",
-                          onPress: () => console.log("click cancel"),
-                          style: "cancel",
-                        },
-                        {
-                          text: "OK",
-                          onPress: () => {
-                            completeQuest(item["questReward"]);
-                            updating(item["questID"], item["questProgress"]);
-                          },
-                        },
-                      ],
-                      { cancelable: false }
-                    )
-                  }
-                >
-                  <View style={styles.taskDiv}>
-                    <Text style={styles.taskTitle}> {item["questName"]}</Text>
-                    <Text style={styles.rewardPoint}>
-                      + {item["questReward"]["avatarHealth"]}
-                      <Icon name={"md-heart"} color={"red"} size={20} />
-                    </Text>
-                  </View>
-                  <Text> {item["questDescription"]}</Text>
-                </TouchableOpacity>
-              );
-            }
+        if (
+          item["questProgress"]["questCompletion"] >= 0 &&
+          item["questProgress"]["questCompletion"] !=
+            item["questProgress"]["questMaxValue"]
+        ) {
+          return (
+            <TouchableOpacity
+              key={item["questID"]}
+              style={styles.textContainer}
+              onPress={() =>
+                Alert.alert(
+                  "Your Progress",
+                  "You have finished " +
+                    item["questReward"]["avatarHealth"] +
+                    "/" +
+                    item["questReward"]["avatarStatus"] +
+                    " of the task, good job and go on",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("click cancel"),
+                      style: "cancel",
+                    },
+                    {
+                      text: "OK",
+                      onPress: () => {
+                        completeQuest(item["questReward"]);
+                        updating(item["questID"], item["questProgress"]);
+                      },
+                    },
+                  ],
+                  { cancelable: false }
+                )
+              }
+            >
+              <View style={styles.taskDiv}>
+                <Text style={styles.taskTitle}> {item["questName"]}</Text>
+                <Text style={styles.rewardPoint}>
+                  + {item["questReward"]["avatarHealth"]}
+                  <Icon name={"md-heart"} color={"red"} size={20} />
+                </Text>
+              </View>
+              <Text> {item["questDescription"]}</Text>
+            </TouchableOpacity>
+          );
+        }
       })}
     </View>
   );
@@ -258,10 +258,10 @@ function CompletionTab() {
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allCompletedQuests([]);
       snapshot.forEach(function (childSnapshot) {
-          allCompletedQuests((completedQuest) => [
-            ...completedQuest,
-            childSnapshot.val(),
-          ]);
+        allCompletedQuests((completedQuest) => [
+          ...completedQuest,
+          childSnapshot.val(),
+        ]);
         // }
       });
     });
@@ -272,26 +272,28 @@ function CompletionTab() {
   return (
     <View>
       {completedQuest.map(function (item) {
-        if (item["questProgress"]["questCompletion"] == item["questProgress"]["questMaxValue"])
+        if (
+          item["questProgress"]["questCompletion"] ==
+          item["questProgress"]["questMaxValue"]
+        ) {
           {
-            {
-              return (
-                <TouchableOpacity
-                  key={item["questID"]}
-                  style={styles.textContainer}
-                >
-                  <View style={styles.taskDiv}>
-                    <Text style={styles.taskTitle}> {item["questName"]}</Text>
-                    <Text style={styles.rewardPoint}>
-                      + {item["questReward"]["avatarHealth"]}
-                      <Icon name={"md-checkmark"} color={"green"} size={20} />
-                    </Text>
-                  </View>
-                  <Text> {item["questDescription"]}</Text>
-                </TouchableOpacity>
-              );
-            }
+            return (
+              <TouchableOpacity
+                key={item["questID"]}
+                style={styles.textContainer}
+              >
+                <View style={styles.taskDiv}>
+                  <Text style={styles.taskTitle}> {item["questName"]}</Text>
+                  <Text style={styles.rewardPoint}>
+                    + {item["questReward"]["avatarHealth"]}
+                    <Icon name={"md-checkmark"} color={"green"} size={20} />
+                  </Text>
+                </View>
+                <Text> {item["questDescription"]}</Text>
+              </TouchableOpacity>
+            );
           }
+        }
       })}
     </View>
   );
@@ -357,6 +359,7 @@ export default class QuestScreen extends Component {
           source={require("../assets/BackgroundOrange.png")}
           style={styles.backgroundImage}
         >
+          <Header props={this.props} pageName="Quest"/>
           <AppIndex />
         </ImageBackground>
       </View>
