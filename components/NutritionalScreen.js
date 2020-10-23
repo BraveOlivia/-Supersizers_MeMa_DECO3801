@@ -17,6 +17,7 @@ import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { fb, Fire } from "../src/firebase/APIKeys";
+import Header from "../components/Header";
 
 var baseHealth = 0;
 var baseStatus = 0;
@@ -309,9 +310,11 @@ export default class NutritionalScreen extends Component {
           source={require("../assets/BackgroundOrange.png")}
           style={styles.backgroundImage}
         >
-          <StatusBar backgroundColor="white" barStyle="light-content" />
-          <View style={styles.header}>
-            {/*  PAGE TITLE  */}
+         
+          <Header pageName="Nutritional Tips" />
+
+          {/* <View style={styles.header}>
+             
             <FontAwesome
               style={{ marginLeft: 15 }}
               name="home"
@@ -345,7 +348,8 @@ export default class NutritionalScreen extends Component {
               color="white"
             />
             <this.handleCurrency />
-          </View>
+          </View> */}
+
           <AppIndex />
         </ImageBackground>
       </View>

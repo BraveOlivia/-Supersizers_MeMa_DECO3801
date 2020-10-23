@@ -16,21 +16,11 @@ import {
   createStackNavigator,
   createAppContainer,
 } from "@react-navigation/stack";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { ProgressBar, Colors } from "react-native-paper";
-import {
-  faHome,
-  faDollarSign,
-  faCogs,
-  faCheckSquare,
-  faLightbulb,
-  faShoppingBag,
-  faUserFriends,
-  faSignOutAlt,
-} from "@fortawesome/free-solid-svg-icons";
 import * as firebase from "firebase";
 import { fb, Fire } from "../src/firebase/APIKeys";
 import images from "../components/images";
+import Header from "../components/Header";
 
 export default class HomeScreen extends Component {
   constructor(props) {
@@ -165,17 +155,7 @@ export default class HomeScreen extends Component {
           source={require("../assets/BackgroundOrange.png")}
           style={styles.backgroundImage}
         >
-          <View style={styles.navBar}>
-            <FontAwesomeIcon icon={faHome} size={40} color={"black"} />
-            <FontAwesomeIcon icon={faDollarSign} size={40} color={"black"} />
-            <FontAwesomeIcon icon={faCogs} size={40} color={"black"} />
-            <FontAwesomeIcon
-              icon={faSignOutAlt}
-              size={40}
-              color={"black"}
-              onPress={this.signOutPress}
-            />
-          </View>
+          <Header pageName="Home" />
 
           <View style={styles.avatarContainer}>
             <Text style={styles.avatarDialogue}>
@@ -208,12 +188,6 @@ export default class HomeScreen extends Component {
           </View>
 
           <View style={styles.footMenu}>
-            {/* <View style={styles.menurow}>
-              <FontAwesomeIcon icon={faCheckSquare} size={30} color={"black"} />
-              <FontAwesomeIcon icon={faLightbulb} size={30} color={"black"} />
-              <FontAwesomeIcon icon={faShoppingBag} size={30} color={"black"} />
-              <FontAwesomeIcon icon={faUserFriends} size={30} color={"black"} />
-            </View> */}
 
             <View style={styles.MainButtons}>
               <TouchableOpacity

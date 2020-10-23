@@ -18,49 +18,10 @@ import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { fb, Fire } from "../src/firebase/APIKeys";
 import images from "../components/images";
-import topNaviBar from "../components/topNaviBar";
+import Header from "../components/Header";
 
 var baseCurrency = 100;
 var userid = Fire.shared.user._id;
-
-// function displayChracter(data) {
-//   if (data === 0) {
-//     console.log("000000 test reach here");
-//     return images.character0;
-//     // <View key={0} style={styles.itemContainer}>
-//     //   <Text>Text msg - 000 </Text>
-//     //   <Image style={styles.avatar} source={images.character0} />
-//     //   {/* <Text style={styles.text}>Price: {item["price"]}</Text> */}
-//     //   <Button title="buy" disabled={true} />
-//     // </View>
-//   } else if (data === 1) {
-//     console.log("********test reach here");
-//     return (
-//       <View key={1} style={styles.itemContainer}>
-//         <Text>Text msg - 111</Text>
-//         <Image style={styles.avatar} source={images.character1} />
-//         <Text style={styles.text}>Price: {item["price"]}</Text>
-//         <Button title="buy" disabled={true} />
-//       </View>
-//     );
-//   } else if (data === 2) {
-//     return (
-//       <View key={2} style={styles.itemContainer}>
-//         <Image style={styles.avatar} source={images.character2} />
-//         <Text style={styles.text}>Price: {item["price"]}</Text>
-//         <Button title="buy" disabled={true} />
-//       </View>
-//     );
-//   } else if (data === 3) {
-//     return (
-//       <View key={3} style={styles.itemContainer}>
-//         <Image style={styles.avatar} source={images.character3} />
-//         <Text style={styles.text}>Price: {item["price"]}</Text>
-//         <Button title="buy" disabled={true} />
-//       </View>
-//     );
-//   }
-// }
 
 //Owned items tab
 function OwnedTab() {
@@ -143,7 +104,7 @@ function OwnedTab() {
 OwnedTab.navigationOptions = {
   tabBarIcon: ({ tintColor, focused }) => (
     <Icon
-      name={focused ? "ios-mail-open" : "md-mail-open"}
+      name={focused ? "ios-basket" : "md-basket"}
       color={tintColor}
       size={25}
     />
@@ -335,11 +296,7 @@ function ShopTab() {
 }
 ShopTab.navigationOptions = {
   tabBarIcon: ({ tintColor, focused }) => (
-    <Icon
-      name={focused ? "ios-mail-unread" : "md-mail-unread"}
-      color={tintColor}
-      size={25}
-    />
+    <Icon name={focused ? "ios-cart" : "md-cart"} color={tintColor} size={25} />
   ),
 };
 
@@ -405,14 +362,11 @@ export default class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {/* <topNaviBar /> */}
         <ImageBackground
           source={require("../assets/BackgroundOrange.png")}
           style={styles.backgroundImage}
         >
-          <View style={styles.avatarContainer}>
-            <Text>Your currency: {this.state.avatarCurrency}</Text>
-          </View>
+          <Header pageName="Avatar Shop" />
           <AppIndex />
         </ImageBackground>
       </View>
