@@ -17,7 +17,7 @@ import {
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { fb, Fire } from "../src/firebase/APIKeys";
-import images from "../components/images";
+import { images } from "../components/images";
 import Header from "../components/Header";
 
 var baseCurrency = 100;

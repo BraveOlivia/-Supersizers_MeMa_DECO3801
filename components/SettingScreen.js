@@ -6,19 +6,36 @@ import {
   View,
   Button,
 } from "react-native";
-import { fb } from "../src/firebase/APIKeys";
+import { fb, Fire } from "../src/firebase/APIKeys";
+import {getBackgroundImage} from "../components/images";
 
 export default class SettingScreen extends Component {
   constructor() {
     super();
     this.state = {
-      backgroundColor: 0,
-      supperssNotification: "OFF",
+      backgroundColor: 5,
     }
+    this.readData();
+  }
+
+  readData() {
+    fb.database()
+      .ref("response/" + this.user._id + "/backgroundColor")
+      .once("value", (dataSnapShot) => {
+        var tempColor = dataSnapShot.val();
+        this.setState({ backgroundColor: tempColor });
+      });
+  }
+
+  get user() {
+    return {
+      //   name: this.props.navigation.state.params.name,
+      _id: Fire.shared.uid,
+    };
   }
 
   backgroundColorOnPress = () => {
-    var color = Math.floor(Math.random() * 10) + 1;
+    var color = Math.floor(Math.random() * 7) + 1;
     this.updateBackgroundColor(color);
     this.setState({
       backgroundColor: color
@@ -27,7 +44,7 @@ export default class SettingScreen extends Component {
 
   updateBackgroundColor(color) {
     fb.database()
-    .ref("response/")
+    .ref("response/" + this.user._id)
     .update({
       backgroundColor: color,
     })
@@ -39,23 +56,28 @@ export default class SettingScreen extends Component {
     });
   } 
 
-  suppressNotificationOnPress = () => {
-    if (this.state.supperssNotification == "OFF") {
-      this.setState({
-        supperssNotification: "ON"
-      })
-    } else {
-      this.setState({
-        supperssNotification: "OFF"
-      })
-    }
-  }
+  signOutPress = () => {
+    fb.auth().signOut();
+  };
+
+  // suppressNotificationOnPress = () => {
+  //   if (this.state.supperssNotification == "OFF") {
+  //     this.setState({
+  //       supperssNotification: "ON"
+  //     })
+  //   } else {
+  //     this.setState({
+  //       supperssNotification: "OFF"
+  //     })
+  //   }
+  // }
 
   render() {
+    const background = getBackgroundImage(this.state.backgroundColor);
     return(
       <View style={{ flex: 1 }}>
         <ImageBackground
-        source={require("../assets/BackgroundOrange.png")}
+        source={background}
         style={styles.backgroundImage}
         >
           <View style={styles.settingItems}>
@@ -66,10 +88,10 @@ export default class SettingScreen extends Component {
             />
           </View>
           <View style={styles.settingItems}>
-            <Text>Suppress Notifications</Text>
+            <Text>Sign Out</Text>
             <Button
-              title={this.state.supperssNotification}
-              onPress={this.suppressNotificationOnPress}
+              title={"Sign Out"}
+              onPress={this.signOutPress}
             />
           </View>
         </ImageBackground>

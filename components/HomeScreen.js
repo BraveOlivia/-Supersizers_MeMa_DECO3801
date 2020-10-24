@@ -14,7 +14,7 @@ import {
 import { ProgressBar, Colors } from "react-native-paper";
 import * as firebase from "firebase";
 import { fb, Fire } from "../src/firebase/APIKeys";
-import images from "../components/images";
+import {images, getBackgroundImage} from "../components/images";
 import Header from "../components/Header";
 
 export default class HomeScreen extends Component {
@@ -24,7 +24,7 @@ export default class HomeScreen extends Component {
       avatarCharacter: 0,
       avatarStatus: 0,
       avatarHealth: 0,
-      backgroundColor: 0,
+      backgroundColor: 5,
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
@@ -86,6 +86,8 @@ export default class HomeScreen extends Component {
     }
   };
 
+  
+
   readData() {
     fb.database()
       .ref("response/" + this.user._id + "/avatarHealth")
@@ -107,22 +109,26 @@ export default class HomeScreen extends Component {
           avatarCharacter: data,
         });
       });
-
-    // firebase
-    //   .database()
-    //   .ref("response/backgroundColor")
-    //   .once("value", (dataSnapShot) => {
-    //     var tempColor = dataSnapShot.val();
-    //     this.setState({ backgroundColor: tempColor });
-    //   });
+    fb.database()
+      .ref("response/" + this.user._id + "/backgroundColor")
+      .once("value", (dataSnapShot) => {
+        var tempColor = dataSnapShot.val();
+        this.setState({ backgroundColor: tempColor });
+      });
   }
 
   writeData() {
     firebase
       .database()
-      .ref("response/" + this.user._uid + "/")
+      .ref("response/" + this.user._id)
       .update({
         avatarHealth: this.state.avatarHealth,
+      })
+      .then(() => {
+        console.log("Health Reduced");
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }
 
@@ -140,14 +146,14 @@ export default class HomeScreen extends Component {
       return { avatarHealth: state.avatarHealth - 1 };
     });
     this.writeData();
-    // console.log("reducing health");
   }
 
   render() {
+    const background = getBackgroundImage(this.state.backgroundColor);
     return (
       <View style={styles.container}>
         <ImageBackground
-          source={require("../assets/BackgroundOrange.png")}
+          source={background}
           style={styles.backgroundImage}
         >
           <Header props={this.props} pageName='Home'/>
