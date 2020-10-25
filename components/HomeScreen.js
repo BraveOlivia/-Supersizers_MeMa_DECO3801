@@ -39,11 +39,6 @@ export default class HomeScreen extends Component {
     };
   }
 
-  //Occurs when signout is pressed;
-  signOutPress = () => {
-    firebase.auth().signOut();
-  };
-
   handleAvatarHealthChange = (props) => {
     const avatarHealth = props.health;
     const avatarCharacter = this.state.avatarCharacter;
@@ -85,9 +80,6 @@ export default class HomeScreen extends Component {
       }
     }
   };
-
-  
-
   readData() {
     fb.database()
       .ref("response/" + this.user._id + "/avatarHealth")

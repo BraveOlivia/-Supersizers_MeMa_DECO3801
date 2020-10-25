@@ -27,6 +27,7 @@ console.log(userid);
 () => readData();
 
 function readData() {
+  console.log(userid);
   firebase.database()
     .ref("response/" + userid + "/avatarHealth")
     .once("value", (dataSnapShot) => {
@@ -47,7 +48,7 @@ function readData() {
 function ReadTab() {
   const [read, allReads] = useState([]);
   useEffect(() => {
-    const readRef = fb
+    const readRef = firebase
       .database()
       .ref("response/" + userid + "/nutritionalTips");
     const OnLoadingListener = readRef.on("value", (snapshot) => {
@@ -182,7 +183,7 @@ function reading(item) {
 function UnreadTab() {
   const [unread, allUnreads] = useState([]);
   useEffect(() => {
-    const unreadRef = fb
+    const unreadRef = firebase
       .database()
       .ref("/response/" + userid + "/nutritionalTips/");
     const OnLoadingListener = unreadRef.on("value", (snapshot) => {
@@ -258,30 +259,31 @@ export default class NutritionalScreen extends Component {
       baseStatus: 0,
       baseCurr: 0,
     };
-    if (!fb.apps.length) {
-      fb.initializeApp(ApiKeys.FirebaseConfig);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(ApiKeys.FirebaseConfig);
     }
-    this.readData();
+    ()=>this.readData();
     completeTips = completeTips.bind(this);
     reading = reading.bind(this);
   }
 
   readData() {
-    fb.database()
+    console.log("reading data in nutritional tip " + userid);
+    firebase.database()
       .ref("response/" + userid + "/avatarHealth")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
         baseHealth = temp;
         this.setState({ baseHealth: temp });
       });
-    fb.database()
+    firebase.database()
       .ref("response/" + userid + "/avatarStatus")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
         baseStatus = temp;
         this.setState({ baseStatus: temp });
       });
-    fb.database()
+    firebase.database()
       .ref("response/" + userid + "/currency")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
@@ -291,19 +293,15 @@ export default class NutritionalScreen extends Component {
   }
 
   componentDidMount() {
-    this.timerID1 = setInterval(() => this.readData(), 1000);
+    userid = Fire.shared.user._id;
+    this.readData();
+    readData();
   }
-
-  componentWillUnmount() {
-    clearInterval(this.timerID1);
-  }
-
   handleCurrency = () => {
     return <Text style={{ fontSize: 25, color: "white" }}>{baseCurrency}</Text>;
   };
 
   render() {
-    readData();
     return (
       <View style={{ flex: 1 }}>
         <ImageBackground

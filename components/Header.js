@@ -2,12 +2,12 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { fb, Fire } from "../src/firebase/APIKeys";
-
+import * as firebase from 'firebase';
 var baseCurrency = 0;
-var userid = Fire.shared.user._id;
-
+var userid = null;
+// ()=>readData();
 function readData() {
-  fb.database()
+  firebase.database()
     .ref("response/" + userid + "/currency")
     .once("value", (dataSnapShot) => {
       baseCurrency = dataSnapShot.val();
@@ -15,6 +15,7 @@ function readData() {
 }
 
 const Header = ({props, pageName}) => {
+  userid = Fire.shared.user._id;
   readData();
   return (
     <View style={styles.header}>

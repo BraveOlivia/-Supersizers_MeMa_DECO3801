@@ -25,6 +25,8 @@ console.log("questScreen userID " + userid);
 () => readData();
 
 function readData() {
+  userid = Fire.shared.user._id;
+  console.log("reading data userID " + userid);
   firebase.database()
     .ref("response/"+ userid +"/avatarHealth")
     .once("value", (dataSnapShot) => {
@@ -40,6 +42,7 @@ function readData() {
     .once("value", (dataSnapShot) => {
       baseCurrency = dataSnapShot.val();
     });
+  return baseHealth, baseStatus, baseCurrency;
 }
 
 function completeQuest(rewardHealth) {
@@ -110,7 +113,7 @@ const updating = (id, progress) => {
 function ReadAllTab() {
   const [quests, allQuests] = useState([]);
   useEffect(() => {
-    const questRef = fb.database().ref("/response/" + userid + "/quests/");
+    const questRef = firebase.database().ref("/response/" + userid + "/quests/");
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allQuests([]);
       snapshot.forEach(function (childSnapshot) {
@@ -173,7 +176,7 @@ ReadAllTab.navigationOptions = {
 function InProgreeTab() {
   const [inProgress, allInProgressQuests] = useState([]);
   useEffect(() => {
-    const questRef = fb.database().ref("/response/" + userid + "/quests/");
+    const questRef = firebase.database().ref("/response/" + userid + "/quests/");
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allInProgressQuests([]);
       snapshot.forEach(function (childSnapshot) {
@@ -254,7 +257,7 @@ InProgreeTab.navigationOptions = {
 function CompletionTab() {
   const [completedQuest, allCompletedQuests] = useState([]);
   useEffect(() => {
-    const questRef = fb.database().ref("/response/" + userid + "/quests/");
+    const questRef = firebase.database().ref("/response/" + userid + "/quests/");
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allCompletedQuests([]);
       snapshot.forEach(function (childSnapshot) {
@@ -337,22 +340,17 @@ export default class QuestScreen extends Component {
       avatarHealth: 0,
       avatarCurrency: 0,
     };
-    if (!fb.apps.length) {
-      fb.initializeApp(ApiKeys.FirebaseConfig);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(ApiKeys.FirebaseConfig);
     }
     readData();
   }
 
   componentDidMount() {
-    this.timerID1 = setInterval(() => readData(), 1000);
+    baseHealth, baseStatus, baseCurrency = readData();
+    this.setState({baseHealth: baseHealth, baseStatus: baseStatus, baseCurrency:baseCurrency});
   }
-
-  componentWillUnmount() {
-    clearInterval(this.timerID1);
-  }
-
   render() {
-    readData();
     return (
       <View style={styles.MainContainer}>
         <ImageBackground

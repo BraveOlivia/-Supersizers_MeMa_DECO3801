@@ -110,7 +110,7 @@ export default class LogInScreen extends Component {
               style={styles.loginText}
               title="Login"
               containerStyle={{ paddingTop: 10 }}
-              onPress={() => this.onLoginPress()}
+              onPress={this.onLoginPress}
             />
             <Button
               style={styles.loginText}
