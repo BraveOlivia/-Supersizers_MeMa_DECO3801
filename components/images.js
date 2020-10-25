@@ -25,8 +25,11 @@ function getBackgroundImage(color) {
     return images.background5;
   } else if (color == 6) {
     return images.background6;
-  } else {
+  } else if (color == 7) {
     return images.background7;
+  } else {
+    // default 
+    return images.background5;
   }
 };
 

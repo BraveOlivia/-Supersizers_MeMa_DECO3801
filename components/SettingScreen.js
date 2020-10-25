@@ -37,13 +37,14 @@ export default class SettingScreen extends Component {
   backgroundColorOnPress = () => {
     // Iterate over 1 to 7
     if (this.state.backgroundColor != 7) { 
+      this.updateBackgroundColor(this.state.backgroundColor + 1);
       this.setState((state) => {
         return { backgroundColor: state.backgroundColor + 1 };
       });
     } else {
+      this.updateBackgroundColor(1);
       this.setState({ backgroundColor: 1 });
     }
-    this.updateBackgroundColor(this.state.backgroundColor);
   }
 
   updateBackgroundColor(color) {

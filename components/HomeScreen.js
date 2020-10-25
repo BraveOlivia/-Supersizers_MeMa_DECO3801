@@ -142,9 +142,13 @@ export default class HomeScreen extends Component {
   }
 
   reduceHealth() {
-    this.setState((state) => {
-      return { avatarHealth: state.avatarHealth - 1 };
-    });
+    if (this.state.avatarHealth > 0) {
+      this.setState((state) => {
+        return { avatarHealth: state.avatarHealth - 1 };
+      });
+    } else {
+      this.setState({ avatarHealth: 0 });
+    }
     this.writeData();
   }
 
