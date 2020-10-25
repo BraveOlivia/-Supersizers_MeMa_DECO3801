@@ -3,11 +3,11 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   Alert,
   ActivityIndicator,
   StyleSheet,
   ImageBackground,
+  TouchableOpacity,
 } from "react-native";
 import { NavigationActions, StackActions } from "react-navigation";
 import * as firebase from "firebase";
@@ -78,7 +78,7 @@ export default class LogInScreen extends Component {
             source={require("../../assets/BackgroundOrange.png")}
             style={styles.backgroundImage}
           >
-            <Text>Login</Text>
+            <Text style={styles.HeadingText}>Login</Text>
 
             <TextInput
               style={styles.inputStyle}
@@ -105,23 +105,29 @@ export default class LogInScreen extends Component {
               autoCapitalize="none"
               autoCorrect={false}
             />
+            <View style={styles.SignInButtons}>
+              <TouchableOpacity
+                style={styles.loginText}
+                onPress={() => this.onLoginPress()}
+                containerStyle={{ paddingTop: 10 }}
+              >
+                <Text style={styles.customBtnText}>Login</Text>
+              </TouchableOpacity>
 
-            <Button
-              style={styles.loginText}
-              title="Login"
-              containerStyle={{ paddingTop: 10 }}
-              onPress={this.onLoginPress}
-            />
-            <Button
-              style={styles.loginText}
-              title="Create account..."
-              onPress={() => this.props.navigation.navigate("Signup")}
-            />
-            <Button
-              style={styles.loginText}
-              title="Forgot Password..."
-              onPress={() => this.props.navigation.navigate("ForgotPassword")}
-            />
+              <TouchableOpacity
+                style={styles.loginText}
+                onPress={() => this.props.navigation.navigate("Signup")}
+              >
+                <Text style={styles.customBtnText}>Create Account</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.loginText}
+                onPress={() => this.props.navigation.navigate("ForgotPassword")}
+              >
+                <Text style={styles.customBtnText}>Forgot Password</Text>
+              </TouchableOpacity>
+            </View>
           </ImageBackground>
         </View>
       );
@@ -135,21 +141,32 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
-    padding: 35,
     backgroundColor: "#fff",
   },
   inputStyle: {
-    width: "100%",
-    marginBottom: 15,
+    width: "85%",
+    marginBottom: 10,
     paddingBottom: 15,
     alignSelf: "center",
-    borderColor: "#ccc",
-    borderBottomWidth: 1,
+    borderColor: "#FFFFFF",
+    borderBottomWidth: 5,
+    borderRadius: 5,
+    fontSize: 18,
+    textAlign: "center",
   },
   loginText: {
-    color: "#3740FE",
-    marginTop: 25,
+    color: "#990000",
+    marginTop: 20,
     textAlign: "center",
+    flexDirection: "column",
+    backgroundColor: "#FFE5CC",
+    borderRadius: 5,
+    marginLeft: 15,
+    marginBottom: 10,
+    marginTop: 5,
+    width: 150,
+    height: 30,
+    flexDirection: "column",
   },
   preloader: {
     left: 0,
@@ -165,5 +182,33 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     justifyContent: "center",
+  },
+  HeadingText: {
+    fontSize: 30,
+    fontWeight: "500",
+    color: "#990000",
+    textAlign: "center",
+    marginBottom: 40,
+  },
+  customBtnText: {
+    fontSize: 16,
+    fontWeight: "400",
+    color: "#990000",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  customBtnBG: {
+    backgroundColor: "#FFE5CC",
+    borderRadius: 5,
+    marginLeft: 15,
+    marginBottom: 10,
+    marginTop: 5,
+    width: 100,
+    height: 30,
+    flexDirection: "column",
+  },
+  SignInButtons: {
+    alignItems: "center",
+    alignContent: "center",
   },
 });

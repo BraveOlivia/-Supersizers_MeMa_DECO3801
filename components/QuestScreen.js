@@ -32,12 +32,14 @@ function readData() {
     .once("value", (dataSnapShot) => {
       baseHealth = dataSnapShot.val();
     });
-  firebase.database()
+  firebase
+    .database()
     .ref("response/" + userid + "/avatarStatus")
     .once("value", (dataSnapShot) => {
       baseStatus = dataSnapShot.val();
     });
-  firebase.database()
+  firebase
+    .database()
     .ref("response/" + userid + "/currency")
     .once("value", (dataSnapShot) => {
       baseCurrency = dataSnapShot.val();
@@ -357,7 +359,7 @@ export default class QuestScreen extends Component {
           source={require("../assets/BackgroundOrange.png")}
           style={styles.backgroundImage}
         >
-          <Header props={this.props} pageName="Quest"/>
+          <Header props={this.props} pageName="Quest" />
           <AppIndex />
         </ImageBackground>
       </View>

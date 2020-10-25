@@ -1,5 +1,14 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TextInput, Button, Alert } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  Button,
+  Alert,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
 import * as firebase from "firebase";
 
 function readUserTemplate(uid) {
@@ -102,54 +111,118 @@ export default class SignUpScreen extends Component {
 
   render() {
     return (
-      <View style={{ paddingTop: 50, alignItems: "center" }}>
-        <Text>Signup</Text>
-        <TextInput
-          style={{ width: 200, height: 40, borderWidth: 1 }}
-          value={this.state.email}
-          onChangeText={(text) => {
-            this.setState({ email: text });
-          }}
-          placeholder="Email"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
+      <View style={styles.container}>
+        <ImageBackground
+          source={require("../../assets/BackgroundOrange.png")}
+          style={styles.backgroundImage}
+        >
 
-        <View style={{ paddingTop: 10 }} />
+          <Text style={styles.HeadingText}>Sign Up</Text>
+          <TextInput
+            title="Signup"
+            style={{ width: 200, height: 40, borderWidth: 1, alignSelf: "center" }}
+            value={this.state.email}
+            onChangeText={(text) => {
+              this.setState({ email: text });
+            }}
+            placeholder="Email"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
 
-        <TextInput
-          style={{ width: 200, height: 40, borderWidth: 1 }}
-          value={this.state.password}
-          onChangeText={(text) => {
-            this.setState({ password: text });
-          }}
-          placeholder="Password"
-          secureTextEntry={true}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
+          <View style={{ paddingTop: 10 }} />
 
-        <View style={{ paddingTop: 10 }} />
+          <TextInput
+            style={{ width: 200, height: 40, borderWidth: 1, alignSelf: "center" }}
+            value={this.state.password}
+            onChangeText={(text) => {
+              this.setState({ password: text });
+            }}
+            placeholder="Password"
+            secureTextEntry={true}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
 
-        <TextInput
-          style={{ width: 200, height: 40, borderWidth: 1 }}
-          value={this.state.passwordConfirm}
-          onChangeText={(text) => {
-            this.setState({ passwordConfirm: text });
-          }}
-          placeholder="Password (confirm)"
-          secureTextEntry={true}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
+          <View style={{ paddingTop: 10 }} />
 
-        <Button title="Signup" onPress={this.onSignupPress} />
+          <TextInput
+            style={{ width: 200, height: 40, borderWidth: 1, alignSelf: "center" }}
+            value={this.state.passwordConfirm}
+            onChangeText={(text) => {
+              this.setState({ passwordConfirm: text });
+            }}
+            placeholder="Password (confirm)"
+            secureTextEntry={true}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
 
-        <Button title="Back to Login" onPress={this.onBackToLoginPress} />
+          <TouchableOpacity style={styles.loginText} onPress={this.onSignupPress}>
+            <Text style={styles.customBtnText}>SignUp</Text>
+          </TouchableOpacity>
+
+          {/* <Button title="Signup" onPress={this.onSignupPress} /> */}
+
+          <TouchableOpacity
+            style={styles.loginText}
+            onPress={this.onBackToLoginPress}
+          >
+            <Text style={styles.customBtnText}>Back to Login</Text>
+          </TouchableOpacity>
+
+        {/* <Button title="Back to Login" onPress={this.onBackToLoginPress} /> */}
+        </ImageBackground>
       </View>
     );
   }
 }
 
-const style = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+  HeadingText: {
+    fontSize: 30,
+    fontWeight: "500",
+    color: "#990000",
+    textAlign: "center",
+    marginBottom: 40,
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+  SignUpButtons: {
+    alignItems: "center",
+    alignContent: "center",
+  },
+  customBtnText: {
+    fontSize: 16,
+    fontWeight: "400",
+    color: "#990000",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  loginText: {
+    color: "#990000",
+    marginTop: 20,
+    textAlign: "center",
+    flexDirection: "column",
+    backgroundColor: "#FFE5CC",
+    borderRadius: 5,
+    marginLeft: 15,
+    marginBottom: 10,
+    marginTop: 5,
+    width: 150,
+    height: 30,
+    flexDirection: "column",
+    alignSelf: "center",
+  },
+});
