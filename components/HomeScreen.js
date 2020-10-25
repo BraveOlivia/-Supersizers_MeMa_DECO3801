@@ -14,7 +14,7 @@ import {
 import { ProgressBar, Colors } from "react-native-paper";
 import * as firebase from "firebase";
 import { fb, Fire } from "../src/firebase/APIKeys";
-import {images, getBackgroundImage} from "../components/images";
+import { images, getBackgroundImage } from "../components/images";
 import Header from "../components/Header";
 
 export default class HomeScreen extends Component {
@@ -86,8 +86,6 @@ export default class HomeScreen extends Component {
     }
   };
 
-  
-
   readData() {
     fb.database()
       .ref("response/" + this.user._id + "/avatarHealth")
@@ -156,11 +154,8 @@ export default class HomeScreen extends Component {
     const background = getBackgroundImage(this.state.backgroundColor);
     return (
       <View style={styles.container}>
-        <ImageBackground
-          source={background}
-          style={styles.backgroundImage}
-        >
-          <Header props={this.props} pageName='Home'/>
+        <ImageBackground source={background} style={styles.backgroundImage}>
+          <Header props={this.props} pageName="Home" />
           <View style={styles.avatarContainer}>
             <Text style={styles.avatarDialogue}>
               [AvatarName]: G'day[UserName], staying healthy?
@@ -192,7 +187,6 @@ export default class HomeScreen extends Component {
           </View>
 
           <View style={styles.footMenu}>
-
             <View style={styles.MainButtons}>
               <TouchableOpacity
                 style={styles.customBtnBG}
@@ -301,17 +295,6 @@ const styles = StyleSheet.create({
     color: "#990000",
     textAlign: "center",
   },
-  customBtnBG: {
-    backgroundColor: "#FFE5CC",
-    borderRadius: 5,
-    marginLeft: 15,
-    marginBottom: 10,
-    marginTop: 5,
-    width: 150,
-    height: 30,
-    flexDirection: "column",
-  },
-
   customBtnBG: {
     backgroundColor: "#FFE5CC",
     borderRadius: 5,
