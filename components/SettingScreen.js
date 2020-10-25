@@ -35,11 +35,15 @@ export default class SettingScreen extends Component {
   }
 
   backgroundColorOnPress = () => {
-    var color = Math.floor(Math.random() * 7) + 1;
-    this.updateBackgroundColor(color);
-    this.setState({
-      backgroundColor: color
-    })
+    // Iterate over 1 to 7
+    if (this.state.backgroundColor != 7) { 
+      this.setState((state) => {
+        return { backgroundColor: state.backgroundColor + 1 };
+      });
+    } else {
+      this.setState({ backgroundColor: 1 });
+    }
+    this.updateBackgroundColor(this.state.backgroundColor);
   }
 
   updateBackgroundColor(color) {
@@ -83,7 +87,7 @@ export default class SettingScreen extends Component {
           <View style={styles.settingItems}>
             <Text>Change Background Color</Text>
             <Button
-              title={this.state.backgroundColor}
+              title={"Change"}
               onPress={this.backgroundColorOnPress}
             />
           </View>
