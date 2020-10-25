@@ -3,7 +3,8 @@ import { StyleSheet, View, Text, TextInput, Button, Alert } from "react-native";
 import * as firebase from "firebase";
 
 function readUserTemplate(uid) {
-  firebase.database()
+  firebase
+    .database()
     .ref("response/1/")
     .once("value", (dataSnapShot) => {
       var key = dataSnapShot.val();
@@ -22,7 +23,8 @@ function createNewUser(index, content) {
     }
     let dataToSave = content;
     // console.log(dataToSave);
-    firebase.database()
+    firebase
+      .database()
       .ref("/response/" + key)
       .update(dataToSave)
       .then((snapshot) => {
@@ -32,7 +34,7 @@ function createNewUser(index, content) {
         reject(err);
       });
   });
-};
+}
 
 export default class SignUpScreen extends Component {
   constructor(props) {
@@ -50,7 +52,7 @@ export default class SignUpScreen extends Component {
       Alert.alert("Passwords do not match");
       return;
     }
-    
+
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
