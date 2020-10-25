@@ -366,7 +366,10 @@ export default class HomeScreen extends Component {
           source={require("../assets/BackgroundOrange.png")}
           style={styles.backgroundImage}
         >
-          <Header pageName="Avatar Shop" props={this.props}/>
+          <Header
+            pageName="Avatar Shop"
+            baseCurrency={this.state.avatarCurrency}
+          />
           <AppIndex />
         </ImageBackground>
       </View>

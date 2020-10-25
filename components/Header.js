@@ -3,29 +3,30 @@ import { StyleSheet, Text, View } from "react-native";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { fb, Fire } from "../src/firebase/APIKeys";
 
-var baseCurrency = 0;
+// var baseCurrency = 0;
 var userid = Fire.shared.user._id;
 
-function readData() {
-  fb.database()
-    .ref("response/" + userid + "/currency")
-    .once("value", (dataSnapShot) => {
-      baseCurrency = dataSnapShot.val();
-    });
-}
+// function readData() {
+//   fb.database()
+//     .ref("response/" + userid + "/currency")
+//     .once("value", (dataSnapShot) => {
+//       baseCurrency = dataSnapShot.val();
+//     });
+// }
 
-const Header = ({props, pageName}) => {
-  readData();
+const Header = ({ props, pageName, baseCurrency }) => {
   return (
     <View style={styles.header}>
-      <FontAwesome 
-        style={styles.iconStyle} 
-        name="home" 
-        onPress={() => props.navigation.navigate("Home")}/>
-      <MaterialIcons 
-        style={styles.iconStyle} 
-        name="settings" 
-        onPress={() => props.navigation.navigate("Settings")}/>
+      <FontAwesome
+        style={styles.iconStyle}
+        name="home"
+        onPress={() => props.navigation.navigate("Home")}
+      />
+      <MaterialIcons
+        style={styles.iconStyle}
+        name="settings"
+        onPress={() => props.navigation.navigate("Settings")}
+      />
       <Text style={styles.pageTitle}> {pageName} </Text>
       <Text style={styles.myCurrency}>${baseCurrency}</Text>
     </View>

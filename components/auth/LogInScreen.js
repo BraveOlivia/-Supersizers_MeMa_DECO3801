@@ -109,7 +109,7 @@ export default class LogInScreen extends Component {
               <TouchableOpacity
                 style={styles.loginText}
                 onPress={() => this.onLoginPress()}
-                containerStyle={{ paddingTop: 10 }}
+                // containerStyle={{ paddingTop: 10 }}
               >
                 <Text style={styles.customBtnText}>Login</Text>
               </TouchableOpacity>
@@ -192,20 +192,20 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   customBtnText: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "400",
     color: "#990000",
     textAlign: "center",
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   customBtnBG: {
     backgroundColor: "#FFE5CC",
     borderRadius: 5,
-    marginLeft: 15,
-    marginBottom: 10,
+    marginLeft: 5,
+    marginBottom: 5,
     marginTop: 5,
     width: 100,
-    height: 30,
+    height: 40,
     flexDirection: "column",
   },
   SignInButtons: {

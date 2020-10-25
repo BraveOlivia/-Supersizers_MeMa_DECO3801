@@ -203,11 +203,11 @@ const styles = StyleSheet.create({
     alignContent: "center",
   },
   customBtnText: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "400",
     color: "#990000",
     textAlign: "center",
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   loginText: {
     color: "#990000",
