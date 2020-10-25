@@ -112,68 +112,68 @@ export default class SignUpScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {/* <ImageBackground
+        <ImageBackground
           source={require("../../assets/BackgroundOrange.png")}
           style={styles.backgroundImage}
-        > */}
-
-        <Text style={styles.HeadingText}>Sign Up</Text>
-        <TextInput
-          title="Signup"
-          style={{ width: 200, height: 40, borderWidth: 1 }}
-          value={this.state.email}
-          onChangeText={(text) => {
-            this.setState({ email: text });
-          }}
-          placeholder="Email"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-
-        <View style={{ paddingTop: 10 }} />
-
-        <TextInput
-          style={{ width: 200, height: 40, borderWidth: 1 }}
-          value={this.state.password}
-          onChangeText={(text) => {
-            this.setState({ password: text });
-          }}
-          placeholder="Password"
-          secureTextEntry={true}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-
-        <View style={{ paddingTop: 10 }} />
-
-        <TextInput
-          style={{ width: 200, height: 40, borderWidth: 1 }}
-          value={this.state.passwordConfirm}
-          onChangeText={(text) => {
-            this.setState({ passwordConfirm: text });
-          }}
-          placeholder="Password (confirm)"
-          secureTextEntry={true}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-
-        <TouchableOpacity style={styles.loginText} onPress={this.onSignupPress}>
-          <Text style={styles.customBtnText}>SignUp</Text>
-        </TouchableOpacity>
-
-        {/* <Button title="Signup" onPress={this.onSignupPress} /> */}
-
-        <TouchableOpacity
-          style={styles.loginText}
-          onPress={this.onBackToLoginPress}
         >
-          <Text style={styles.customBtnText}>Back to Login</Text>
-        </TouchableOpacity>
+
+          <Text style={styles.HeadingText}>Sign Up</Text>
+          <TextInput
+            title="Signup"
+            style={{ width: 200, height: 40, borderWidth: 1, alignSelf: "center" }}
+            value={this.state.email}
+            onChangeText={(text) => {
+              this.setState({ email: text });
+            }}
+            placeholder="Email"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+
+          <View style={{ paddingTop: 10 }} />
+
+          <TextInput
+            style={{ width: 200, height: 40, borderWidth: 1, alignSelf: "center" }}
+            value={this.state.password}
+            onChangeText={(text) => {
+              this.setState({ password: text });
+            }}
+            placeholder="Password"
+            secureTextEntry={true}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+
+          <View style={{ paddingTop: 10 }} />
+
+          <TextInput
+            style={{ width: 200, height: 40, borderWidth: 1, alignSelf: "center" }}
+            value={this.state.passwordConfirm}
+            onChangeText={(text) => {
+              this.setState({ passwordConfirm: text });
+            }}
+            placeholder="Password (confirm)"
+            secureTextEntry={true}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+
+          <TouchableOpacity style={styles.loginText} onPress={this.onSignupPress}>
+            <Text style={styles.customBtnText}>SignUp</Text>
+          </TouchableOpacity>
+
+          {/* <Button title="Signup" onPress={this.onSignupPress} /> */}
+
+          <TouchableOpacity
+            style={styles.loginText}
+            onPress={this.onBackToLoginPress}
+          >
+            <Text style={styles.customBtnText}>Back to Login</Text>
+          </TouchableOpacity>
 
         {/* <Button title="Back to Login" onPress={this.onBackToLoginPress} /> */}
-        {/* </ImageBackground> */}
+        </ImageBackground>
       </View>
     );
   }
@@ -181,8 +181,9 @@ export default class SignUpScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
-    alignItems: "center",
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
     resizeMode: "cover",
     justifyContent: "center",
   },
@@ -222,5 +223,6 @@ const styles = StyleSheet.create({
     width: 150,
     height: 30,
     flexDirection: "column",
+    alignSelf: "center",
   },
 });
