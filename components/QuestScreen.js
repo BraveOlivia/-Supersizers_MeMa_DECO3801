@@ -27,8 +27,9 @@ console.log("questScreen userID " + userid);
 function readData() {
   userid = Fire.shared.user._id;
   console.log("reading data userID " + userid);
-  firebase.database()
-    .ref("response/"+ userid +"/avatarHealth")
+  firebase
+    .database()
+    .ref("response/" + userid + "/avatarHealth")
     .once("value", (dataSnapShot) => {
       baseHealth = dataSnapShot.val();
     });
@@ -115,7 +116,9 @@ const updating = (id, progress) => {
 function ReadAllTab() {
   const [quests, allQuests] = useState([]);
   useEffect(() => {
-    const questRef = firebase.database().ref("/response/" + userid + "/quests/");
+    const questRef = firebase
+      .database()
+      .ref("/response/" + userid + "/quests/");
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allQuests([]);
       snapshot.forEach(function (childSnapshot) {
@@ -178,7 +181,9 @@ ReadAllTab.navigationOptions = {
 function InProgreeTab() {
   const [inProgress, allInProgressQuests] = useState([]);
   useEffect(() => {
-    const questRef = firebase.database().ref("/response/" + userid + "/quests/");
+    const questRef = firebase
+      .database()
+      .ref("/response/" + userid + "/quests/");
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allInProgressQuests([]);
       snapshot.forEach(function (childSnapshot) {
@@ -259,7 +264,9 @@ InProgreeTab.navigationOptions = {
 function CompletionTab() {
   const [completedQuest, allCompletedQuests] = useState([]);
   useEffect(() => {
-    const questRef = firebase.database().ref("/response/" + userid + "/quests/");
+    const questRef = firebase
+      .database()
+      .ref("/response/" + userid + "/quests/");
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allCompletedQuests([]);
       snapshot.forEach(function (childSnapshot) {
@@ -349,8 +356,12 @@ export default class QuestScreen extends Component {
   }
 
   componentDidMount() {
-    baseHealth, baseStatus, baseCurrency = readData();
-    this.setState({baseHealth: baseHealth, baseStatus: baseStatus, baseCurrency:baseCurrency});
+    baseHealth, baseStatus, (baseCurrency = readData());
+    this.setState({
+      baseHealth: baseHealth,
+      baseStatus: baseStatus,
+      baseCurrency: baseCurrency,
+    });
   }
   render() {
     return (
@@ -359,7 +370,11 @@ export default class QuestScreen extends Component {
           source={require("../assets/BackgroundOrange.png")}
           style={styles.backgroundImage}
         >
-          <Header props={this.props} pageName="Quest" />
+          <Header
+            props={this.props}
+            pageName="Home"
+            baseCurrency={this.state.baseCurrency}
+          />
           <AppIndex />
         </ImageBackground>
       </View>

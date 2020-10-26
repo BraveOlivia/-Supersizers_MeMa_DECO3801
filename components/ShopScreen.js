@@ -368,7 +368,8 @@ export default class HomeScreen extends Component {
           style={styles.backgroundImage}
         >
           <Header
-            pageName="Avatar Shop"
+            props={this.props}
+            pageName="Home"
             baseCurrency={this.state.avatarCurrency}
           />
           <AppIndex />

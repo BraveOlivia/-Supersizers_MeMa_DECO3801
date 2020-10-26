@@ -28,17 +28,20 @@ console.log(userid);
 
 function readData() {
   console.log(userid);
-  firebase.database()
+  firebase
+    .database()
     .ref("response/" + userid + "/avatarHealth")
     .once("value", (dataSnapShot) => {
       baseHealth = dataSnapShot.val();
     });
-  firebase.database()
+  firebase
+    .database()
     .ref("response/" + userid + "/avatarStatus")
     .once("value", (dataSnapShot) => {
       baseStatus = dataSnapShot.val();
     });
-  firebase.database()
+  firebase
+    .database()
     .ref("response/" + userid + "/currency")
     .once("value", (dataSnapShot) => {
       baseCurrency = dataSnapShot.val();
@@ -262,28 +265,31 @@ export default class NutritionalScreen extends Component {
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
     }
-    ()=>this.readData();
+    () => this.readData();
     completeTips = completeTips.bind(this);
     reading = reading.bind(this);
   }
 
   readData() {
     console.log("reading data in nutritional tip " + userid);
-    firebase.database()
+    firebase
+      .database()
       .ref("response/" + userid + "/avatarHealth")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
         baseHealth = temp;
         this.setState({ baseHealth: temp });
       });
-    firebase.database()
+    firebase
+      .database()
       .ref("response/" + userid + "/avatarStatus")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
         baseStatus = temp;
         this.setState({ baseStatus: temp });
       });
-    firebase.database()
+    firebase
+      .database()
       .ref("response/" + userid + "/currency")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
@@ -308,9 +314,11 @@ export default class NutritionalScreen extends Component {
           source={require("../assets/BackgroundOrange.png")}
           style={styles.backgroundImage}
         >
-         
-          <Header props={this.props} pageName='Nutritional Tips'/>
-
+          <Header
+            props={this.props}
+            pageName="Home"
+            baseCurrency={this.state.baseCurr}
+          />
           {/* <View style={styles.header}>
              
             <FontAwesome

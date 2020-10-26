@@ -25,6 +25,7 @@ export default class HomeScreen extends Component {
       avatarStatus: 0,
       avatarHealth: 0,
       backgroundColor: 5,
+      avatarCurrency: 0,
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
@@ -107,6 +108,14 @@ export default class HomeScreen extends Component {
         var tempColor = dataSnapShot.val();
         this.setState({ backgroundColor: tempColor });
       });
+    fb.database()
+      .ref("response/" + this.user._id + "/currency")
+      .once("value", (querySnapShot) => {
+        let data = querySnapShot.val() ? querySnapShot.val() : {};
+        this.setState({
+          avatarCurrency: data,
+        });
+      });
   }
 
   writeData() {
@@ -149,10 +158,14 @@ export default class HomeScreen extends Component {
     return (
       <View style={styles.container}>
         <ImageBackground source={background} style={styles.backgroundImage}>
-          <Header props={this.props} pageName="Home" />
+          <Header
+            props={this.props}
+            pageName="Home"
+            baseCurrency={this.state.avatarCurrency}
+          />
           <View style={styles.avatarContainer}>
             <Text style={styles.avatarDialogue}>
-              [AvatarName]: G'day[UserName], staying healthy?
+              G'day, staying healthy? Do some quest chanllenges, read nutritional tips to keep fit!
             </Text>
             <this.handleAvatarHealthChange health={this.state.avatarHealth} />
             <View>
