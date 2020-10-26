@@ -332,6 +332,7 @@ export default class HomeScreen extends Component {
   }
 
   readData() {
+    userid = Fire.shared.user._id;
     fb.database()
       .ref("response/" + userid + "/currency")
       .once("value", (dataSnapShot) => {
