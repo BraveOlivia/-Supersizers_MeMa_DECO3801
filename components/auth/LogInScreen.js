@@ -144,12 +144,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   inputStyle: {
-    width: "85%",
+    width: "65%",
     marginBottom: 10,
     paddingBottom: 15,
     alignSelf: "center",
     borderColor: "#FFFFFF",
-    borderBottomWidth: 5,
+    borderBottomWidth: 1,
     borderRadius: 5,
     fontSize: 18,
     textAlign: "center",
@@ -195,7 +195,6 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     color: "#990000",
     textAlign: "center",
-    // marginBottom: 20,
   },
   customBtnBG: {
     backgroundColor: "#FFE5CC",
@@ -208,6 +207,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   SignInButtons: {
+    margin: 20,
     alignItems: "center",
     alignContent: "center",
   },

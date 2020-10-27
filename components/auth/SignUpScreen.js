@@ -116,11 +116,16 @@ export default class SignUpScreen extends Component {
           source={require("../../assets/BackgroundOrange.png")}
           style={styles.backgroundImage}
         >
-
           <Text style={styles.HeadingText}>Sign Up</Text>
           <TextInput
             title="Signup"
-            style={{ width: 200, height: 40, borderWidth: 1, alignSelf: "center" }}
+            style={styles.inputStyle}
+            // style={{
+            //   width: 200,
+            //   height: 40,
+            //   borderWidth: 1,
+            //   alignSelf: "center",
+            // }}
             value={this.state.email}
             onChangeText={(text) => {
               this.setState({ email: text });
@@ -134,7 +139,13 @@ export default class SignUpScreen extends Component {
           <View style={{ paddingTop: 10 }} />
 
           <TextInput
-            style={{ width: 200, height: 40, borderWidth: 1, alignSelf: "center" }}
+            style={styles.inputStyle}
+            // style={{
+            //   width: 200,
+            //   height: 40,
+            //   borderWidth: 1,
+            //   alignSelf: "center",
+            // }}
             value={this.state.password}
             onChangeText={(text) => {
               this.setState({ password: text });
@@ -148,7 +159,13 @@ export default class SignUpScreen extends Component {
           <View style={{ paddingTop: 10 }} />
 
           <TextInput
-            style={{ width: 200, height: 40, borderWidth: 1, alignSelf: "center" }}
+            style={styles.inputStyle}
+            // style={{
+            //   width: 200,
+            //   height: 40,
+            //   borderWidth: 1,
+            //   alignSelf: "center",
+            // }}
             value={this.state.passwordConfirm}
             onChangeText={(text) => {
               this.setState({ passwordConfirm: text });
@@ -159,11 +176,12 @@ export default class SignUpScreen extends Component {
             autoCorrect={false}
           />
 
-          <TouchableOpacity style={styles.loginText} onPress={this.onSignupPress}>
-            <Text style={styles.customBtnText}>SignUp</Text>
+          <TouchableOpacity
+            style={styles.loginText}
+            onPress={this.onSignupPress}
+          >
+            <Text style={styles.customBtnText}>Sign Up</Text>
           </TouchableOpacity>
-
-          {/* <Button title="Signup" onPress={this.onSignupPress} /> */}
 
           <TouchableOpacity
             style={styles.loginText}
@@ -172,7 +190,7 @@ export default class SignUpScreen extends Component {
             <Text style={styles.customBtnText}>Back to Login</Text>
           </TouchableOpacity>
 
-        {/* <Button title="Back to Login" onPress={this.onBackToLoginPress} /> */}
+          {/* <Button title="Back to Login" onPress={this.onBackToLoginPress} /> */}
         </ImageBackground>
       </View>
     );
@@ -199,20 +217,15 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     justifyContent: "center",
   },
-  SignUpButtons: {
-    alignItems: "center",
-    alignContent: "center",
-  },
   customBtnText: {
     fontSize: 20,
     fontWeight: "400",
     color: "#990000",
     textAlign: "center",
-    // marginBottom: 20,
   },
   loginText: {
     color: "#990000",
-    marginTop: 20,
+    marginTop: 30,
     textAlign: "center",
     flexDirection: "column",
     backgroundColor: "#FFE5CC",
@@ -224,5 +237,17 @@ const styles = StyleSheet.create({
     height: 30,
     flexDirection: "column",
     alignSelf: "center",
+  },
+  inputStyle: {
+    width: "65%",
+    marginBottom: 10,
+    paddingBottom: 15,
+    alignSelf: "center",
+    borderColor: "#FFFFFF",
+    borderBottomWidth: 1,
+    borderRadius: 5,
+    fontSize: 18,
+    textAlign: "center",
+    marginBottom: 20,
   },
 });

@@ -311,7 +311,7 @@ const Tab = createMaterialTopTabNavigator(
       showIcon: true,
       showLabel: true,
       style: {
-        backgroundColor: "#FF9933",
+        backgroundColor: "transparent",
       },
     },
   }
@@ -370,13 +370,10 @@ export default class HomeScreen extends Component {
     const background = getBackgroundImage(this.state.backgroundColor);
     return (
       <View style={styles.container}>
-        <ImageBackground
-          source={background}
-          style={styles.backgroundImage}
-        >
+        <ImageBackground source={background} style={styles.backgroundImage}>
           <Header
             props={this.props}
-            pageName="Home"
+            pageName="Avatar Shop"
             baseCurrency={this.state.avatarCurrency}
           />
           <AppIndex />
@@ -420,5 +417,11 @@ const styles = StyleSheet.create({
 
   buyText: {
     textAlign: "center",
+  },
+
+  text: {
+    marginTop: 5,
+    fontSize: 16,
+    fontWeight: "500",
   },
 });

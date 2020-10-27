@@ -7,6 +7,8 @@ import {
   Text,
   Image,
   View,
+  SafeAreaView,
+  ScrollView,
   Button,
   Alert,
   TouchableOpacity,
@@ -156,76 +158,85 @@ export default class HomeScreen extends Component {
   render() {
     const background = getBackgroundImage(this.state.backgroundColor);
     return (
-      <View style={styles.container}>
-        <ImageBackground source={background} style={styles.backgroundImage}>
-          <Header
-            props={this.props}
-            pageName="Home"
-            baseCurrency={this.state.avatarCurrency}
-          />
-          <View style={styles.avatarContainer}>
-            <Text style={styles.avatarDialogue}>
-              G'day, staying healthy? Do some quest chanllenges, read nutritional tips to keep fit!
-            </Text>
-            <this.handleAvatarHealthChange health={this.state.avatarHealth} />
-            <View>
-              <Text style={styles.textStyle}> Happiness Status </Text>
-              <ProgressBar
-                progress={1 * this.state.avatarStatus * 0.01}
-                color={Colors.lightBlue300}
-                style={{
-                  width: 200,
-                  height: 13,
-                }}
+      <SafeAreaView>
+        <ScrollView>
+          <View style={styles.container}>
+            <ImageBackground source={background} style={styles.backgroundImage}>
+              <Header
+                props={this.props}
+                pageName="Home"
+                baseCurrency={this.state.avatarCurrency}
               />
-            </View>
-            <Text> </Text>
-            <View>
-              <Text style={styles.textStyle}> Emotion Status </Text>
-              <ProgressBar
-                progress={1 * this.state.avatarHealth * 0.01}
-                color={Colors.white}
-                style={{
-                  width: 200,
-                  height: 13,
-                }}
-              />
-            </View>
+              <View style={styles.avatarContainer}>
+                <Text style={styles.avatarDialogue}>
+                  G'day, staying healthy? Do some quest chanllenges, read
+                  nutritional tips to keep fit!
+                </Text>
+                <this.handleAvatarHealthChange
+                  health={this.state.avatarHealth}
+                />
+                <View>
+                  <Text style={styles.textStyle}> Happiness Status </Text>
+                  <ProgressBar
+                    progress={1 * this.state.avatarStatus * 0.01}
+                    color={Colors.lightBlue300}
+                    style={{
+                      width: 200,
+                      height: 13,
+                    }}
+                  />
+                </View>
+                <Text> </Text>
+                <View>
+                  <Text style={styles.textStyle}> Emotion Status </Text>
+                  <ProgressBar
+                    progress={1 * this.state.avatarHealth * 0.01}
+                    color={Colors.white}
+                    style={{
+                      width: 200,
+                      height: 13,
+                    }}
+                  />
+                </View>
+              </View>
+
+              <View style={styles.footMenu}>
+                <View style={styles.MainButtons}>
+                  <TouchableOpacity
+                    style={styles.customBtnBG}
+                    onPress={() => this.props.navigation.navigate("Quest")}
+                  >
+                    <Text style={styles.customBtnText}>Quest</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.customBtnBG}
+                    onPress={() =>
+                      this.props.navigation.navigate("Nutritional")
+                    }
+                  >
+                    <Text style={styles.customBtnText}>Nutrition</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.customBtnBG}
+                    onPress={() => this.props.navigation.navigate("Shop")}
+                  >
+                    <Text style={styles.customBtnText}>Shop</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.customBtnBG}
+                    onPress={() => this.props.navigation.navigate("Chat")}
+                  >
+                    <Text style={styles.customBtnText}>Socialize</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </ImageBackground>
           </View>
-
-          <View style={styles.footMenu}>
-            <View style={styles.MainButtons}>
-              <TouchableOpacity
-                style={styles.customBtnBG}
-                onPress={() => this.props.navigation.navigate("Quest")}
-              >
-                <Text style={styles.customBtnText}>Quest</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.customBtnBG}
-                onPress={() => this.props.navigation.navigate("Nutritional")}
-              >
-                <Text style={styles.customBtnText}>Nutrition</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.customBtnBG}
-                onPress={() => this.props.navigation.navigate("Shop")}
-              >
-                <Text style={styles.customBtnText}>Shop</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.customBtnBG}
-                onPress={() => this.props.navigation.navigate("Chat")}
-              >
-                <Text style={styles.customBtnText}>Socialize</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </ImageBackground>
-      </View>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
@@ -243,38 +254,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  navBar: {
-    marginTop: 10,
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-  },
-
   avatarContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-
-  footMenu: {
-    flex: 0.1,
-    alignItems: "stretch",
-    justifyContent: "space-evenly",
-    flexDirection: "column",
-    margin: 30,
-    padding: 5,
-    marginBottom: "10%",
-  },
-
-  menurow: {
-    marginBottom: 30,
-    borderRadius: 100,
-    borderColor: "white",
-  },
-
-  avatar: {
-    width: 220,
-    height: 220,
-    margin: 40,
   },
 
   avatarDialogue: {
@@ -283,12 +266,27 @@ const styles = StyleSheet.create({
     color: "#000000",
     borderWidth: 0.5,
     borderRadius: 10,
-    width: 250,
-    padding: 10,
-    marginTop: "10%",
+    width: "65%",
+    marginTop: "1%",
     justifyContent: "center",
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "400",
+  },
+
+  footMenu: {
+    flex: 0.1,
+    alignItems: "stretch",
+    justifyContent: "space-evenly",
+    flexDirection: "column",
+    margin: 20,
+    padding: 5,
+    marginBottom: "5%",
+  },
+
+  avatar: {
+    width: 220,
+    height: 220,
+    margin: 35,
   },
 
   MainButtons: {
@@ -302,6 +300,7 @@ const styles = StyleSheet.create({
     color: "#990000",
     textAlign: "center",
   },
+
   customBtnBG: {
     backgroundColor: "#FFE5CC",
     borderRadius: 5,

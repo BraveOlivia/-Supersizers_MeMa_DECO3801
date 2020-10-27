@@ -14,7 +14,7 @@ import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { fb, Fire } from "../src/firebase/APIKeys.js";
 import * as firebase from "firebase";
-import { getBackgroundImage } from "../components/images"
+import { getBackgroundImage } from "../components/images";
 import Header from "../components/Header";
 
 var baseHealth = 0;
@@ -334,7 +334,7 @@ const Tab = createMaterialTopTabNavigator(
       showLabel: true,
       style: {
         borderColor: "black",
-        backgroundColor: "#FF6600",
+        backgroundColor: "transparent",
       },
     },
   }
@@ -348,7 +348,7 @@ export default class QuestScreen extends Component {
       questCompletion: 0,
       avatarStatus: 0,
       avatarHealth: 0,
-      avatarCurrency: 0,
+      baseCurrency: 0,
       backgroundColor: 5,
     };
     if (!firebase.apps.length) {
@@ -366,6 +366,12 @@ export default class QuestScreen extends Component {
         var tempColor = dataSnapShot.val();
         this.setState({ backgroundColor: tempColor });
       });
+    fb.database()
+      .ref("response/" + userid + "/currency")
+      .once("value", (dataSnapShot) => {
+        var temp = dataSnapShot.val();
+        this.setState({ baseCurrency: temp });
+      });
   }
 
   componentDidMount() {
@@ -381,13 +387,10 @@ export default class QuestScreen extends Component {
     const background = getBackgroundImage(this.state.backgroundColor);
     return (
       <View style={styles.MainContainer}>
-        <ImageBackground
-          source={background}
-          style={styles.backgroundImage}
-        >
+        <ImageBackground source={background} style={styles.backgroundImage}>
           <Header
             props={this.props}
-            pageName="Home"
+            pageName="Quests"
             baseCurrency={this.state.baseCurrency}
           />
           <AppIndex />
@@ -423,7 +426,6 @@ const styles = StyleSheet.create({
   },
 
   taskDiv: {
-    // flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
   },

@@ -1,7 +1,7 @@
 // @flow
 import React from "react";
 import { GiftedChat } from "react-native-gifted-chat"; // 0.3.0
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { fb, Fire } from "../src/firebase/APIKeys";
 
 export default class ChatScreen extends React.Component {
@@ -18,11 +18,13 @@ export default class ChatScreen extends React.Component {
 
   render() {
     return (
-      <GiftedChat
-        messages={this.state.messages}
-        onSend={Fire.shared.send}
-        user={this.user}
-      />
+      <View style={styles.container}>
+        <GiftedChat
+          messages={this.state.messages}
+          onSend={Fire.shared.send}
+          user={this.user}
+        />
+      </View>
     );
   }
 
@@ -39,7 +41,7 @@ export default class ChatScreen extends React.Component {
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 3,
+    flex: 1,
     flexDirection: "column",
   },
   backrgoundImage: {
@@ -53,7 +55,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-
 
 // // import React, { Component } from "react";
 // // import { Platform, KeyboardAvoidingView, SafeAreaView } from "react-native";

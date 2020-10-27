@@ -1,12 +1,7 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  ImageBackground,
-  Text,
-  View,
-  Button,
-} from "react-native";
-import { getBackgroundImage } from "../components/images"
+import { StyleSheet, ImageBackground, Text, View, Button } from "react-native";
+import { inlineStyles } from "react-native-svg";
+import { getBackgroundImage } from "../components/images";
 import { fb, Fire } from "../src/firebase/APIKeys";
 
 export default class SettingScreen extends Component {
@@ -15,7 +10,7 @@ export default class SettingScreen extends Component {
     this.state = {
       backgroundColor: 0,
       supperssNotification: "OFF",
-    }
+    };
     this.readData();
   }
 
@@ -30,7 +25,6 @@ export default class SettingScreen extends Component {
 
   get user() {
     return {
-      //   name: this.props.navigation.state.params.name,
       _id: Fire.shared.uid,
     };
   }
@@ -51,63 +45,65 @@ export default class SettingScreen extends Component {
       this.updateBackgroundColor(1);
       this.setState({ backgroundColor: 1 });
     }
-  }
+  };
 
   updateBackgroundColor(color) {
     fb.database()
-    .ref("response/" + this.user._id)
-    .update({
-      backgroundColor: color,
-    })
-    .then(() => {
-      console.log("Background Color Changed");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  } 
+      .ref("response/" + this.user._id)
+      .update({
+        backgroundColor: color,
+      })
+      .then(() => {
+        console.log("Background Color Changed");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   suppressNotificationOnPress = () => {
-    if (this.state.supperssNotification == "OFF") {
+    if (this.state.supperssNotification == "Turn Off") {
       this.setState({
-        supperssNotification: "ON"
-      })
+        supperssNotification: "Turn On",
+      });
     } else {
       this.setState({
-        supperssNotification: "OFF"
-      })
+        supperssNotification: "Turn Off",
+      });
     }
-  }
+  };
 
   render() {
     const background = getBackgroundImage(this.state.backgroundColor);
-    return(
+    return (
       <View style={{ flex: 1 }}>
-        <ImageBackground
-        source={background}
-        style={styles.backgroundImage}
-        >
-          <View style={styles.settingItems}>
-            <Text>Change Background Color</Text>
-            <Button
-              title={"Change"}
-              onPress={this.backgroundColorOnPress}
-            />
-          </View>
-          <View style={styles.settingItems}>
-            <Text>Suppress Notifications</Text>
-            <Button
-              title={this.state.supperssNotification}
-              onPress={this.suppressNotificationOnPress}
-            />
-          </View>
+        <ImageBackground source={background} style={styles.backgroundImage}>
+          <View style={styles.btnContainer}>
+            <View style={styles.settingItems}>
+              <Text style={styles.bodyText}>Change Background Color</Text>
+              <Button
+                style={styles.bodyText}
+                title={"Change"}
+                onPress={this.backgroundColorOnPress}
+              />
+            </View>
+            <View style={styles.settingItems}>
+              <Text style={styles.bodyText}>Notifications</Text>
+              <Button
+                style={styles.bodyText}
+                title={this.state.supperssNotification}
+                onPress={this.suppressNotificationOnPress}
+              />
+            </View>
 
-          <View style={styles.settingItems}>
-            <Text>Sign Out</Text>
-            <Button
-              title={"Sign Out"}
-              onPress={this.signOutPress}
-            />
+            <View style={styles.settingItems}>
+              <Text style={styles.bodyText}>Sign Out</Text>
+              <Button
+                style={styles.bodyText}
+                title={"Sign Out"}
+                onPress={this.signOutPress}
+              />
+            </View>
           </View>
         </ImageBackground>
       </View>
@@ -115,20 +111,34 @@ export default class SettingScreen extends Component {
   }
 }
 
-const styles = StyleSheet.create({ 
-    backgroundImage: {
-      flex: 1,
-      resizeMode: "cover",
-      justifyContent: "flex-start",
-    },
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "flex-start",
+  },
 
-    settingItems: {
-      backgroundColor: "#ffffff",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      margin: 10,
-      borderRadius: 5,
-      height: 40,
-    },  
-  });
+  btnContainer: {
+    flex: 1,
+    marginTop: 20,
+  },
+
+  settingItems: {
+    marginTop: 15,
+    backgroundColor: "#ffffff",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    margin: 10,
+    borderRadius: 5,
+    height: 40,
+  },
+
+  bodyText: {
+    fontSize: 16,
+  },
+
+  btnText: {
+    fontSize: 16,
+  },
+});
