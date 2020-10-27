@@ -14,6 +14,7 @@ import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { fb, Fire } from "../src/firebase/APIKeys.js";
 import * as firebase from "firebase";
+import { getBackgroundImage } from "../components/images"
 import Header from "../components/Header";
 
 var baseHealth = 0;
@@ -348,11 +349,23 @@ export default class QuestScreen extends Component {
       avatarStatus: 0,
       avatarHealth: 0,
       avatarCurrency: 0,
+      backgroundColor: 5,
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
     }
     readData();
+    this.readData();
+  }
+
+  readData() {
+    userid = Fire.shared.user._id;
+    fb.database()
+      .ref("response/" + userid + "/backgroundColor")
+      .once("value", (dataSnapShot) => {
+        var tempColor = dataSnapShot.val();
+        this.setState({ backgroundColor: tempColor });
+      });
   }
 
   componentDidMount() {
@@ -363,11 +376,13 @@ export default class QuestScreen extends Component {
       baseCurrency: baseCurrency,
     });
   }
+
   render() {
+    const background = getBackgroundImage(this.state.backgroundColor);
     return (
       <View style={styles.MainContainer}>
         <ImageBackground
-          source={require("../assets/BackgroundOrange.png")}
+          source={background}
           style={styles.backgroundImage}
         >
           <Header

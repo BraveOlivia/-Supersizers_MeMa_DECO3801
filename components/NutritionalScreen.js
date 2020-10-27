@@ -17,6 +17,7 @@ import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { fb, Fire } from "../src/firebase/APIKeys";
 import * as firebase from "firebase";
+import { getBackgroundImage } from "../components/images"
 import Header from "../components/Header";
 
 var baseHealth = 0;
@@ -261,6 +262,7 @@ export default class NutritionalScreen extends Component {
       baseHealth: 0,
       baseStatus: 0,
       baseCurr: 0,
+      backgroundColor: 5,
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
@@ -296,6 +298,12 @@ export default class NutritionalScreen extends Component {
         baseCurrency = temp;
         this.setState({ baseCurr: temp });
       });
+    firebase.database()
+      .ref("response/" + userid + "/backgroundColor")
+      .once("value", (dataSnapShot) => {
+        var tempColor = dataSnapShot.val();
+        this.setState({ backgroundColor: tempColor });
+      });
   }
 
   componentDidMount() {
@@ -308,10 +316,11 @@ export default class NutritionalScreen extends Component {
   };
 
   render() {
+    const background = getBackgroundImage(this.state.backgroundColor);
     return (
       <View style={{ flex: 1 }}>
         <ImageBackground
-          source={require("../assets/BackgroundOrange.png")}
+          source={background}
           style={styles.backgroundImage}
         >
           <Header

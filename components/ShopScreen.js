@@ -17,7 +17,7 @@ import {
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { fb, Fire } from "../src/firebase/APIKeys";
-import { images } from "../components/images";
+import { images, getBackgroundImage } from "../components/images";
 import Header from "../components/Header";
 
 var baseCurrency = 100;
@@ -338,6 +338,12 @@ export default class HomeScreen extends Component {
       .once("value", (dataSnapShot) => {
         baseCurrency = dataSnapShot.val();
       });
+    fb.database()
+      .ref("response/" + userid + "/backgroundColor")
+      .once("value", (dataSnapShot) => {
+        var tempColor = dataSnapShot.val();
+        this.setState({ backgroundColor: tempColor });
+      });
   }
 
   componentDidMount() {
@@ -361,10 +367,11 @@ export default class HomeScreen extends Component {
   }
 
   render() {
+    const background = getBackgroundImage(this.state.backgroundColor);
     return (
       <View style={styles.container}>
         <ImageBackground
-          source={require("../assets/BackgroundOrange.png")}
+          source={background}
           style={styles.backgroundImage}
         >
           <Header

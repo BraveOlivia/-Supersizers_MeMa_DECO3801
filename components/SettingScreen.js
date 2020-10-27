@@ -6,15 +6,33 @@ import {
   View,
   Button,
 } from "react-native";
-import { fb } from "../src/firebase/APIKeys";
+import { getBackgroundImage } from "../components/images"
+import { fb, Fire } from "../src/firebase/APIKeys";
 
 export default class SettingScreen extends Component {
   constructor() {
     super();
     this.state = {
-      backgroundColor: '',
+      backgroundColor: 0,
       supperssNotification: "OFF",
     }
+    this.readData();
+  }
+
+  readData() {
+    fb.database()
+      .ref("response/" + this.user._id + "/backgroundColor")
+      .once("value", (dataSnapShot) => {
+        var tempColor = dataSnapShot.val();
+        this.setState({ backgroundColor: tempColor });
+      });
+  }
+
+  get user() {
+    return {
+      //   name: this.props.navigation.state.params.name,
+      _id: Fire.shared.uid,
+    };
   }
 
   //Occurs when signout is pressed;
@@ -23,16 +41,21 @@ export default class SettingScreen extends Component {
   };
 
   backgroundColorOnPress = () => {
-    var color = Math.floor(Math.random() * 10) + 1;
-    this.updateBackgroundColor(color);
-    this.setState({
-      backgroundColor: color
-    })
+    // Iterate over 1 to 7
+    if (this.state.backgroundColor != 7) {
+      this.updateBackgroundColor(this.state.backgroundColor + 1);
+      this.setState((state) => {
+        return { backgroundColor: state.backgroundColor + 1 };
+      });
+    } else {
+      this.updateBackgroundColor(1);
+      this.setState({ backgroundColor: 1 });
+    }
   }
 
   updateBackgroundColor(color) {
     fb.database()
-    .ref("response/")
+    .ref("response/" + this.user._id)
     .update({
       backgroundColor: color,
     })
@@ -57,16 +80,17 @@ export default class SettingScreen extends Component {
   }
 
   render() {
+    const background = getBackgroundImage(this.state.backgroundColor);
     return(
       <View style={{ flex: 1 }}>
         <ImageBackground
-        source={require("../assets/BackgroundOrange.png")}
+        source={background}
         style={styles.backgroundImage}
         >
           <View style={styles.settingItems}>
             <Text>Change Background Color</Text>
             <Button
-              title={this.state.backgroundColor}
+              title={"Change"}
               onPress={this.backgroundColorOnPress}
             />
           </View>
@@ -81,7 +105,7 @@ export default class SettingScreen extends Component {
           <View style={styles.settingItems}>
             <Text>Sign Out</Text>
             <Button
-              title="Signout"
+              title={"Sign Out"}
               onPress={this.signOutPress}
             />
           </View>
@@ -105,5 +129,6 @@ const styles = StyleSheet.create({
       alignItems: "center",
       margin: 10,
       borderRadius: 5,
+      height: 40,
     },  
   });
