@@ -23,7 +23,7 @@ import Header from "../components/Header";
 var baseCurrency = 100;
 var userid = Fire.shared.user._id;
 
-//Owned items tab
+//Owned shopping items tab, it showed all the items which already bean bought from the shop
 function OwnedTab() {
   const [read, allReads] = useState([]);
   useEffect(() => {
@@ -44,7 +44,9 @@ function OwnedTab() {
       <SafeAreaView>
         <ScrollView>
           {read.map(function (item, index) {
-            //Iterate items in the shop.
+
+            //Iterate all the bought items in the shop. Load dynamic images from database is retricted by React Native.
+            //So here we achieve the feature by a hard code way. Need to further develop in the future.
             if (item["bought"]) {
               if (item["img"] === 0) {
                 return (
@@ -112,7 +114,7 @@ OwnedTab.navigationOptions = {
   ),
 };
 
-//Change the status of bought in firebase
+//Change the status of buying an item in firebase using boolean
 const recordBuying = (index, buy, imgUrl, itemPrice) => {
   return new Promise(function (resolve, reject) {
     let data = {
@@ -132,7 +134,7 @@ const recordBuying = (index, buy, imgUrl, itemPrice) => {
   });
 };
 
-//reduce currency in firebase
+//Reduce currency in firebase, record the spend of the money
 function completeBuying(price) {
   baseCurrency = baseCurrency - price;
   fb.database()
@@ -190,8 +192,8 @@ function setAvatar(item, index) {
         text: "OK",
         onPress: () => {
           console.log("hello olivia, you reached here");
+          //If success, then call this function to rewrite the avatar data to show in database
           updataAvatar(index);
-          // completeBuying(index);
         },
       },
     ],
@@ -215,7 +217,7 @@ function updataAvatar(data) {
     });
 }
 
-// Tab of shop to choose items to buy
+// Tab of shop to choose items to buy. 
 function ShopTab() {
   const [unbought, allUnbought] = useState([]);
 
@@ -237,6 +239,8 @@ function ShopTab() {
       <SafeAreaView>
         <ScrollView>
           {unbought.map(function (item, index) {
+            //Load dynamic images from database is retricted by React Native.
+            //So here we achieve the feature by a hard code way. Need to further develop in the future.
             if (!item["bought"]) {
               if (item["img"] === 0) {
                 return (
@@ -319,6 +323,7 @@ const Tab = createMaterialTopTabNavigator(
 );
 const AppIndex = createAppContainer(Tab);
 
+
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -346,6 +351,7 @@ export default class HomeScreen extends Component {
         this.setState({ backgroundColor: tempColor });
       });
   }
+
 
   componentDidMount() {
     fb.database()
