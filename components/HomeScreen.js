@@ -19,6 +19,7 @@ import { fb, Fire } from "../src/firebase/APIKeys";
 import { images, getBackgroundImage } from "../components/images";
 import Header from "../components/Header";
 
+//This is the HomeScreen to navigate to main features and avatar stats display
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -34,14 +35,14 @@ export default class HomeScreen extends Component {
     }
     () => this.readData();
   }
-
+  //Getting user ID
   get user() {
     return {
       //   name: this.props.navigation.state.params.name,
       _id: Fire.shared.uid,
     };
   }
-
+  //Handling Changes of Avatar health gradually reflected to avatar expression
   handleAvatarHealthChange = (props) => {
     const avatarHealth = props.health;
     const avatarCharacter = this.state.avatarCharacter;
@@ -83,6 +84,8 @@ export default class HomeScreen extends Component {
       }
     }
   };
+
+  //Fetching data from firebase console.
   readData() {
     fb.database()
       .ref("response/" + this.user._id + "/avatarHealth")
@@ -119,7 +122,7 @@ export default class HomeScreen extends Component {
         });
       });
   }
-
+  //Updating data from firebase console
   writeData() {
     firebase
       .database()
@@ -143,7 +146,7 @@ export default class HomeScreen extends Component {
   componentWillUnmount() {
     clearInterval(this.timerID1);
   }
-
+  //Reduce Health every second in order to keep user to work out
   reduceHealth() {
     if (this.state.avatarHealth > 0) {
       this.setState((state) => {

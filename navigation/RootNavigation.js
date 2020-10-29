@@ -8,21 +8,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
-// {
-//   Login: { screen: LogInScreen },
-//   Signup: { screen: SignUpScreen },
-//   ForgotPassword: { screen: ForgotPasswordScreen },
-
-//   Main: { screen: HomeScreen },
-// },
-// {
-//   navigationOptions: () => ({
-//     headerTitleStyle: {
-//       fontWeight: "normal",
-//     },
-//   }),
-// }
-
+//This is the root navigator to navigate across registering features
 export default class RootNavigator extends Component {
   render() {
     return (

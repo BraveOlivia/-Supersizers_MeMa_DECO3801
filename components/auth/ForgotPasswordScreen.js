@@ -11,6 +11,7 @@ import {
 import { NavigationActions } from "react-navigation";
 import * as firebase from "firebase";
 
+// This is the forgot password screen in case users forget their password
 export default class ForgotPasswordScreen extends Component {
   constructor(props) {
     super(props);
@@ -18,6 +19,7 @@ export default class ForgotPasswordScreen extends Component {
       email: "",
     };
   }
+  //Reset password pressed
   onResetPasswordPress = () => {
     firebase
       .auth()
@@ -31,7 +33,7 @@ export default class ForgotPasswordScreen extends Component {
         }
       );
   };
-
+  //Return to login screen
   onBackToLoginPress = () => {
     this.props.navigation.navigate("Login");
   };

@@ -24,11 +24,9 @@ var baseHealth = 0;
 var baseStatus = 0;
 var baseCurrency = 0;
 var userid = Fire.shared.user._id;
-console.log(userid);
 () => readData();
-
+//Fetching data from Firebase console
 function readData() {
-  console.log(userid);
   firebase
     .database()
     .ref("response/" + userid + "/avatarHealth")
@@ -48,7 +46,7 @@ function readData() {
       baseCurrency = dataSnapShot.val();
     });
 }
-
+//Read Nutritional Tip Tab
 function ReadTab() {
   const [read, allReads] = useState([]);
   useEffect(() => {
@@ -131,7 +129,7 @@ const submitTip = (id, name, tip, type, reward, complete) => {
       });
   });
 };
-
+//Updating completed tip towards the avatar stats
 function completeTips(rewardHealth) {
   baseHealth += rewardHealth["avatarHealth"];
   baseStatus += rewardHealth["avatarStatus"];
@@ -185,6 +183,7 @@ function reading(item) {
     { cancelable: false }
   );
 }
+//Unread Nutritional Tips
 function UnreadTab() {
   const [unread, allUnreads] = useState([]);
   useEffect(() => {
@@ -273,35 +272,31 @@ export default class NutritionalScreen extends Component {
     completeTips = completeTips.bind(this);
     reading = reading.bind(this);
   }
-
+  //Fetching Data from Firebase console
   readData() {
     console.log("reading data in nutritional tip " + userid);
-    firebase
-      .database()
+    fb.database()
       .ref("response/" + userid + "/avatarHealth")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
         baseHealth = temp;
         this.setState({ baseHealth: temp });
       });
-    firebase
-      .database()
+    fb.database()
       .ref("response/" + userid + "/avatarStatus")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
         baseStatus = temp;
         this.setState({ baseStatus: temp });
       });
-    firebase
-      .database()
+    fb.database()
       .ref("response/" + userid + "/currency")
       .once("value", (dataSnapShot) => {
         var temp = dataSnapShot.val();
         baseCurrency = temp;
         this.setState({ baseCurr: temp });
       });
-    firebase
-      .database()
+    fb.database()
       .ref("response/" + userid + "/backgroundColor")
       .once("value", (dataSnapShot) => {
         var tempColor = dataSnapShot.val();
@@ -313,7 +308,16 @@ export default class NutritionalScreen extends Component {
     userid = Fire.shared.user._id;
     this.readData();
     readData();
+    fb.database()
+      .ref("response/" + userid + "/currency")
+      .on("value", (querySnapShot) => {
+        let data = querySnapShot.val() ? querySnapShot.val() : {};
+        this.setState({
+          baseCurr: data,
+        });
+      });
   }
+
   handleCurrency = () => {
     return <Text style={{ fontSize: 25, color: "white" }}>{baseCurrency}</Text>;
   };
@@ -328,7 +332,6 @@ export default class NutritionalScreen extends Component {
             pageName="Home"
             baseCurrency={this.state.baseCurr}
           />
-
           <AppIndex />
         </ImageBackground>
       </View>

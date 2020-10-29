@@ -14,41 +14,33 @@ import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { fb, Fire } from "../src/firebase/APIKeys.js";
 import * as firebase from "firebase";
-import { getBackgroundImage } from "../components/images";
 import Header from "../components/Header";
 
 var baseHealth = 0;
 var baseStatus = 0;
 var baseCurrency = 0;
 var userid = Fire.shared.user._id;
-console.log("questScreen userID " + userid);
-
 () => readData();
-
+//Fetching data from firebase console
 function readData() {
   userid = Fire.shared.user._id;
-  console.log("reading data userID " + userid);
-  firebase
-    .database()
-    .ref("response/" + userid + "/avatarHealth")
+  firebase.database()
+    .ref("response/"+ userid +"/avatarHealth")
     .once("value", (dataSnapShot) => {
       baseHealth = dataSnapShot.val();
     });
-  firebase
-    .database()
+  firebase.database()
     .ref("response/" + userid + "/avatarStatus")
     .once("value", (dataSnapShot) => {
       baseStatus = dataSnapShot.val();
     });
-  firebase
-    .database()
+  firebase.database()
     .ref("response/" + userid + "/currency")
     .once("value", (dataSnapShot) => {
       baseCurrency = dataSnapShot.val();
     });
-  return baseHealth, baseStatus, baseCurrency;
 }
-
+//Updating completed Quest to avatar stats
 function completeQuest(rewardHealth) {
   baseHealth += rewardHealth["avatarHealth"];
   baseStatus += rewardHealth["avatarStatus"];
@@ -101,7 +93,6 @@ const updating = (id, progress) => {
       questID: key,
       questProgress: complete,
     };
-    console.log(dataToSave);
     fb.database()
       .ref("/response/" + userid + "/quests/" + key)
       .update(dataToSave)
@@ -113,13 +104,11 @@ const updating = (id, progress) => {
       });
   });
 };
-
+//All Quests Tab
 function ReadAllTab() {
   const [quests, allQuests] = useState([]);
   useEffect(() => {
-    const questRef = firebase
-      .database()
-      .ref("/response/" + userid + "/quests/");
+    const questRef = firebase.database().ref("/response/" + userid + "/quests/");
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allQuests([]);
       snapshot.forEach(function (childSnapshot) {
@@ -178,13 +167,11 @@ ReadAllTab.navigationOptions = {
     <Icon name={focused ? "ios-cube" : "md-cube"} color={tintColor} size={25} />
   ),
 };
-
+//InProgress Quest Tab
 function InProgreeTab() {
   const [inProgress, allInProgressQuests] = useState([]);
   useEffect(() => {
-    const questRef = firebase
-      .database()
-      .ref("/response/" + userid + "/quests/");
+    const questRef = firebase.database().ref("/response/" + userid + "/quests/");
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allInProgressQuests([]);
       snapshot.forEach(function (childSnapshot) {
@@ -261,13 +248,11 @@ InProgreeTab.navigationOptions = {
     />
   ),
 };
-
+//Completed Quest Tab
 function CompletionTab() {
   const [completedQuest, allCompletedQuests] = useState([]);
   useEffect(() => {
-    const questRef = firebase
-      .database()
-      .ref("/response/" + userid + "/quests/");
+    const questRef = firebase.database().ref("/response/" + userid + "/quests/");
     const OnLoadingListener = questRef.on("value", (snapshot) => {
       allCompletedQuests([]);
       snapshot.forEach(function (childSnapshot) {
@@ -334,7 +319,7 @@ const Tab = createMaterialTopTabNavigator(
       showLabel: true,
       style: {
         borderColor: "black",
-        backgroundColor: "transparent",
+        backgroundColor: "#FF6600",
       },
     },
   }
@@ -348,51 +333,35 @@ export default class QuestScreen extends Component {
       questCompletion: 0,
       avatarStatus: 0,
       avatarHealth: 0,
-      baseCurrency: 0,
-      backgroundColor: 5,
+      avatarCurrency: 0,
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
     }
     readData();
-    this.readData();
   }
-
-  readData() {
+  //Component Update Trigger Rendering
+  componentDidMount() {
     userid = Fire.shared.user._id;
-    fb.database()
-      .ref("response/" + userid + "/backgroundColor")
-      .once("value", (dataSnapShot) => {
-        var tempColor = dataSnapShot.val();
-        this.setState({ backgroundColor: tempColor });
-      });
+    this.setState({avatarHealth: baseHealth, avatarStatus: baseStatus, avatarCurrency:baseCurrency});
     fb.database()
       .ref("response/" + userid + "/currency")
-      .once("value", (dataSnapShot) => {
-        var temp = dataSnapShot.val();
-        this.setState({ baseCurrency: temp });
+      .on("value", (querySnapShot) => {
+        let data = querySnapShot.val() ? querySnapShot.val() : {};
+        this.setState({
+          avatarCurrency: data,
+        });
       });
-  }
-
-  componentDidMount() {
-    baseHealth, baseStatus, (baseCurrency = readData());
-    this.setState({
-      baseHealth: baseHealth,
-      baseStatus: baseStatus,
-      baseCurrency: baseCurrency,
-    });
   }
 
   render() {
-    const background = getBackgroundImage(this.state.backgroundColor);
     return (
       <View style={styles.MainContainer}>
-        <ImageBackground source={background} style={styles.backgroundImage}>
-          <Header
-            props={this.props}
-            pageName="Quests"
-            baseCurrency={this.state.baseCurrency}
-          />
+        <ImageBackground
+          source={require("../assets/BackgroundOrange.png")}
+          style={styles.backgroundImage}
+        >
+          <Header props={this.props} pageName="Quest" baseCurrency={this.state.avatarCurrency}/>
           <AppIndex />
         </ImageBackground>
       </View>
@@ -426,6 +395,7 @@ const styles = StyleSheet.create({
   },
 
   taskDiv: {
+    // flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
   },

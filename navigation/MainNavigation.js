@@ -12,7 +12,7 @@ import {
 import { StyleSheet } from "react-native";
 
 const Stack = createStackNavigator();
-
+//This is the main Navigator to navigate across different features component
 export default class MainNavigator extends Component {
   render() {
     return (

@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import * as firebase from "firebase";
 
+//Retrieve the avatar template from firebase
 function readUserTemplate(uid) {
   firebase
     .database()
@@ -45,6 +46,7 @@ function createNewUser(index, content) {
   });
 }
 
+//This is the SignUp page where user can register new accounts
 export default class SignUpScreen extends Component {
   constructor(props) {
     super(props);
@@ -53,9 +55,9 @@ export default class SignUpScreen extends Component {
       password: "",
       passwordConfirm: "",
     };
-    // readUserTemplate = readUserTemplate.bind(this);
   }
 
+  //Signup button pressed
   onSignupPress = () => {
     if (this.state.password !== this.state.passwordConfirm) {
       Alert.alert("Passwords do not match");
@@ -74,37 +76,7 @@ export default class SignUpScreen extends Component {
         }
       );
   };
-
-  // Update tip after the tip has been read
-  // createNewUser = (index, id, name, tip, type, reward, complete) => {
-  //   return new Promise(function (resolve, reject) {
-  //     let key;
-  //     if (id != null) {
-  //       key = id;
-  //     } else {
-  //       key = fb.database().ref().push().key;
-  //     }
-  //     let dataToSave = {
-  //       tipID: key,
-  //       tipName: name,
-  //       complete: complete,
-  //       tipReward: reward,
-  //       tip: tip,
-  //       tipType: type,
-  //     };
-  //     console.log(dataToSave);
-  //     fb.database()
-  //       .ref("/response/nutritionalTips/" + index)
-  //       .update(dataToSave)
-  //       .then((snapshot) => {
-  //         resolve(snapshot);
-  //       })
-  //       .catch((err) => {
-  //         reject(err);
-  //       });
-  //   });
-  // };
-
+  //Return back to login
   onBackToLoginPress = () => {
     this.props.navigation.navigate("Login");
   };
@@ -120,12 +92,6 @@ export default class SignUpScreen extends Component {
           <TextInput
             title="Signup"
             style={styles.inputStyle}
-            // style={{
-            //   width: 200,
-            //   height: 40,
-            //   borderWidth: 1,
-            //   alignSelf: "center",
-            // }}
             value={this.state.email}
             onChangeText={(text) => {
               this.setState({ email: text });
@@ -140,12 +106,6 @@ export default class SignUpScreen extends Component {
 
           <TextInput
             style={styles.inputStyle}
-            // style={{
-            //   width: 200,
-            //   height: 40,
-            //   borderWidth: 1,
-            //   alignSelf: "center",
-            // }}
             value={this.state.password}
             onChangeText={(text) => {
               this.setState({ password: text });
@@ -160,12 +120,6 @@ export default class SignUpScreen extends Component {
 
           <TextInput
             style={styles.inputStyle}
-            // style={{
-            //   width: 200,
-            //   height: 40,
-            //   borderWidth: 1,
-            //   alignSelf: "center",
-            // }}
             value={this.state.passwordConfirm}
             onChangeText={(text) => {
               this.setState({ passwordConfirm: text });
@@ -190,7 +144,6 @@ export default class SignUpScreen extends Component {
             <Text style={styles.customBtnText}>Back to Login</Text>
           </TouchableOpacity>
 
-          {/* <Button title="Back to Login" onPress={this.onBackToLoginPress} /> */}
         </ImageBackground>
       </View>
     );

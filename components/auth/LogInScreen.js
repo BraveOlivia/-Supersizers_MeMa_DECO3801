@@ -21,6 +21,7 @@ export default class LogInScreen extends Component {
       isLoading: false,
     };
   }
+  //LogIn button pressed
   onLoginPress = () => {
     if (this.state.email.length === "" && this.state.password.length === "") {
       Alert.alert("Enter details to signin!");
@@ -47,7 +48,7 @@ export default class LogInScreen extends Component {
         );
     }
   };
-
+  //Signup account
   onCreateAccountPress = () => {
     // NavigationActions.navigate("SignUp");
     var navActions = StackActions.reset({
@@ -56,7 +57,7 @@ export default class LogInScreen extends Component {
     });
     this.props.navigation.dispatch(navActions);
   };
-
+  //Forgot Password
   onForgotPasswordPress = () => {
     var navActions = StackActions.reset({
       index: 0,
