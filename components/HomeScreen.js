@@ -244,6 +244,7 @@ export default class HomeScreen extends Component {
   }
 }
 
+  /*  STYLESHEET  */
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f0f8ff",
@@ -270,7 +271,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 10,
     width: "65%",
-    marginTop: "1%",
+    marginTop: "10%",
     justifyContent: "center",
     fontSize: 16,
     fontWeight: "400",
@@ -282,7 +283,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     flexDirection: "column",
     margin: 20,
-    padding: 5,
+    padding: 20,
     marginBottom: "5%",
   },
 
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
   },
 
   textStyle: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "500",
     color: "#990000",
     textAlign: "left",

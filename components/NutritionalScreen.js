@@ -329,7 +329,7 @@ export default class NutritionalScreen extends Component {
         <ImageBackground source={background} style={styles.backgroundImage}>
           <Header
             props={this.props}
-            pageName="Home"
+            pageName="Nutritional Tips"
             baseCurrency={this.state.baseCurr}
           />
           <AppIndex />

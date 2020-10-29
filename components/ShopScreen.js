@@ -44,6 +44,7 @@ function OwnedTab() {
       <SafeAreaView>
         <ScrollView>
           {read.map(function (item, index) {
+            //Iterate items in the shop.
             if (item["bought"]) {
               if (item["img"] === 0) {
                 return (
@@ -223,7 +224,6 @@ function ShopTab() {
     const OnLoadingListener = unboughtRef.on("value", (snapshot) => {
       allUnbought([]);
       snapshot.forEach(function (childSnapshot) {
-        // console.log(childSnapshot.val());
         allUnbought((unbought) => [...unbought, childSnapshot.val()]);
       });
     });
@@ -300,6 +300,7 @@ ShopTab.navigationOptions = {
   ),
 };
 
+//Top navigator menu
 const Tab = createMaterialTopTabNavigator(
   {
     Shop: ShopTab,
@@ -383,6 +384,7 @@ export default class HomeScreen extends Component {
   }
 }
 
+/*  STYLESHEET  */
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f0f8ff",
